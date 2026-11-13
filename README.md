@@ -34,7 +34,9 @@ Each published case study will include its goal, risks, test strategy, architect
 
 ## Review workflow
 
-We work one small, reviewable slice at a time. Claude is used as an independent reviewer for copy, design proposals, code changes, and documentation. Claude Design can help explore visual directions and prototypes before implementation. Joan reviews suggestions and approves each decision; no generated design is treated as final by default. Handoffs are manual: Claude is not automatically connected to this repository or Trello. Do not share confidential employer material, private URLs, credentials, or personal data with external AI tools.
+We work one small, reviewable slice at a time on a short-lived branch. Each change is pushed to GitHub in a draft pull request targeting `main`. Claude reviews the pull request and its design or code; Joan reviews the findings, requests any changes, and approves the merge. `main` remains the reviewed project baseline.
+
+Claude Design can help explore visual directions and prototypes before implementation. Its output is a proposal for review. Claude is not automatically connected to this repository or Trello, so handoffs and review requests are manual. Do not share confidential employer material, private URLs, credentials, or personal data with external AI tools.
 
 ## Current limitations
 
