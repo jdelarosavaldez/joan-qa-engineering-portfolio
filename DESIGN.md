@@ -14,7 +14,7 @@ Use Alice Paggi's portfolio as a reference for information hierarchy and polish,
 
 ## Recommended experience
 
-- Start with one small, reviewable slice: a home page and one real test artifact. Add profile, résumé, contact, and more case studies only after content and launch scope are agreed.
+- Start with one small, reviewable slice: the home page and Joan-approved introduction. Complete and review the site before adding the QA Lab, test artifacts, or separate projects.
 - A short profile and grouped skills must be grounded in confirmed experience rather than a keyword wall.
 - The "QA Lab" must say **pending** until checks have run. Once it reports status, that status and linked evidence must come from a real CI run.
 - Each case study explains its goal, quality risks, strategy, architecture, executable checks, CI evidence, results, and limitations.
@@ -31,12 +31,14 @@ Keep navigation direct and the page readable on narrow screens. Do not rely on c
 
 ## Collaboration and review
 
-- Keep `main` as the reviewed project baseline. Make each small change on a short-lived branch such as `feature/portfolio-home` or `docs/cv-content`.
-- Push the branch and open a draft pull request targeting `main`. Claude reviews that pull request before merge, with concrete findings and severity. Joan reviews the feedback, decides which changes to accept, and approves the merge.
-- Resolve review comments and update the same branch; merge only after the requested review is complete.
+- Keep `main` as the reviewed project baseline. The planning baseline was committed before this review workflow was adopted; all subsequent changes go on short-lived branches such as `feature/portfolio-home` or `docs/portfolio-copy`.
+- Codex authors changes at Joan's direction. Push the branch and open a draft pull request targeting `main`; keep it in draft while work is in progress, then mark it ready when the slice is reviewable.
+- Claude reviews the public PR read-only and returns findings in the Claude project chat. Codex relays the review summary to the PR; Joan reviews the findings, decides what to accept, and performs the merge.
+- Resolve accepted findings on the same branch. Claude has no GitHub or Trello write access in this workflow. Branch protection is not configured yet; the no-direct-commit rule is currently a team convention.
 - Use Claude Design to explore and refine visual directions or prototypes before implementation. Treat its output as a proposal to review, not approved product design. Bring the selected mockup/prototype and its decisions back into this repository before coding.
 - Keep a short record of accepted design decisions and review findings in the project documents or the relevant Trello card. Do not send confidential employer code, private URLs, credentials, or data to external AI tools.
-- Claude is not connected to this repository or Trello automatically; reviews and design artifacts are handed off manually unless an integration is deliberately configured later.
+- Never commit a raw CV, personal contact details, or other private information to any branch or PR in this public repository. Keep the source CV in private storage and add only copy Joan has approved for publication.
+- Claude can read this public repository for review, but no automatic GitHub or Trello write integration is configured; the review handoff and comment relay are manual.
 
 ## Accessibility and visual acceptance
 
@@ -82,7 +84,7 @@ No frontend work starts until the design choices below are answered and the repo
 
 1. Resolve the content and visual decisions; record them in this file and Trello.
 2. Verify the selected framework, starter, license, package versions, Node requirements, and GitHub Pages workflow.
-3. [x] Create the public GitHub repository and connect the local remote; only set `site` and `base` after confirming the Pages path.
+3. The public GitHub repository and local remote are established; set `site` and `base` only after confirming the Pages path.
 4. Review the site's information architecture and a small wireframe before coding.
 5. Build and review the portfolio site first using only confirmed profile/content; no projects or test suite are required for this slice.
 6. After the site is reviewed, add the portfolio's own QA checks, then add separate projects and their tests one by one.
