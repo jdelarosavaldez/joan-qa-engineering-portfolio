@@ -31,8 +31,9 @@ Keep navigation direct and the page readable on narrow screens. Do not rely on c
 
 ## Collaboration and review
 
-- Work in small slices and review each draft before moving on.
-- Use Claude as an independent reviewer for copy, design proposals, implementation diffs, and project documentation. Ask for findings with concrete evidence and severity; Joan decides which changes to accept.
+- Keep `main` as the reviewed project baseline. Make each small change on a short-lived branch such as `feature/portfolio-home` or `docs/cv-content`.
+- Push the branch and open a draft pull request targeting `main`. Claude reviews that pull request before merge, with concrete findings and severity. Joan reviews the feedback, decides which changes to accept, and approves the merge.
+- Resolve review comments and update the same branch; merge only after the requested review is complete.
 - Use Claude Design to explore and refine visual directions or prototypes before implementation. Treat its output as a proposal to review, not approved product design. Bring the selected mockup/prototype and its decisions back into this repository before coding.
 - Keep a short record of accepted design decisions and review findings in the project documents or the relevant Trello card. Do not send confidential employer code, private URLs, credentials, or data to external AI tools.
 - Claude is not connected to this repository or Trello automatically; reviews and design artifacts are handed off manually unless an integration is deliberately configured later.
