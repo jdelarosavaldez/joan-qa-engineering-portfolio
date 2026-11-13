@@ -11,12 +11,14 @@ This portfolio grows through independently runnable milestones. A project moves 
 - [ ] Confirm résumé format, visual system, first artifact/case, and launch scope.
 - [ ] Verify Astro/template versions, license, runtime requirements, and GitHub Pages setup using primary sources.
 - [x] Establish the exact GitHub repository and remote before setting the Pages URL/base.
+- [x] Define the review workflow: Codex authors on a short-lived branch → draft PR to `main` → Claude reviews read-only and returns findings in chat → Codex relays findings to PR → Joan approves and merges.
 - [ ] Review one small wireframe and the design tokens before implementation.
 
 ## Milestone 1 — Portfolio site
 
 - [ ] Agree the site's language, content, visual identity, résumé/contact treatment, and wireframe.
-- [ ] Ask Claude to review the bio, wireframe, and visual proposal; record findings and Joan's decisions before implementation.
+- [ ] Ask Claude to review the bio, wireframe, and visual proposal; relay findings to the PR and record Joan's decisions before implementation.
+- [ ] Keep implementation on a task branch and present each reviewable slice in a draft PR to `main`; Joan merges after review.
 - [ ] Implement the portfolio site structure and confirmed content first; keep project results and testing out of this slice.
 - [ ] Review the rendered site at mobile and desktop before expanding it.
 - [ ] Publish only after the site content, repository visibility, and privacy have been reviewed.
