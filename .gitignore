@@ -1,0 +1,20 @@
+# Node and Astro build output
+node_modules/
+dist/
+.astro/
+
+# Test output and browser artifacts
+playwright-report/
+test-results/
+blob-report/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Editors and operating-system files
+.DS_Store
+.vscode/
+.idea/
+*.swp
