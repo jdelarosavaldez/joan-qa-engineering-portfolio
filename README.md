@@ -34,9 +34,9 @@ Each published case study will include its goal, risks, test strategy, architect
 
 ## Review workflow
 
-We work one small, reviewable slice at a time on a short-lived branch. Each change is pushed to GitHub in a draft pull request targeting `main`. Claude reviews the pull request and its design or code; Joan reviews the findings, requests any changes, and approves the merge. `main` remains the reviewed project baseline.
+We work one small, reviewable slice at a time on a short-lived branch. Codex authors changes at Joan's direction and opens a draft pull request to `main`; it becomes ready for review when the slice is complete. Claude reads the public PR and returns findings in the Claude project chat. Codex relays a review summary to the PR. Joan decides which findings to accept and performs the merge. `main` remains the reviewed project baseline.
 
-Claude Design can help explore visual directions and prototypes before implementation. Its output is a proposal for review. Claude is not automatically connected to this repository or Trello, so handoffs and review requests are manual. Do not share confidential employer material, private URLs, credentials, or personal data with external AI tools.
+Claude Design can help explore visual directions and prototypes before implementation. Its output is a proposal for review. Claude has read-only access for this workflow; no GitHub or Trello write integration is configured. Do not commit a raw CV, personal contact details, confidential employer material, private URLs, credentials, or other private data to any branch of this public repository.
 
 ## Current limitations
 
