@@ -98,5 +98,6 @@ No frontend work starts until the design choices below are answered and the repo
 
 - Keep company and assessment repositories private; do not copy their code, selectors, scenarios, URLs, screenshots, or data into this site.
 - Do not expose secrets or personal contact details before review.
+- The Claude Reviewer workflow is a narrow exception to the external-AI boundary: while this repository is public, it sends only the PR diff to Anthropic's Messages API for review. Never include confidential employer material, private URLs, credentials, personal data, or unapproved CV content in a PR. The workflow skips reviews if the repository is private.
 - Public demo sites are not load-test targets. Keep load testing on a local or explicitly approved environment.
 - The site is a portfolio and evidence index, not a claim that every listed technology has production experience.
