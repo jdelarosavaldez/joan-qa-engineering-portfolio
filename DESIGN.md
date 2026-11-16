@@ -14,7 +14,7 @@ Use Alice Paggi's portfolio as a reference for information hierarchy and polish,
 
 ## Recommended experience
 
-- Start with one small, reviewable slice: a home page and one real test artifact. Add profile, résumé, contact, and more case studies only after content and launch scope are agreed.
+- Start with one small, reviewable slice: the home page and Joan-approved introduction. Complete and review the site before adding the QA Lab, test artifacts, or separate projects.
 - A short profile and grouped skills must be grounded in confirmed experience rather than a keyword wall.
 - The "QA Lab" must say **pending** until checks have run. Once it reports status, that status and linked evidence must come from a real CI run.
 - Each case study explains its goal, quality risks, strategy, architecture, executable checks, CI evidence, results, and limitations.
@@ -31,11 +31,21 @@ Keep navigation direct and the page readable on narrow screens. Do not rely on c
 
 ## Collaboration and review
 
-- Work in small slices and review each draft before moving on.
-- Use Claude as an independent reviewer for copy, design proposals, implementation diffs, and project documentation. Ask for findings with concrete evidence and severity; Joan decides which changes to accept.
+- Keep `main` as the reviewed project baseline. The planning baseline was committed before this review workflow was adopted; all subsequent changes go on short-lived branches such as `feature/portfolio-home` or `docs/portfolio-copy`.
+- Follow the responsibilities in [Project roles](#project-roles). Work one small, reviewable slice at a time on a short-lived branch, keeping a PR in draft while work is in progress. Codex marks it ready when the slice is reviewable; Joan decides which findings to accept and performs the merge.
+- Claude may review and comment on the public PR or related Trello card when its connected tools allow. Claude does not edit files, create commits, push branches, or merge. If direct comments are unavailable, Codex relays Claude's findings and credits Claude clearly. Resolve accepted findings on the same branch.
+- Current GitHub and Trello activity uses the account authenticated by each connector; role labels in comment text describe responsibility and do not create a separate verified agent identity. Dedicated GitHub App identities have not been configured. Branch protection is not configured yet; the no-direct-commit rule is currently a team convention.
 - Use Claude Design to explore and refine visual directions or prototypes before implementation. Treat its output as a proposal to review, not approved product design. Bring the selected mockup/prototype and its decisions back into this repository before coding.
 - Keep a short record of accepted design decisions and review findings in the project documents or the relevant Trello card. Do not send confidential employer code, private URLs, credentials, or data to external AI tools.
-- Claude is not connected to this repository or Trello automatically; reviews and design artifacts are handed off manually unless an integration is deliberately configured later.
+- Never commit a raw CV, personal contact details, or other private information to any branch or PR in this public repository. Keep the source CV in private storage and add only copy Joan has approved for publication.
+
+## Project roles
+
+- **Joan — Project Owner:** sets priorities, approves public content and design decisions, accepts or declines review findings, and performs the final merge.
+- **Claude — Reviewer & Design Advisor:** independently reviews the proposed slice and gives design feedback when requested. Claude may leave comments on the PR or Trello card when connected tools permit; it does not edit project files, commit, push, or merge.
+- **Codex — QA Engineer & Implementer:** implements the slice Joan authorized, explains material technical choices, prepares the branch and PR, and addresses findings Joan accepts. Codex does not approve or merge its own changes.
+
+These are project responsibilities, not GitHub permission roles or verified account identities. Until separate agent identities are configured, GitHub and Trello show the account used by the connected integration. When a comment is relayed, label it as Claude's review relayed by Codex; do not present a role label as proof of a separate account.
 
 ## Accessibility and visual acceptance
 
@@ -81,7 +91,7 @@ No frontend work starts until the design choices below are answered and the repo
 
 1. Resolve the content and visual decisions; record them in this file and Trello.
 2. Verify the selected framework, starter, license, package versions, Node requirements, and GitHub Pages workflow.
-3. [x] Create the public GitHub repository and connect the local remote; only set `site` and `base` after confirming the Pages path.
+3. The public GitHub repository and local remote are established; set `site` and `base` only after confirming the Pages path.
 4. Review the site's information architecture and a small wireframe before coding.
 5. Build and review the portfolio site first using only confirmed profile/content; no projects or test suite are required for this slice.
 6. After the site is reviewed, add the portfolio's own QA checks, then add separate projects and their tests one by one.
