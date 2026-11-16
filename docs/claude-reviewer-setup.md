@@ -14,7 +14,7 @@ After this workflow is merged into `main`, add these values in **Settings → Se
 | `CLAUDE_REVIEWER_APP_PRIVATE_KEY` | Secret | Contents of a newly generated `.pem` private key for that app |
 | `ANTHROPIC_API_KEY` | Secret | API key from the Anthropic Console |
 
-The app must remain installed only on this repository with Contents read, Pull requests read, and Issues read/write. Never commit or share the private key or API key. Optional variable `CLAUDE_REVIEWER_MODEL` overrides the default `claude-sonnet-5` model identifier.
+The app must remain installed only on this repository with Contents read, Pull requests read, and Issues read/write. Never commit or share the private key or API key. Optional variable `CLAUDE_REVIEWER_MODEL` overrides the default `claude-sonnet-5-5` model identifier.
 
 This is an explicit exception to the project's external-AI boundary: only the public PR diff is sent to Anthropic for review. Do not put confidential employer material, private URLs, credentials, personal data, or unapproved CV content in a PR. The workflow skips reviews if the repository is private.
 

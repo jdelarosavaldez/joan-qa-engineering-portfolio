@@ -43,7 +43,7 @@ jobs:
         run: node scripts/claude-review.mjs
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          CLAUDE_REVIEW_MODEL: ${{ vars.CLAUDE_REVIEWER_MODEL || 'claude-sonnet-5' }}
+          CLAUDE_REVIEW_MODEL: ${{ vars.CLAUDE_REVIEWER_MODEL || 'claude-sonnet-5-5' }}
           GITHUB_TOKEN: ${{ steps.claude-app-token.outputs.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}

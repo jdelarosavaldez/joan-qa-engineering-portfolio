@@ -38,6 +38,7 @@ We work one small, reviewable slice at a time. Claude is used as an independent 
 
 ## Current limitations
 
+- The Claude Reviewer GitHub App is installed only on this repository. Automatic PR comments remain pending until the review workflow is merged and its Actions variable and secrets are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
 - The site and automation framework are not implemented yet.
 - Framework, starter, exact runtime requirements, and setup commands remain unverified and will be chosen before a package manifest is written.
 - The public GitHub repository is created and connected to this local repository. It will contain planning documents only until the site design is approved; the Pages path is not configured yet.
