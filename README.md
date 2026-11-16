@@ -34,7 +34,7 @@ Each published case study will include its goal, risks, test strategy, architect
 
 ## Review workflow
 
-We work one small, reviewable slice at a time. The Claude Reviewer GitHub App is installed only on this repository. Its automated review workflow posts one read-only review comment per PR after the workflow is merged and its credentials are configured; until then, reviews remain manual. See [Claude Reviewer setup](docs/claude-reviewer-setup.md) for permissions and required secrets. Claude Design can explore visual proposals before implementation; Joan reviews suggestions and approves decisions. Do not share confidential employer material, private URLs, credentials, or personal data with external AI tools.
+We work one small, reviewable slice at a time. Claude is used as an independent reviewer for copy, design proposals, code changes, and documentation. Claude Design can help explore visual directions and prototypes before implementation. Joan reviews suggestions and approves each decision; no generated design is treated as final by default. Handoffs are manual: Claude is not automatically connected to this repository or Trello. Do not share confidential employer material, private URLs, credentials, or personal data with external AI tools.
 
 ## Current limitations
 
