@@ -32,13 +32,20 @@ Keep navigation direct and the page readable on narrow screens. Do not rely on c
 ## Collaboration and review
 
 - Keep `main` as the reviewed project baseline. The planning baseline was committed before this review workflow was adopted; all subsequent changes go on short-lived branches such as `feature/portfolio-home` or `docs/portfolio-copy`.
-- Codex authors changes at Joan's direction. Push the branch and open a draft pull request targeting `main`; keep it in draft while work is in progress, then mark it ready when the slice is reviewable.
-- Claude reviews the public PR read-only and returns findings in the Claude project chat. Codex relays the review summary to the PR; Joan reviews the findings, decides what to accept, and performs the merge.
-- Resolve accepted findings on the same branch. Claude has no GitHub or Trello write access in this workflow. Branch protection is not configured yet; the no-direct-commit rule is currently a team convention.
+- Follow the responsibilities in [Project roles](#project-roles). Work one small, reviewable slice at a time on a short-lived branch, keeping a PR in draft while work is in progress. Codex marks it ready when the slice is reviewable; Joan decides which findings to accept and performs the merge.
+- Claude may review and comment on the public PR or related Trello card when its connected tools allow. Claude does not edit files, create commits, push branches, or merge. If direct comments are unavailable, Codex relays Claude's findings and credits Claude clearly. Resolve accepted findings on the same branch.
+- Current GitHub and Trello activity uses the account authenticated by each connector; role labels in comment text describe responsibility and do not create a separate verified agent identity. Dedicated GitHub App identities have not been configured. Branch protection is not configured yet; the no-direct-commit rule is currently a team convention.
 - Use Claude Design to explore and refine visual directions or prototypes before implementation. Treat its output as a proposal to review, not approved product design. Bring the selected mockup/prototype and its decisions back into this repository before coding.
 - Keep a short record of accepted design decisions and review findings in the project documents or the relevant Trello card. Do not send confidential employer code, private URLs, credentials, or data to external AI tools.
 - Never commit a raw CV, personal contact details, or other private information to any branch or PR in this public repository. Keep the source CV in private storage and add only copy Joan has approved for publication.
-- Claude can read this public repository for review, but no automatic GitHub or Trello write integration is configured; the review handoff and comment relay are manual.
+
+## Project roles
+
+- **Joan — Project Owner:** sets priorities, approves public content and design decisions, accepts or declines review findings, and performs the final merge.
+- **Claude — Reviewer & Design Advisor:** independently reviews the proposed slice and gives design feedback when requested. Claude may leave comments on the PR or Trello card when connected tools permit; it does not edit project files, commit, push, or merge.
+- **Codex — QA Engineer & Implementer:** implements the slice Joan authorized, explains material technical choices, prepares the branch and PR, and addresses findings Joan accepts. Codex does not approve or merge its own changes.
+
+These are project responsibilities, not GitHub permission roles or verified account identities. Until separate agent identities are configured, GitHub and Trello show the account used by the connected integration. When a comment is relayed, label it as Claude's review relayed by Codex; do not present a role label as proof of a separate account.
 
 ## Accessibility and visual acceptance
 
