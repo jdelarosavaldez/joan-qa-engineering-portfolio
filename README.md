@@ -10,7 +10,7 @@ This repository will contain a public portfolio site and small, executable quali
 
 ## Portfolio map
 
-- **Website and QA Lab:** the first homepage view is implemented as static HTML, CSS, and JavaScript. The full framework and template decision remains open; any CI status must come from a real run.
+- **Website and QA Lab:** the first homepage view is implemented as static HTML, CSS, and JavaScript. Its design is being reviewed before choosing any framework; any CI status must come from a real run.
 - **UI and API case study:** a clean-room project using a public practice application, with positive, negative, edge, and regression coverage.
 - **Python and Pytest:** a separately runnable API or integration-testing project.
 - **Docker and CI:** reproducible local dependencies and quality gates.
@@ -42,7 +42,7 @@ Project roles and attribution rules are defined in [DESIGN.md](DESIGN.md#project
 
 - The Claude Reviewer GitHub App is installed only on this repository. Automatic PR comments remain pending until the review workflow is merged and its Actions variable and secrets are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
 - The initial homepage is a static prototype with a short bilingual biography; it has no build tooling, automation framework, or deployment yet.
-- Astro, a starter template, and exact runtime requirements remain unverified; the first view deliberately has no package manifest or third-party dependencies.
+- Astro and the earlier starter proposal are paused while the static homepage design is reviewed. The first view has no package manifest or third-party runtime dependencies.
 - The public GitHub repository is created and connected to this local repository. GitHub Pages is not configured yet.
 - Résumé details, employment dates, project metrics, and public contact details are not included.
 - The initial practice target and starter-template license still need validation before implementation.
