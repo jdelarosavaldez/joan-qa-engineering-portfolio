@@ -6,11 +6,11 @@ The public site will open in English and provide a visible `ES` control for the 
 
 This repository will contain a public portfolio site and small, executable quality-engineering projects. The goal is to show how I approach risk, design tests, automate checks, investigate failures, and communicate evidence—not only list tools.
 
-> **Project status:** design review. This repository currently contains planning documents only; there is no app scaffold or deployment. See [DESIGN.md](DESIGN.md) for open decisions and acceptance criteria.
+> **Project status:** the first bilingual homepage is under review on a feature branch. It is a small static view with no deployment yet. See [DESIGN.md](DESIGN.md) for the current scope and open decisions.
 
 ## Portfolio map
 
-- **Website and QA Lab:** planned portfolio site. The framework and template are not selected yet; any CI status must come from a real run.
+- **Website and QA Lab:** the first homepage view is implemented as static HTML, CSS, and JavaScript. The full framework and template decision remains open; any CI status must come from a real run.
 - **UI and API case study:** a clean-room project using a public practice application, with positive, negative, edge, and regression coverage.
 - **Python and Pytest:** a separately runnable API or integration-testing project.
 - **Docker and CI:** reproducible local dependencies and quality gates.
@@ -41,10 +41,10 @@ Project roles and attribution rules are defined in [DESIGN.md](DESIGN.md#project
 ## Current limitations
 
 - The Claude Reviewer GitHub App is installed only on this repository. Automatic PR comments remain pending until the review workflow is merged and its Actions variable and secrets are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
-- The site and automation framework are not implemented yet.
-- Framework, starter, exact runtime requirements, and setup commands remain unverified and will be chosen before a package manifest is written.
-- The public GitHub repository is created and connected to this local repository. It will contain planning documents only until the site design is approved; the Pages path is not configured yet.
-- No résumé, biography, employment dates, project metrics, or public contact details are included until reviewed with Joan.
+- The initial homepage is a static prototype with a short bilingual biography; it has no build tooling, automation framework, or deployment yet.
+- Astro, a starter template, and exact runtime requirements remain unverified; the first view deliberately has no package manifest or third-party dependencies.
+- The public GitHub repository is created and connected to this local repository. GitHub Pages is not configured yet.
+- Résumé details, employment dates, project metrics, and public contact details are not included.
 - The initial practice target and starter-template license still need validation before implementation.
 
 ## Project documents

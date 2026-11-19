@@ -1,6 +1,6 @@
 # Portfolio site design proposal
 
-**Status:** design review in progress. The public GitHub repository contains planning documents only; there is no application scaffold or deployment. Work will proceed one reviewable slice at a time.
+**Status:** first homepage slice implemented on a review branch; no deployment yet. Work will proceed one reviewable slice at a time.
 
 ## Product direction
 
@@ -15,6 +15,8 @@ Use Alice Paggi's portfolio as a reference for information hierarchy and polish,
 ## Recommended experience
 
 - Start with one small, reviewable slice: the home page and Joan-approved introduction. Complete and review the site before adding the QA Lab, test artifacts, or separate projects.
+- The first view contains a brief bilingual biography, English by default, and a transparent note that case studies and execution evidence will be added as they are built and reviewed.
+- The initial view uses static HTML, CSS, and JavaScript without external dependencies. This is a reviewable first slice; the long-term framework and starter decision remains open.
 - A short profile and grouped skills must be grounded in confirmed experience rather than a keyword wall.
 - The "QA Lab" must say **pending** until checks have run. Once it reports status, that status and linked evidence must come from a real CI run.
 - Each case study explains its goal, quality risks, strategy, architecture, executable checks, CI evidence, results, and limitations.
@@ -89,18 +91,16 @@ These are project responsibilities, not GitHub permission roles or verified acco
 
 No frontend work starts until the design choices below are answered and the repository target is established.
 
-1. Resolve the content and visual decisions; record them in this file and Trello.
-2. Verify the selected framework, starter, license, package versions, Node requirements, and GitHub Pages workflow.
-3. The public GitHub repository and local remote are established; set `site` and `base` only after confirming the Pages path.
-4. Review the site's information architecture and a small wireframe before coding.
-5. Build and review the portfolio site first using only confirmed profile/content; no projects or test suite are required for this slice.
-6. After the site is reviewed, add the portfolio's own QA checks, then add separate projects and their tests one by one.
+1. Review the first homepage and biography; record accepted changes in the PR and Trello.
+2. Decide whether the reviewed static view should remain the site foundation or move to Astro; verify framework, starter, license, package versions, and runtime requirements before adding a package manifest.
+3. Confirm the GitHub Pages URL and configuration before setting a deployment workflow.
+4. After the homepage is reviewed, add the portfolio's own QA checks, then add separate projects and their tests one by one.
 
 ## Decisions for review
 
 1. **Audience and language:** resolved — English by default, with a visible switch to the equivalent Spanish version.
-2. **Résumé:** choose web résumé, PDF, both, or defer until current content is supplied.
-3. **Visual system:** choose from the typography candidates, then approve the palette and token values with contrast ratios.
+2. **Résumé:** choose web résumé, PDF, both, or defer until current content is supplied. Deferred for this slice.
+3. **Visual system:** the first view uses a warm paper background, cobalt action color, system sans-serif body text, and a serif display face. Treat these as prototype styling; confirm the final tokens and font pairing before expanding the site.
 4. **First artifact/case:** choose what real test artifact or clean-room case to build and feature first.
 5. **Release scope:** choose the smallest public launch slice; keep all unverified CI and project states marked pending.
 

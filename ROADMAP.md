@@ -11,15 +11,15 @@ This portfolio grows through independently runnable milestones. A project moves 
 - [ ] Confirm résumé format, visual system, first artifact/case, and launch scope.
 - [ ] Verify Astro/template versions, license, runtime requirements, and GitHub Pages setup using primary sources.
 - [x] Establish the exact GitHub repository and remote before setting the Pages URL/base.
-- [ ] Merge the review workflow: Joan owns decisions and merges; Codex implements each authorized slice on a short-lived branch, keeps the PR in draft while work is in progress, and marks it ready for review; Claude reviews and comments when the GitHub integration is active.
-- [ ] Review one small wireframe and the design tokens before implementation.
+- [x] Merge the review workflow: Joan owns decisions and merges; Codex implements each authorized slice on a short-lived branch, keeps the PR in draft while work is in progress, and marks it ready for review; Claude reviews and comments when the GitHub integration is active.
+- [ ] Review the first homepage view and refine the visual system before expanding beyond this slice.
 
 ## Milestone 1 — Portfolio site
 
-- [ ] Agree the site's language, content, visual identity, résumé/contact treatment, and wireframe.
-- [ ] Ask Claude to review the bio, wireframe, and visual proposal; relay findings to the PR and record Joan's decisions before implementation.
-- [ ] Keep implementation on a task branch and present each reviewable slice in a draft PR to `main`; Joan merges after review.
-- [ ] Implement the portfolio site structure and confirmed content first; keep project results and testing out of this slice.
+- [x] Agree the site's language: English by default, with a visible switch to equivalent Spanish content.
+- [ ] Review the concise bio and visual proposal with Claude; record Joan's accepted decisions before expanding the site.
+- [x] Keep implementation on a task branch and prepare the first reviewable homepage slice for `main`; Joan merges after review.
+- [x] Implement the initial responsive portfolio view and confirmed introductory content; keep project results and testing out of this slice.
 - [ ] Review the rendered site at mobile and desktop before expanding it.
 - [ ] Publish only after the site content, repository visibility, and privacy have been reviewed.
 
