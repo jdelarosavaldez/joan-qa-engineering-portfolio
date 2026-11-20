@@ -3,64 +3,71 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation."
-      data-en="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation."
-      data-es="Joan De la Rosa — QA Engineer enfocado en pruebas manuales y automatización de pruebas."
-    />
-    <meta name="theme-color" content="#f5f4ef" />
+    <meta name="theme-color" content="#102b32" />
+    <meta name="description" content="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation." data-en="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation." data-es="Joan De la Rosa — ingeniero de QA enfocado en pruebas manuales y automatización de pruebas." />
     <title>Joan De la Rosa — QA Engineer</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="./script.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main" data-en="Skip to content" data-es="Ir al contenido">Skip to content</a>
-
     <header class="site-header">
-      <a class="wordmark" href="#top" aria-label="Joan De la Rosa"><span class="wordmark-text">JD<span>.</span></span></a>
-      <div class="header-right">
-        <span class="header-label" data-en="QUALITY ENGINEERING" data-es="INGENIERÍA DE CALIDAD">QUALITY ENGINEERING</span>
-        <button class="language-toggle" type="button" aria-label="ES — Switch to Spanish">ES</button>
+      <a class="wordmark" href="#top" aria-label="Joan De la Rosa"><span>JD.</span></a>
+      <div class="language-switch" role="group" data-en-label="Language" data-es-label="Idioma" aria-label="Language">
+        <button type="button" lang="en" data-language-choice="en" aria-label="EN — English" data-en-label="EN — English" data-es-label="EN — Inglés" aria-pressed="true">EN</button>
+        <span aria-hidden="true">|</span>
+        <button type="button" lang="es" data-language-choice="es" aria-label="ES — Spanish" data-en-label="ES — Spanish" data-es-label="ES — Español" aria-pressed="false">ES</button>
       </div>
     </header>
 
+    <div class="welcome-slot">
+      <aside class="welcome-banner" id="welcome-banner" hidden>
+        <p id="welcome-message" role="status" aria-live="polite"></p>
+        <a class="welcome-start" href="#flow" data-en="Explore the QA flow" data-es="Explorar el flujo de QA">Explore the QA flow</a>
+        <button class="welcome-close" type="button" data-en="Close" data-es="Cerrar">Close</button>
+      </aside>
+    </div>
+
     <main id="main">
-      <section class="intro" id="top" aria-labelledby="intro-title">
-        <div class="intro-copy">
-          <h1 id="intro-title">Joan De la Rosa</h1>
-          <p class="role-line" data-en="QA Engineer · SDET · Quality Engineering" data-es="QA Engineer · SDET · Ingeniería de Calidad">QA Engineer · SDET · Quality Engineering</p>
-          <p class="bio" data-en="I’m a QA Engineer with years of experience in both manual and automated testing. I help teams build confidence in their software through thoughtful test strategies, reliable automation, and a strong focus on quality throughout the development process."
-            data-es="Soy QA Engineer con años de experiencia en pruebas manuales y automatizadas. Ayudo a los equipos a confiar en su software mediante estrategias de prueba bien pensadas, automatización confiable y un enfoque constante en la calidad durante el desarrollo.">
-            I’m a QA Engineer with years of experience in both manual and automated testing. I help teams build confidence in their software through thoughtful test strategies, reliable automation, and a strong focus on quality throughout the development process.
-          </p>
-          <a class="text-link" href="#approach">
-            <span data-en="How I think about quality" data-es="Cómo entiendo la calidad">How I think about quality</span>
-            <span aria-hidden="true">↘</span>
-          </a>
+      <section class="hero" id="top" aria-labelledby="intro-title">
+        <h1 id="intro-title" tabindex="-1"><span>Joan</span><span>De la Rosa</span></h1>
+        <p class="role-line" data-en="QA Engineer · SDET · Quality Engineering" data-es="QA Engineer · SDET · Ingeniería de Calidad">QA Engineer · SDET · Quality Engineering</p>
+
+        <div class="flow" id="flow" role="group" tabindex="-1" aria-label="Quality approach" data-en-label="Quality approach" data-es-label="Enfoque de calidad">
+          <svg class="flow-line" viewBox="0 0 1000 10" preserveAspectRatio="none" aria-hidden="true">
+            <path class="flow-track" d="M0 5H1000" />
+            <path class="flow-progress" d="M0 5H625" />
+          </svg>
+          <span class="flow-end flow-start" aria-hidden="true"></span>
+          <span class="flow-end flow-finish" aria-hidden="true"></span>
+          <div class="stations">
+            <button class="station" type="button" aria-label="Strategy" data-en-label="Strategy" data-es-label="Estrategia" aria-describedby="strategy-copy" aria-controls="strategy-copy" aria-expanded="false">
+              <span class="station-shape shape-step" aria-hidden="true"></span><span class="station-label" data-en="Strategy" data-es="Estrategia">Strategy</span>
+            </button>
+            <button class="station" type="button" aria-label="Manual testing" data-en-label="Manual testing" data-es-label="Pruebas manuales" aria-describedby="manual-copy" aria-controls="manual-copy" aria-expanded="false">
+              <span class="station-shape shape-decision" aria-hidden="true"></span><span class="station-label" data-en="Manual testing" data-es="Pruebas ma&#173;nuales">Manual testing</span>
+            </button>
+            <button class="station" type="button" aria-label="Automation" data-en-label="Automation" data-es-label="Automatización" aria-describedby="automation-copy" aria-controls="automation-copy" aria-expanded="false">
+              <span class="station-shape shape-step" aria-hidden="true"></span><span class="station-label" data-en="Auto&#173;mation" data-es="Automa&#173;tización">Auto&#173;mation</span>
+            </button>
+            <button class="station station-goal" type="button" aria-label="Quality throughout" data-en-label="Quality throughout" data-es-label="Calidad continua" aria-describedby="quality-copy" aria-controls="quality-copy" aria-expanded="false">
+              <span class="station-shape shape-goal" aria-hidden="true"></span><span class="station-label" data-en="Quality through&#173;out" data-es="Calidad continua">Quality through&#173;out</span>
+            </button>
+          </div>
+          <div class="station-notes">
+            <p id="strategy-copy" aria-hidden="true" data-en="Test strategies shaped around how the team ships software." data-es="Estrategias de prueba pensadas para la forma en que el equipo entrega software.">Test strategies shaped around how the team ships software.</p>
+            <p id="manual-copy" aria-hidden="true" data-en="Exploratory testing of real user paths and edge cases." data-es="Exploración de rutas reales de usuario y casos límite.">Exploratory testing of real user paths and edge cases.</p>
+            <p id="automation-copy" aria-hidden="true" data-en="Reliable automated checks that run with every change." data-es="Verificaciones automatizadas confiables que se ejecutan con cada cambio.">Reliable automated checks that run with every change.</p>
+            <p id="quality-copy" aria-hidden="true" data-en="Quality built in from the start of development, not added at the end." data-es="Calidad integrada desde el inicio del desarrollo, no añadida al final.">Quality built in from the start of development, not added at the end.</p>
+          </div>
         </div>
 
-      </section>
-
-      <section class="approach" id="approach" aria-labelledby="approach-title">
-        <div class="section-heading">
-          <p class="eyebrow" data-en="WORKING PRINCIPLE" data-es="PRINCIPIO DE TRABAJO">WORKING PRINCIPLE</p>
-        </div>
-        <h2 id="approach-title" data-en="Understand the risk. Test with intent. Share what the evidence says."
-          data-es="Entender el riesgo. Probar con intención. Comunicar lo que demuestra la evidencia.">
-          Understand the risk. Test with intent. Share what the evidence says.
-        </h2>
-        <p class="approach-detail" data-en="This portfolio is taking shape. Case studies and execution evidence will be added as each project is built and reviewed."
-          data-es="Este portafolio está en construcción. Añadiré casos de estudio y evidencia de ejecución a medida que cada proyecto esté desarrollado y revisado.">
-          This portfolio is taking shape. Case studies and execution evidence will be added as each project is built and reviewed.
+        <p class="bio" data-en="I’m a QA Engineer with years of experience in both manual and automated testing. I help teams build confidence in their software through thoughtful test strategies, reliable automation, and a strong focus on quality throughout the development process." data-es="Soy ingeniero de QA con años de experiencia en pruebas manuales y automatizadas. Ayudo a los equipos a generar confianza en su software mediante estrategias de prueba bien pensadas, automatización confiable y un enfoque constante en la calidad durante todo el proceso de desarrollo.">
+          I’m a QA Engineer with years of experience in both manual and automated testing. I help teams build confidence in their software through thoughtful test strategies, reliable automation, and a strong focus on quality throughout the development process.
         </p>
       </section>
-    </main>
 
-    <footer class="site-footer">
-      <span>JOAN DE LA ROSA</span>
-      <span data-en="QA ENGINEER · SDET · QUALITY ENGINEERING" data-es="QA ENGINEER · SDET · INGENIERÍA DE CALIDAD">QA ENGINEER · SDET · QUALITY ENGINEERING</span>
-      <span>© <span id="year">2026</span></span>
-    </footer>
+    </main>
+    <footer class="site-footer"><span>Joan De la Rosa</span><span data-en="QA Engineer · SDET · Quality Engineering" data-es="QA Engineer · SDET · Ingeniería de Calidad">QA Engineer · SDET · Quality Engineering</span><span>© <span id="year">2026</span></span></footer>
   </body>
 </html>
