@@ -21,8 +21,7 @@ function setLanguage(language) {
 
   const nextLanguage = language === "en" ? "es" : "en";
   languageToggle.textContent = nextLanguage.toUpperCase();
-  languageToggle.setAttribute("aria-label", language === "en" ? "Cambiar idioma a español" : "Switch language to English");
-  languageToggle.setAttribute("aria-pressed", String(language === "es"));
+  languageToggle.setAttribute("aria-label", language === "en" ? "Switch to Spanish" : "Cambiar a inglés");
   document.title = pageTitle[language];
 }
 

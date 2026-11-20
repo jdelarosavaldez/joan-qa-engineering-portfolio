@@ -7,7 +7,7 @@
   --blue: #174bb8;
   --blue-dark: #103886;
   --space-page: clamp(1.25rem, 6vw, 6.5rem);
-  font-family: Inter, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  font-family: system-ui, sans-serif;
   background: var(--paper);
   color: var(--ink);
   font-synthesis: none;
@@ -183,7 +183,7 @@ h2 {
   justify-content: space-between;
   gap: 1rem;
   border-top: 1px solid var(--line);
-  font-size: 0.62rem;
+  font-size: 0.8rem;
 }
 
 :focus-visible {

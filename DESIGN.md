@@ -92,7 +92,7 @@ These are project responsibilities, not GitHub permission roles or verified acco
 
 1. **Audience and language:** resolved — English by default, with a visible switch to the equivalent Spanish version.
 2. **Résumé:** choose web résumé, PDF, both, or defer until current content is supplied. Deferred for this slice.
-3. **Visual system:** this first view uses a warm paper background, cobalt action color, system sans-serif body text, a serif display face, and a `JD.` brand mark. Review the result before expanding the site.
+3. **Visual system:** this first view uses a warm paper background, cobalt action color, native `system-ui` body text, a serif display face, and a `JD.` brand mark. Review the result before expanding the site.
 4. **First artifact/case:** choose what real test artifact or clean-room case to build and feature first.
 5. **Release scope:** choose the smallest public launch slice; keep all unverified CI and project states marked pending.
 
