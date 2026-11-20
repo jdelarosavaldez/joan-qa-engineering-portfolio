@@ -41,18 +41,18 @@ h1 span:last-child { white-space: nowrap; }
 .flow-progress { stroke: var(--orange); stroke-width: 3; stroke-dasharray: 0 625; animation: draw-flow 1.4s cubic-bezier(.16, 1, .3, 1) 150ms forwards; }
 .flow-end { position: absolute; z-index: 1; top: 1.37rem; width: 1.15rem; height: 1.15rem; border: 2px solid var(--bone); border-radius: 50%; background: var(--petrol); }
 .flow-start { left: 1.75rem; background: var(--bone); }
-.flow-finish { right: 1.75rem; }
+.flow-finish { right: auto; left: 87.5%; transform: translateX(-50%); }
 .stations { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; }
 .station { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .9rem; min-width: 0; padding: 0 .35rem; border: 0; background: transparent; color: var(--bone); cursor: pointer; text-align: center; }
 .station:first-child { align-items: flex-start; padding-left: 0; text-align: left; }
-.station:last-child { align-items: flex-end; padding-right: 0; text-align: right; }
+.station:last-child { align-items: center; padding: 0 .35rem; text-align: center; }
 .station-shape { display: block; width: 3.5rem; height: 2.5rem; border-radius: 6px; background: var(--bone); transform: translateY(0); transition: transform 150ms ease; }
 .shape-decision { width: 2rem; height: 2rem; margin: .25rem 0; transform: rotate(45deg); border-radius: 2px; background: var(--bone); }
 .station:hover .station-shape, .station:focus-visible .station-shape, .station[aria-expanded="true"] .station-shape { transform: translateY(-3px); }
 .station:hover .shape-decision, .station:focus-visible .shape-decision, .station[aria-expanded="true"] .shape-decision { transform: rotate(45deg) translateY(-3px); }
 .shape-goal { background: var(--orange); }
 .station-label { max-width: 13rem; font-size: clamp(.9rem, 1.3vw, 1rem); font-weight: 700; }
-.station:last-child .station-label { position: relative; left: 50%; transform: translateX(-50%); text-align: center; }
+.station:last-child .station-label { width: 5.25rem; text-align: center; text-wrap: balance; }
 .station-notes { position: relative; min-height: 3.4rem; margin-top: 1rem; }
 .station-notes p { position: absolute; left: 50%; width: min(26rem, 90%); margin: 0; padding: .65rem .9rem; border-radius: 8px; background: var(--bone); color: var(--petrol); font-size: .95rem; line-height: 1.4; opacity: 0; transform: translate(-50%, 4px); pointer-events: none; transition: opacity 200ms ease, transform 200ms ease; }
 .station-notes p.is-visible { opacity: 1; transform: translate(-50%, 0); }
@@ -72,9 +72,7 @@ h1 span:last-child { white-space: nowrap; }
 @media (min-width: 761px) and (max-width: 1024px) {
   .flow { margin-right: 0; }
   .flow-start { left: 12.5%; transform: translateX(-50%); }
-  .flow-finish { right: auto; left: 87.5%; transform: translateX(-50%); }
   .station:first-child, .station:last-child { align-items: center; padding: 0 .35rem; text-align: center; }
-  .station:last-child .station-label { left: auto; transform: none; text-align: center; }
 }
 @media (max-width: 760px) {
   :root { --page-gutter: 1.5rem; }
@@ -85,10 +83,8 @@ h1 span:last-child { white-space: nowrap; }
   .role-line { max-width: 18rem; margin-top: 1rem; line-height: 1.35; }
   .flow { margin-top: 4.5rem; margin-right: 0; overflow: visible; }
   .flow-start { left: 12.5%; transform: translateX(-50%); }
-  .flow-finish { right: auto; left: 87.5%; transform: translateX(-50%); }
   .station { padding: 0 .12rem; gap: .75rem; }
   .station:first-child, .station:last-child { align-items: center; padding: 0 .12rem; text-align: center; }
-  .station:last-child .station-label { left: auto; transform: none; text-align: center; }
   .station-shape { width: 2.7rem; height: 2.1rem; }
   .shape-decision { width: 1.65rem; height: 1.65rem; }
   .station-label { font-size: .78rem; line-height: 1.2; overflow-wrap: anywhere; }
