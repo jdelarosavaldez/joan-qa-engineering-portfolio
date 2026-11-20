@@ -92,7 +92,14 @@ stations.forEach((station) => {
   station.addEventListener("mouseenter", () => showStation(station));
   station.addEventListener("mouseleave", () => scheduleNoteHide(station));
   station.addEventListener("focus", () => showStation(station));
-  station.addEventListener("blur", () => scheduleNoteHide(station));
+  station.addEventListener("blur", () => {
+    if (station.dataset.openedByClick === "true") {
+      station.dataset.openedByClick = "false";
+      hideStationNote(station);
+      return;
+    }
+    scheduleNoteHide(station);
+  });
   station.addEventListener("click", () => {
     if (station.dataset.openedByClick === "true") {
       station.dataset.openedByClick = "false";

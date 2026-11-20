@@ -97,7 +97,7 @@ The circular “JD.” wordmark links to the page start. The EN/ES selector is v
 
 ### QA flow
 
-Four real buttons represent strategy, manual testing, automation, and quality throughout. Each button opens its associated description by click, hover, or keyboard focus. A visible note remains hoverable; a click-open note closes on a second click, outside click, or Escape. Keep the final label centered below its orange shape. The progress stroke animates once on entry and stops at Automation.
+Four real buttons represent strategy, manual testing, automation, and quality throughout. Each button opens its associated description by click, hover, or keyboard focus. A visible note remains hoverable; a click-open note closes on a second click, blur, outside click, or Escape. Keep the final label centered below its orange shape. The progress stroke animates once on entry and stops at Automation.
 
 ### Welcome banner
 
