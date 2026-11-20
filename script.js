@@ -4,8 +4,8 @@ const pageTitle = "Joan De la Rosa — QA Engineer";
 const welcomeBanner = document.querySelector("#welcome-banner");
 const welcomeMessage = document.querySelector("#welcome-message");
 const welcomeCopy = {
-  en: "Welcome to my QA test. Review each section of my portfolio.",
-  es: "Bienvenido a mi prueba de QA. Revisa cada sección de mi portafolio.",
+  en: "Welcome to my QA test. Explore how I approach quality.",
+  es: "Bienvenido a mi prueba de QA. Explora mi enfoque de calidad.",
 };
 
 function setLanguage(language) {

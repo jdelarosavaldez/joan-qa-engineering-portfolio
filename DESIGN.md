@@ -56,7 +56,7 @@ Keep translations equivalent. Don't invent experience, metrics, results, reports
 - The Claude Reviewer workflow sends the pull request diff to Anthropic's Messages API. Keep confidential or private material out of every pull request, and do not send sensitive employer content to external AI tools.
 - Do not commit directly to `main`; keep changes on a short-lived branch for review. Public demo sites are not load-test targets; use only local or explicitly authorized environments.
 
-## External font request
+## Self-hosted font assets
 
 The page self-hosts Bricolage Grotesque and Literata from `assets/fonts/` under the SIL Open Font License 1.1. This avoids third-party font requests from visitor browsers. Keep the font license notices with the redistributed files.
 

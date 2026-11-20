@@ -121,7 +121,7 @@ h1 span:last-child { white-space: nowrap; }
   .station:first-child, .station:last-child { align-items: center; padding: 0 .12rem; text-align: center; }
   .station-shape { width: 2.7rem; height: 2.1rem; }
   .shape-decision { width: 1.65rem; height: 1.65rem; }
-  .station-label { width: min(100%, 5.25rem); font-size: .72rem; line-height: 1.2; overflow-wrap: anywhere; hyphens: manual; }
+  .station-label, .station:last-child .station-label { width: min(100%, 5.25rem); font-size: .78rem; line-height: 1.2; overflow-wrap: normal; hyphens: manual; }
   .station-notes { min-height: 4.8rem; }
   .station-notes p { width: 100%; font-size: .9rem; }
   .bio { width: 100%; margin-top: 2rem; font-size: 1rem; }
@@ -131,7 +131,7 @@ h1 span:last-child { white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   .flow-progress { stroke-dasharray: 625 625; }
   .welcome-banner { animation: none; }
   .welcome-banner { align-items: stretch; }
