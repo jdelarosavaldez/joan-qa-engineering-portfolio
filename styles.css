@@ -52,7 +52,6 @@ button, a { color: inherit; font: inherit; }
 .skip-link { position: fixed; z-index: 10; top: 1rem; left: var(--page-gutter); padding: .75rem 1rem; transform: translateY(-180%); background: var(--bone); color: var(--petrol); }
 .skip-link:focus { transform: translateY(0); }
 .site-header { display: flex; justify-content: space-between; align-items: center; min-height: 6rem; }
-.welcome-slot { min-height: 6rem; }
 .welcome-banner { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; padding: .8rem 1rem; border: 1px solid rgb(247 243 232 / 35%); border-radius: 10px; animation: welcome-in 300ms ease-out both; }
 .welcome-banner[hidden] { display: none; }
 .welcome-banner p { flex: 1 1 18rem; margin: 0; font-family: "Literata", Georgia, serif; font-size: .95rem; line-height: 1.45; }
@@ -88,7 +87,7 @@ h1 span:last-child { white-space: nowrap; }
 .station:last-child .station-label { width: 5.25rem; text-align: center; text-wrap: balance; }
 .station-notes { position: relative; min-height: 3.4rem; margin-top: 1rem; }
 .station-notes p { position: absolute; left: 50%; width: min(26rem, 90%); margin: 0; padding: .65rem .9rem; border-radius: 8px; background: var(--bone); color: var(--petrol); font-size: .95rem; line-height: 1.4; opacity: 0; visibility: hidden; transform: translate(-50%, 4px); pointer-events: none; transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms; }
-.station-notes p.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition-delay: 0s; }
+.station-notes p.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; transition-delay: 0s; }
 .bio { width: min(43rem, 72%); margin: 2.2rem 0 0 auto; font-family: "Literata", Georgia, serif; font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.58; color: var(--bone); }
 .site-footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 5rem; border-top: 1px solid rgb(247 243 232 / 30%); color: var(--muted-bone); font-size: .75rem; font-weight: 700; letter-spacing: .02em; }
 :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
@@ -127,7 +126,6 @@ h1 span:last-child { white-space: nowrap; }
   .bio { width: 100%; margin-top: 2rem; font-size: 1rem; }
   .site-footer { flex-wrap: wrap; justify-content: flex-start; padding: 1rem 0; }
   .site-footer span:last-child { margin-left: auto; }
-  .welcome-slot { min-height: 9rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -36,6 +36,21 @@ languageButtons.forEach((button) => {
 
 const stations = [...document.querySelectorAll(".station")];
 const notes = [...document.querySelectorAll(".station-notes p")];
+let noteHideTimer;
+
+function cancelNoteHide() {
+  window.clearTimeout(noteHideTimer);
+}
+
+function scheduleNoteHide(station) {
+  cancelNoteHide();
+  if (station.dataset.openedByClick === "true") return;
+  noteHideTimer = window.setTimeout(() => {
+    const note = document.getElementById(station.getAttribute("aria-controls"));
+    if (document.activeElement === station || station.matches(":hover") || note.matches(":hover")) return;
+    hideStationNote(station);
+  }, 500);
+}
 
 function closeStations() {
   stations.forEach((station) => {
@@ -47,6 +62,7 @@ function closeStations() {
 }
 
 function showStation(station) {
+  cancelNoteHide();
   stations.forEach((item) => {
     if (item !== station) {
       item.dataset.openedByClick = "false";
@@ -73,26 +89,32 @@ function hideStationNote(station) {
 stations.forEach((station) => {
   station.dataset.openedByClick = "false";
   station.addEventListener("mouseenter", () => showStation(station));
-  station.addEventListener("mouseleave", () => {
-    if (document.activeElement !== station) hideStationNote(station);
-  });
+  station.addEventListener("mouseleave", () => scheduleNoteHide(station));
   station.addEventListener("focus", () => showStation(station));
-  station.addEventListener("blur", () => {
-    if (!station.matches(":hover")) hideStationNote(station);
-  });
+  station.addEventListener("blur", () => scheduleNoteHide(station));
   station.addEventListener("click", () => {
     if (station.dataset.openedByClick === "true") {
       station.dataset.openedByClick = "false";
-      station.setAttribute("aria-expanded", "false");
-      const note = document.getElementById(station.getAttribute("aria-controls"));
-      note.classList.remove("is-visible");
-      note.setAttribute("aria-hidden", "true");
+      hideStationNote(station);
       return;
     }
     closeStations();
     station.dataset.openedByClick = "true";
     showStation(station);
   });
+});
+
+notes.forEach((note) => {
+  note.addEventListener("mouseenter", cancelNoteHide);
+  note.addEventListener("mouseleave", () => {
+    const station = stations.find((item) => item.getAttribute("aria-controls") === note.id);
+    if (station) scheduleNoteHide(station);
+  });
+});
+
+document.addEventListener("pointerdown", (event) => {
+  const target = event.target;
+  if (!(target instanceof Element) || !target.closest(".station, .station-notes")) closeStations();
 });
 
 const welcomeClose = document.querySelector(".welcome-close");
@@ -134,15 +156,25 @@ welcomeStart.addEventListener("click", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
-  if (!welcomeBanner.hidden) {
+  if (!welcomeBanner.hidden && welcomeBanner.contains(document.activeElement)) {
     dismissWelcome(welcomeBanner.contains(document.activeElement) ? introTitle : null);
     return;
   }
-  closeStations();
+  if (stations.some((station) => station.getAttribute("aria-expanded") === "true")) {
+    closeStations();
+    return;
+  }
+  if (!welcomeBanner.hidden) dismissWelcome();
 });
 
+let userInteracted = false;
+const markUserInteraction = () => { userInteracted = true; };
+window.addEventListener("pointerdown", markUserInteraction, { once: true, passive: true });
+window.addEventListener("keydown", markUserInteraction, { once: true });
+window.addEventListener("scroll", markUserInteraction, { once: true, passive: true });
+
 window.setTimeout(() => {
-  if (welcomeDismissed) return;
+  if (welcomeDismissed || userInteracted) return;
   welcomeBanner.hidden = false;
   window.requestAnimationFrame(() => {
     if (welcomeBanner.hidden) return;
