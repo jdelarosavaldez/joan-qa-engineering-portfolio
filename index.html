@@ -23,18 +23,20 @@
       </div>
     </header>
 
-    <aside class="welcome-banner" id="welcome-banner" hidden>
-      <p role="status" data-en="Welcome to my QA test. Review each session of my portfolio." data-es="Bienvenido a mi prueba de QA. Revisa cada sesión de mi portafolio.">Welcome to my QA test. Review each session of my portfolio.</p>
-      <a class="welcome-start" href="#flow" data-en="Start the walkthrough" data-es="Iniciar recorrido">Start the walkthrough</a>
-      <button class="welcome-close" type="button" data-en="Close" data-es="Cerrar">Close</button>
-    </aside>
+    <div class="welcome-slot">
+      <aside class="welcome-banner" id="welcome-banner" hidden>
+        <p id="welcome-message" role="status" aria-live="polite"></p>
+        <a class="welcome-start" href="#flow" data-en="Start the walkthrough" data-es="Iniciar recorrido">Start the walkthrough</a>
+        <button class="welcome-close" type="button" data-en="Close" data-es="Cerrar">Close</button>
+      </aside>
+    </div>
 
     <main id="main">
       <section class="hero" id="top" aria-labelledby="intro-title">
-        <h1 id="intro-title"><span>Joan</span><span>De la Rosa</span></h1>
+        <h1 id="intro-title" tabindex="-1"><span>Joan</span><span>De la Rosa</span></h1>
         <p class="role-line" data-en="QA Engineer · SDET · Quality Engineering" data-es="QA Engineer · SDET · Ingeniería de Calidad">QA Engineer · SDET · Quality Engineering</p>
 
-        <div class="flow" id="flow" role="group" aria-label="Quality approach" data-en-label="Quality approach" data-es-label="Enfoque de calidad">
+        <div class="flow" id="flow" role="group" tabindex="-1" aria-label="Quality approach" data-en-label="Quality approach" data-es-label="Enfoque de calidad">
           <svg class="flow-line" viewBox="0 0 1000 10" preserveAspectRatio="none" aria-hidden="true">
             <path class="flow-track" d="M0 5H1000" />
             <path class="flow-progress" d="M0 5H625" />
@@ -55,11 +57,11 @@
               <span class="station-shape shape-goal" aria-hidden="true"></span><span class="station-label" data-en="Quality throughout" data-es="Calidad continua">Quality throughout</span>
             </button>
           </div>
-          <div class="station-notes" aria-live="polite">
-            <p id="strategy-copy" data-en="Test strategies shaped around how the team ships software." data-es="Estrategias de prueba pensadas para la forma en que el equipo entrega software.">Test strategies shaped around how the team ships software.</p>
-            <p id="manual-copy" data-en="Exploratory testing of real user paths and edge cases." data-es="Exploración de rutas reales de usuario y casos límite.">Exploratory testing of real user paths and edge cases.</p>
-            <p id="automation-copy" data-en="Reliable automated checks that run with every change." data-es="Verificaciones automatizadas confiables que se ejecutan con cada cambio.">Reliable automated checks that run with every change.</p>
-            <p id="quality-copy" data-en="Quality built in from the start of development, not added at the end." data-es="Calidad integrada desde el inicio del desarrollo, no añadida al final.">Quality built in from the start of development, not added at the end.</p>
+          <div class="station-notes">
+            <p id="strategy-copy" aria-hidden="true" data-en="Test strategies shaped around how the team ships software." data-es="Estrategias de prueba pensadas para la forma en que el equipo entrega software.">Test strategies shaped around how the team ships software.</p>
+            <p id="manual-copy" aria-hidden="true" data-en="Exploratory testing of real user paths and edge cases." data-es="Exploración de rutas reales de usuario y casos límite.">Exploratory testing of real user paths and edge cases.</p>
+            <p id="automation-copy" aria-hidden="true" data-en="Reliable automated checks that run with every change." data-es="Verificaciones automatizadas confiables que se ejecutan con cada cambio.">Reliable automated checks that run with every change.</p>
+            <p id="quality-copy" aria-hidden="true" data-en="Quality built in from the start of development, not added at the end." data-es="Calidad integrada desde el inicio del desarrollo, no añadida al final.">Quality built in from the start of development, not added at the end.</p>
           </div>
         </div>
 
