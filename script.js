@@ -3,6 +3,7 @@ const translatableElements = document.querySelectorAll("[data-en][data-es]");
 const pageTitle = "Joan De la Rosa — QA Engineer";
 const welcomeBanner = document.querySelector("#welcome-banner");
 const welcomeMessage = document.querySelector("#welcome-message");
+const welcomeSlot = document.querySelector(".welcome-slot");
 const welcomeCopy = {
   en: "Welcome to my QA test. Explore how I approach quality.",
   es: "Bienvenido a mi prueba de QA. Explora mi enfoque de calidad.",
@@ -132,6 +133,7 @@ function readWelcomePreference() {
 }
 
 let welcomeDismissed = readWelcomePreference();
+if (!welcomeDismissed) welcomeSlot.classList.add("is-reserved");
 
 function dismissWelcome(focusTarget = null) {
   welcomeDismissed = true;
@@ -142,6 +144,7 @@ function dismissWelcome(focusTarget = null) {
   }
   if (focusTarget) focusTarget.focus({ preventScroll: true });
   welcomeBanner.hidden = true;
+  welcomeSlot.classList.remove("is-reserved");
   welcomeMessage.textContent = "";
 }
 
@@ -167,14 +170,8 @@ document.addEventListener("keydown", (event) => {
   if (!welcomeBanner.hidden) dismissWelcome();
 });
 
-let userInteracted = false;
-const markUserInteraction = () => { userInteracted = true; };
-window.addEventListener("pointerdown", markUserInteraction, { once: true, passive: true });
-window.addEventListener("keydown", markUserInteraction, { once: true });
-window.addEventListener("scroll", markUserInteraction, { once: true, passive: true });
-
 window.setTimeout(() => {
-  if (welcomeDismissed || userInteracted) return;
+  if (welcomeDismissed) return;
   welcomeBanner.hidden = false;
   window.requestAnimationFrame(() => {
     if (welcomeBanner.hidden) return;
