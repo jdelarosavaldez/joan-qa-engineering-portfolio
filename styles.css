@@ -127,7 +127,7 @@ h1 span:last-child { white-space: nowrap; }
   .bio { width: 100%; margin-top: 2rem; font-size: 1rem; }
   .site-footer { flex-wrap: wrap; justify-content: flex-start; padding: 1rem 0; }
   .site-footer span:last-child { margin-left: auto; }
-  .welcome-slot.is-reserved { min-height: 8rem; }
+  .welcome-slot.is-reserved { min-height: 10rem; }
 }
 @media (max-width: 340px) {
   .flow-line { left: -.5rem; width: calc(100% + .5rem); }

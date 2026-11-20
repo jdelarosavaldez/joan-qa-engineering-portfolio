@@ -93,7 +93,7 @@ Workflow steps use rounded rectangles, manual testing uses a diamond, and the pa
 
 ### Navigation and language
 
-The circular “JD.” wordmark links to the page start. The EN/ES selector is visible in the header; English is the default. The active language uses a filled bone circle, and both controls retain a high-contrast focus ring.
+The circular “JD.” wordmark links to the page start. The EN/ES selector is visible in the header; English is the default. Each button's accessible name includes its visible language code. The active language uses a filled bone circle, and both controls retain a high-contrast focus ring.
 
 ### QA flow
 
@@ -101,7 +101,7 @@ Four real buttons represent strategy, manual testing, automation, and quality th
 
 ### Welcome banner
 
-The banner appears after the initial entrance sequence, announces its text after becoming visible with `role="status"`, and can be dismissed by button or Escape. Its primary action scrolls to the QA flow. Reserve its responsive height while it is pending or visible to prevent a late layout shift, then release the space when it is dismissed.
+The banner appears after the initial entrance sequence, announces its text after becoming visible with `role="status"`, and can be dismissed by button or Escape. Its primary action scrolls to the QA flow. Reserve enough responsive height for either translation while it is pending or visible to prevent a late layout shift, then release the space when it is dismissed.
 
 ### Motion and accessibility
 
