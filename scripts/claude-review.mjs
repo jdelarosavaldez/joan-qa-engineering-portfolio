@@ -35,7 +35,17 @@ async function githubRequest(path, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`GitHub API request failed with status ${response.status}.`);
+    const errorBody = await response.json().catch(() => ({}));
+    const message = typeof errorBody.message === "string"
+      ? errorBody.message.slice(0, 300)
+      : "No error message returned";
+    const acceptedPermissions = response.headers.get("x-accepted-github-permissions") || "not provided";
+    const rateRemaining = response.headers.get("x-ratelimit-remaining") || "not provided";
+    const requestId = response.headers.get("x-github-request-id") || "not provided";
+    throw new Error(
+      `GitHub API ${options.method || "GET"} ${path} failed with status ${response.status}: ${message}. ` +
+      `Accepted permissions: ${acceptedPermissions}; rate limit remaining: ${rateRemaining}; request ID: ${requestId}.`,
+    );
   }
   return response;
 }
