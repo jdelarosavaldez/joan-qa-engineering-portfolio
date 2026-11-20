@@ -46,7 +46,7 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: clip; }
+html { scroll-behavior: smooth; }
 body { min-width: 320px; max-width: 1600px; margin: 0 auto; padding: 0 var(--page-gutter); background-image: radial-gradient(circle, rgb(247 243 232 / 12%) 1px, transparent 1.2px); background-size: 22px 22px; }
 button, a { color: inherit; font: inherit; }
 .skip-link { position: fixed; z-index: 10; top: 1rem; left: var(--page-gutter); padding: .75rem 1rem; transform: translateY(-180%); background: var(--bone); color: var(--petrol); }

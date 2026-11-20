@@ -94,6 +94,7 @@ stations.forEach((station) => {
   station.addEventListener("focus", () => showStation(station));
   station.addEventListener("blur", () => {
     if (station.dataset.openedByClick === "true") {
+      if (station.dataset.notePointerDown === "true") return;
       station.dataset.openedByClick = "false";
       hideStationNote(station);
       return;
@@ -113,12 +114,26 @@ stations.forEach((station) => {
 });
 
 notes.forEach((note) => {
+  note.addEventListener("pointerdown", () => {
+    const station = stations.find((item) => item.getAttribute("aria-controls") === note.id);
+    if (station?.dataset.openedByClick === "true") station.dataset.notePointerDown = "true";
+  });
   note.addEventListener("mouseenter", cancelNoteHide);
   note.addEventListener("mouseleave", () => {
     const station = stations.find((item) => item.getAttribute("aria-controls") === note.id);
     if (station) scheduleNoteHide(station);
   });
 });
+
+function restoreFocusAfterNotePress() {
+  const station = stations.find((item) => item.dataset.notePointerDown === "true");
+  if (!station) return;
+  station.dataset.notePointerDown = "false";
+  station.focus({ preventScroll: true });
+}
+
+document.addEventListener("pointerup", restoreFocusAfterNotePress);
+document.addEventListener("pointercancel", restoreFocusAfterNotePress);
 
 document.addEventListener("pointerdown", (event) => {
   const target = event.target;

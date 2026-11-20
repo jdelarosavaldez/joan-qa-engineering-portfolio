@@ -66,7 +66,7 @@ The page self-hosts Bricolage Grotesque and Literata from `assets/fonts/` under 
 - Every interactive element has a visible keyboard focus state. The skip link reaches the main content, and controls work by keyboard.
 - `prefers-reduced-motion` behavior is implemented and exercised in a browser check.
 - Responsive behavior is checked at 375 px and desktop widths, with screenshots retained as review evidence.
-- A browser check confirms no horizontal overflow; visual review covers the English and Spanish layouts.
+- A browser check compares content bounding boxes against the viewport to detect horizontal overflow; visual review covers the English and Spanish layouts.
 
 ## Technology and hosting
 
