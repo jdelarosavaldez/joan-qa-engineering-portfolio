@@ -17,7 +17,8 @@ This portfolio grows through independently runnable milestones. A project moves 
 ## Milestone 1 — Portfolio site
 
 - [x] Agree the site's language: English by default, with a visible switch to equivalent Spanish content.
-- [ ] Review the concise bio and visual proposal with Claude; record Joan's accepted decisions before expanding the site.
+- [x] Confirm the concise, general bio wording with Joan.
+- [ ] Review the homepage visual proposal with Claude; record Joan's accepted decisions before expanding the site.
 - [x] Keep implementation on a task branch and prepare the first reviewable homepage slice for `main`; Joan merges after review.
 - [x] Implement the initial responsive portfolio view and confirmed introductory content; keep project results and testing out of this slice.
 - [ ] Review the rendered site at mobile and desktop before expanding it.

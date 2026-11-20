@@ -40,7 +40,7 @@ Project roles and attribution rules are defined in [DESIGN.md](DESIGN.md#project
 
 ## Current limitations
 
-- The Claude Reviewer GitHub App is installed only on this repository. The workflow reviews diffs from public, same-repository PRs and posts an App-authored comment when its Actions credentials are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
+- The Claude Reviewer GitHub App is installed only on this repository. The [review workflow](.github/workflows/claude-review.yml) reviews diffs from public, same-repository PRs and posts an App-authored comment when its Actions credentials are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
 - The initial homepage is a static prototype with a short bilingual biography; it has no build tooling, automation framework, or deployment yet.
 - Astro and the earlier starter proposal are paused while the static homepage design is reviewed. The first view has no package manifest or third-party runtime dependencies.
 - The public GitHub repository is created and connected to this local repository. GitHub Pages is not configured yet.
