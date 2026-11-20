@@ -58,4 +58,25 @@ Keep translations equivalent. Don't invent experience, metrics, results, reports
 
 ## External font request
 
-The current page loads Bricolage Grotesque and Literata from Google Fonts. This sends each visitor's IP address and browser User-Agent to Google when the fonts are requested. The portfolio currently has no consent mechanism. This is an intentional design dependency for this slice; self-host the font files before removing the third-party request if the privacy trade-off is no longer acceptable.
+The page self-hosts Bricolage Grotesque and Literata from `assets/fonts/` under the SIL Open Font License 1.1. This avoids third-party font requests from visitor browsers. Keep the font license notices with the redistributed files.
+
+## Accessibility and verification acceptance
+
+- Normal text meets WCAG AA contrast (at least 4.5:1); large text and non-text controls meet their applicable contrast thresholds.
+- Every interactive element has a visible keyboard focus state. The skip link reaches the main content, and controls work by keyboard.
+- `prefers-reduced-motion` behavior is implemented and exercised in a browser check.
+- Responsive behavior is checked at 375 px and desktop widths, with screenshots retained as review evidence.
+- A browser check confirms no horizontal overflow; visual review covers the English and Spanish layouts.
+
+## Technology and hosting
+
+- The homepage uses static HTML, CSS, and JavaScript with locally hosted font assets. It has no application server, database, analytics, or runtime framework dependency.
+- GitHub Pages through GitHub Actions remains the hosting direction; deployment and the Pages base path are not configured in this review slice.
+- Playwright + TypeScript is the planned browser check for the portfolio. Add the smallest check workflow after the homepage design is approved.
+
+## Next reviewable slices
+
+1. Resolve accepted review findings and approve the homepage design and content.
+2. Add a small Playwright check for language selection, keyboard access, reduced motion, responsive widths, and overflow.
+3. Confirm the GitHub Pages URL and configuration before preparing deployment.
+4. Build the portfolio QA Lab and separate practice projects one at a time; report only real, reproducible test evidence.
