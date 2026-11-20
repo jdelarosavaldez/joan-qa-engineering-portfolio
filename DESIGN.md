@@ -1,6 +1,6 @@
 # Portfolio site design proposal
 
-**Status:** design review in progress. The public GitHub repository contains planning documents only; there is no application scaffold or deployment. Work will proceed one reviewable slice at a time.
+**Status:** first homepage slice implemented on a review branch; no deployment yet. Work will proceed one reviewable slice at a time.
 
 ## Product direction
 
@@ -15,6 +15,8 @@ Use Alice Paggi's portfolio as a reference for information hierarchy and polish,
 ## Recommended experience
 
 - Start with one small, reviewable slice: the home page and Joan-approved introduction. Complete and review the site before adding the QA Lab, test artifacts, or separate projects.
+- The first view contains a brief bilingual biography, English by default, and a transparent note that case studies and execution evidence will be added as they are built and reviewed.
+- The initial view uses static HTML, CSS, and JavaScript without external dependencies. We are refining this view before deciding whether a framework adds value.
 - A short profile and grouped skills must be grounded in confirmed experience rather than a keyword wall.
 - The "QA Lab" must say **pending** until checks have run. Once it reports status, that status and linked evidence must come from a real CI run.
 - Each case study explains its goal, quality risks, strategy, architecture, executable checks, CI evidence, results, and limitations.
@@ -22,12 +24,14 @@ Use Alice Paggi's portfolio as a reference for information hierarchy and polish,
 
 Keep navigation direct and the page readable on narrow screens. Do not rely on color alone for test states.
 
-## Visual proposal
+## Visual direction for this slice
 
-- Let report details and real evidence define the page composition; avoid generic editorial portfolio layouts and decorative QA icons.
-- If cobalt is selected, reserve it for links and actions. If a warm accent is selected, reserve it for QA states. Confirm the palette and contrast before styling.
-- Select a type pairing before implementation. Candidates to compare: IBM Plex Sans + IBM Plex Mono; Atkinson Hyperlegible + IBM Plex Mono; Source Sans 3 + IBM Plex Mono. The final choice and font sources remain open.
+- Lead with Joan's full name, a readable role line, and the approved biography. Keep the `JD.` mark in the header as a compact signature.
+- Use the existing warm paper, dark ink, and cobalt palette. Cobalt highlights links, actions, and the brand mark; any future QA state colors must have a separate meaning.
+- Keep the display serif and sans-serif body pairing for this review. Check the visual result on mobile and desktop before adding more visual systems.
+- Let future real reports and evidence define the composition of project pages; avoid generic QA icons and fabricated dashboards.
 - Avoid fabricated reports, metrics, status indicators, ornamental dashboards, and placeholder test data that could be mistaken for Joan's work.
+- The Impeccable and Make Interfaces Feel Better skills guide this typography and detail pass. Transitions.dev and GSAP skills are available for later interactions that genuinely need motion; skills do not add site runtime dependencies.
 
 ## Collaboration and review
 
@@ -58,8 +62,7 @@ These are project responsibilities, not GitHub permission roles or verified acco
 
 ## Technology and hosting
 
-- Astro, TypeScript, the starter template, and exact versions are candidates, not decisions. Verify current package requirements on npm and in Astro's official documentation before writing a manifest.
-- Compare the Accessible Astro Starter with a minimal Astro scaffold after checking runtime compatibility, license, and which features are actually needed. The Trello card must match the selected option.
+- The current site remains static HTML, CSS, and JavaScript while its visual direction is reviewed. Astro and the earlier starter proposal are paused, not part of this slice.
 - GitHub Pages deployment through GitHub Actions remains the hosting direction; no workflow or `base` path is approved yet.
 - Playwright + TypeScript is the planned browser check. Browser and test commands are not yet locked.
 - No server, database, analytics, or secrets are planned for the first release.
@@ -71,36 +74,25 @@ These are project responsibilities, not GitHub permission roles or verified acco
 ├── README.md
 ├── ROADMAP.md
 ├── DESIGN.md
-├── astro.config.mjs
-├── package.json
-├── tsconfig.json
-├── public/
-├── src/
-│   ├── components/       # navigation, evidence labels, QA SVGs
-│   ├── content/projects/ # reviewed case studies
-│   ├── layouts/
-│   ├── pages/
-│   └── styles/
+├── index.html
+├── styles.css
+├── script.js
 ├── tests/e2e/            # Playwright checks for the portfolio
 └── .github/workflows/    # build, browser checks, Pages deployment
 ```
 
 ## Next reviewable slices
 
-No frontend work starts until the design choices below are answered and the repository target is established.
-
-1. Resolve the content and visual decisions; record them in this file and Trello.
-2. Verify the selected framework, starter, license, package versions, Node requirements, and GitHub Pages workflow.
-3. The public GitHub repository and local remote are established; set `site` and `base` only after confirming the Pages path.
-4. Review the site's information architecture and a small wireframe before coding.
-5. Build and review the portfolio site first using only confirmed profile/content; no projects or test suite are required for this slice.
-6. After the site is reviewed, add the portfolio's own QA checks, then add separate projects and their tests one by one.
+1. Review the first homepage and biography; record accepted changes in the PR and Trello.
+2. Decide whether this static view needs a framework after the homepage design is approved.
+3. Confirm the GitHub Pages URL and configuration before setting a deployment workflow.
+4. After the homepage is reviewed, add the portfolio's own QA checks, then add separate projects and their tests one by one.
 
 ## Decisions for review
 
 1. **Audience and language:** resolved — English by default, with a visible switch to the equivalent Spanish version.
-2. **Résumé:** choose web résumé, PDF, both, or defer until current content is supplied.
-3. **Visual system:** choose from the typography candidates, then approve the palette and token values with contrast ratios.
+2. **Résumé:** choose web résumé, PDF, both, or defer until current content is supplied. Deferred for this slice.
+3. **Visual system:** this first view uses a warm paper background, cobalt action color, native `system-ui` body text, a serif display face, and a `JD.` brand mark. Review the result before expanding the site.
 4. **First artifact/case:** choose what real test artifact or clean-room case to build and feature first.
 5. **Release scope:** choose the smallest public launch slice; keep all unverified CI and project states marked pending.
 
