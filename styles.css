@@ -215,6 +215,7 @@ h1 span:last-child { white-space: nowrap; }
 .qa-metrics dt { color: var(--muted-bone); font-size: .78rem; }
 .qa-metrics dd { margin: .35rem 0 0; font-size: clamp(1.2rem, 2vw, 1.7rem); font-variant-numeric: tabular-nums; font-weight: 700; }
 .qa-run-link { display: inline-flex; min-height: 44px; align-items: center; margin-top: .35rem; color: var(--bone); font-size: .9rem; font-weight: 700; text-underline-offset: .25rem; }
+.qa-run-link[hidden] { display: none; }
 .qa-chart { display: block; width: 100%; max-width: 34rem; height: auto; margin: 1.5rem 0 .75rem; overflow: visible; }
 .qa-history { margin-top: 1rem; border-top: 1px solid rgb(247 243 232 / 24%); }
 .qa-history-head {
