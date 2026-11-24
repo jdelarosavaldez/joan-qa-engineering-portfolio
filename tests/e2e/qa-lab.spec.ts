@@ -22,6 +22,7 @@ const successfulFeed = {
     passed: 18,
     failed: 0,
     skipped: 0,
+    flaky: 0,
     total: 18,
     durationMs: 42000,
     actionsUrl: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/9001",
@@ -56,6 +57,7 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await expect(qaLab.passed).toHaveText("18");
   await expect(qaLab.failed).toHaveText("0");
   await expect(qaLab.skipped).toHaveText("0");
+  await expect(qaLab.flaky).toHaveText("0");
   await expect(qaLab.chart).toBeVisible();
   await expect(qaLab.historyPanel).not.toHaveAttribute("open", "");
   await qaLab.expandHistory();
@@ -121,6 +123,7 @@ test("[PF-QA-006] filters unsafe and non-result history before rendering @regres
     }),
   }));
   await qaLab.reload();
+  await qaLab.expandHistory();
 
   await expect(qaLab.history.getByRole("listitem")).toHaveCount(1);
   await expect(qaLab.history.getByRole("link")).toHaveAttribute("href", /9001$/);

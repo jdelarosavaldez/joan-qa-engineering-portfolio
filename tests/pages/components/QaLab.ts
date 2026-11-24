@@ -12,6 +12,7 @@ export class QaLab {
   readonly passed: Locator;
   readonly failed: Locator;
   readonly skipped: Locator;
+  readonly flaky: Locator;
   readonly runAction: Locator;
   readonly runEvidence: Locator;
   private readonly page: Page;
@@ -29,6 +30,7 @@ export class QaLab {
     this.passed = this.root.locator("#qa-passed");
     this.failed = this.root.locator("#qa-failed");
     this.skipped = this.root.locator("#qa-skipped");
+    this.flaky = this.root.locator("#qa-flaky");
     this.runEvidence = this.root.locator('#qa-run-link');
     this.runAction = this.root.getByRole("link", { name: /Run checks|Ejecutar pruebas/ });
   }

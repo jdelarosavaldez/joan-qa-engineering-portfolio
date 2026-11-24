@@ -1,6 +1,7 @@
 const languageButtons = [...document.querySelectorAll("[data-language-choice]")];
 const translatableElements = document.querySelectorAll("[data-en][data-es]");
 const pageTitle = "Joan De la Rosa — QA Engineer";
+let qaLabReady = false;
 const welcomeBanner = document.querySelector("#welcome-banner");
 const welcomeMessage = document.querySelector("#welcome-message");
 const welcomeSlot = document.querySelector(".welcome-slot");
@@ -29,7 +30,7 @@ function setLanguage(language) {
   });
   if (!welcomeBanner.hidden) welcomeMessage.textContent = welcomeCopy[language];
   document.title = pageTitle;
-  renderQaLab(qaLabData);
+  if (qaLabReady) renderQaLab(qaLabData);
 }
 
 languageButtons.forEach((button) => {
@@ -211,6 +212,7 @@ const qaRunLink = document.querySelector("#qa-run-link");
 const qaPassed = document.querySelector("#qa-passed");
 const qaFailed = document.querySelector("#qa-failed");
 const qaSkipped = document.querySelector("#qa-skipped");
+const qaFlaky = document.querySelector("#qa-flaky");
 const qaDuration = document.querySelector("#qa-duration");
 const qaChart = document.querySelector("#qa-history-chart");
 const qaChartAxis = qaChart.querySelector(".qa-chart-axis");
@@ -252,7 +254,7 @@ function renderQaPending(language, invalid = false) {
   qaStatus.dataset.qaStatus = "pending";
   qaRunMeta.textContent = invalid ? messages.invalid : messages.noResult;
   qaRunLink.hidden = true;
-  qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaDuration.textContent = "—";
+  qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaFlaky.textContent = qaDuration.textContent = "—";
   qaHistoryList.replaceChildren();
   qaChart.setAttribute("hidden", "");
   qaEmpty.hidden = false;
@@ -274,12 +276,14 @@ function renderQaLab(payload) {
   qaStatus.textContent = isSuccess ? messages.passed : messages.failed;
   qaStatus.dataset.qaStatus = latest.status;
   const date = formatQaDate(latest.completedAt, language);
-  qaRunMeta.textContent = ["#" + latest.runNumber, date, latest.commit].filter(Boolean).join(" · ") || messages.noResult;
+  const runLabel = Number.isInteger(latest.runNumber) && latest.runNumber > 0 ? "#" + latest.runNumber : null;
+  qaRunMeta.textContent = [runLabel, date, latest.commit].filter(Boolean).join(" · ") || messages.noResult;
 
   const countsValid = ["passed", "failed", "skipped"].every((key) => Number.isInteger(latest[key]) && latest[key] >= 0);
   qaPassed.textContent = countsValid ? String(latest.passed) : "—";
   qaFailed.textContent = countsValid ? String(latest.failed) : "—";
   qaSkipped.textContent = countsValid ? String(latest.skipped) : "—";
+  qaFlaky.textContent = Number.isInteger(latest.flaky) && latest.flaky >= 0 ? String(latest.flaky) : "—";
   qaDuration.textContent = Number.isFinite(latest.durationMs) ? formatQaDuration(latest.durationMs, language) : "—";
 
   const actionsUrl = safeActionsUrl(latest.actionsUrl);
@@ -386,4 +390,5 @@ async function loadQaLab() {
   renderQaLab(qaLabData);
 }
 
+qaLabReady = true;
 loadQaLab();
