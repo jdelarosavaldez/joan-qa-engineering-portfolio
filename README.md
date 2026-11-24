@@ -20,7 +20,7 @@ Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Python is only the local 
 
 ## Run the portfolio QA checks
 
-The portfolio's browser checks use Playwright and TypeScript with page objects, fixtures, centralized bilingual test data, stable case IDs, and a traceable [test plan](docs/test-plan.md). An axe scan checks the introduction in English and Spanish. The framework runs the static site with the Python preview server; it does not add a build framework to the website.
+The portfolio's browser checks use Playwright and TypeScript with page objects, fixtures, centralized bilingual test data, stable case IDs, and a traceable [test plan](docs/test-plan.md). An axe scan checks the full page in English and Spanish. The framework runs the static site with the Python preview server; it does not add a build framework to the website.
 
 **Requirements:** Node.js 22.12 or newer, npm, and Python 3. GitHub Actions uses Node.js 24.
 
