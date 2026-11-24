@@ -1,5 +1,15 @@
 import { test, expect } from "../fixtures/portfolio.fixture";
 
+const workflowRunsUrl = "https://api.github.com/repos/jdelarosavaldez/joan-qa-engineering-portfolio/actions/workflows/portfolio-quality.yml/runs";
+
+async function stubWorkflowRuns(page, workflow_runs = []) {
+  await page.route(workflowRunsUrl + "**", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ workflow_runs }),
+  }));
+}
+
 const successfulFeed = {
   schemaVersion: 1,
   latestRun: {
@@ -21,7 +31,9 @@ const successfulFeed = {
   ],
 };
 
-test("[PF-QA-001] shows a pending empty state before CI evidence exists @smoke", async ({ portfolio, qaLab }) => {
+test("[PF-QA-001] shows a pending empty state before CI evidence exists @smoke", async ({ portfolio, page, qaLab }) => {
+  await stubWorkflowRuns(page);
+  await qaLab.reload();
   await expect(qaLab.heading).toBeVisible();
   await expect(qaLab.status).toHaveText("Pending");
   await expect(qaLab.pendingMessage).toBeVisible();
@@ -31,6 +43,7 @@ test("[PF-QA-001] shows a pending empty state before CI evidence exists @smoke",
 });
 
 test("[PF-QA-002] renders real-result fields and recent run outcomes in English and Spanish @regression", async ({ portfolio, page, qaLab }) => {
+  await stubWorkflowRuns(page);
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -51,7 +64,30 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados recientes de CI/);
 });
 
-test("[PF-QA-003] keeps malformed public data in the pending state @regression", async ({ qaLab, page }) => {
+test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ page, qaLab }) => {
+  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify(successfulFeed),
+  }));
+  await stubWorkflowRuns(page, [{
+    id: 9002,
+    run_number: 22,
+    status: "in_progress",
+    event: "workflow_dispatch",
+    head_branch: "main",
+    created_at: "2026-11-25T01:00:00.000Z",
+    html_url: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/9002",
+  }]);
+  await qaLab.reload();
+
+  await expect(qaLab.status).toHaveText("Running");
+  await expect(qaLab.passed).toHaveText("—");
+  await expect(qaLab.runEvidence).toHaveAttribute("href", /actions\/workflows\/portfolio-quality\.yml$/);
+});
+
+test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ qaLab, page }) => {
+  await stubWorkflowRuns(page);
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
     status: 200,
     contentType: "application/json",

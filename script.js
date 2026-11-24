@@ -29,7 +29,7 @@ function setLanguage(language) {
   });
   if (!welcomeBanner.hidden) welcomeMessage.textContent = welcomeCopy[language];
   document.title = pageTitle;
-  if (qaLabData) renderQaLab(qaLabData);
+  if (qaLabData) renderQaLab(qaLabData); else renderQaPending(language);
 }
 
 languageButtons.forEach((button) => {
@@ -219,10 +219,11 @@ const qaChartPoints = qaChart.querySelector(".qa-chart-points");
 const qaHistoryList = document.querySelector("#qa-history-list");
 const qaEmpty = document.querySelector("#qa-empty");
 let qaLabData = null;
+let qaLiveRun = null;
 
 const qaMessages = {
-  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", run: "Run", on: "on", runs: "Recent runs", chart: "Recent CI outcomes, newest first.", invalid: "The published result is not available yet." },
-  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", run: "Ejecución", on: "el", runs: "Ejecuciones recientes", chart: "Resultados recientes de CI, del más nuevo al más antiguo.", invalid: "El resultado publicado aún no está disponible." },
+  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", run: "Run", on: "on", runs: "Recent runs", queued: "Queued", running: "Running", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet." },
+  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", run: "Ejecución", on: "el", runs: "Ejecuciones recientes", queued: "En cola", running: "En curso", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible." },
 };
 
 function currentQaLanguage() {
@@ -264,6 +265,23 @@ function renderQaLab(payload) {
   const messages = qaMessages[language];
   const latest = payload?.schemaVersion === 1 ? payload.latestRun : null;
 
+  if (qaLiveRun && (!latest?.completedAt || Date.parse(qaLiveRun.createdAt) > Date.parse(latest.completedAt))) {
+    const activeLabel = qaLiveRun.status === "queued" ? messages.queued : messages.running;
+    qaStatus.textContent = activeLabel;
+    qaStatus.dataset.qaStatus = qaLiveRun.status;
+    qaRunMeta.textContent = ["#" + qaLiveRun.runNumber, activeLabel, qaLiveRun.commit].filter(Boolean).join(" · ");
+    qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaDuration.textContent = "—";
+    const activeUrl = safeActionsUrl(qaLiveRun.actionsUrl);
+    qaRunLink.hidden = !activeUrl;
+    if (activeUrl) qaRunLink.href = activeUrl;
+    const activeHistory = Array.isArray(payload?.history) ? payload.history : [];
+    renderQaHistory(activeHistory, language);
+    if (!activeHistory.length) qaEmpty.textContent = language === "es"
+      ? "El historial aparecerá cuando finalice esta ejecución."
+      : "History will appear when this run finishes.";
+    return;
+  }
+
   if (!latest || !["success", "failure"].includes(latest.status)) {
     renderQaPending(language, Boolean(payload));
     return;
@@ -273,7 +291,7 @@ function renderQaLab(payload) {
   qaStatus.textContent = isSuccess ? messages.passed : messages.failed;
   qaStatus.dataset.qaStatus = latest.status;
   const date = formatQaDate(latest.completedAt, language);
-  qaRunMeta.textContent = [`#${latest.runNumber}`, date].filter(Boolean).join(" · ") || messages.noResult;
+  qaRunMeta.textContent = ["#" + latest.runNumber, date, latest.commit].filter(Boolean).join(" · ") || messages.noResult;
 
   const countsValid = ["passed", "failed", "skipped"].every((key) => Number.isInteger(latest[key]) && latest[key] >= 0);
   qaPassed.textContent = countsValid ? String(latest.passed) : "—";
@@ -285,7 +303,7 @@ function renderQaLab(payload) {
   qaRunLink.hidden = !actionsUrl;
   if (actionsUrl) qaRunLink.href = actionsUrl;
 
-  const history = Array.isArray(payload.history)
+  const history = Array.isArray(payload?.history)
     ? payload.history.filter((item) => Number.isInteger(item.runNumber) && ["success", "failure"].includes(item.status) && safeActionsUrl(item.actionsUrl)).slice(0, 10)
     : [];
   renderQaHistory(history, language);
@@ -353,10 +371,41 @@ function renderQaHistory(history, language) {
   qaEmpty.hidden = true;
 }
 
-fetch("./data/qa-lab-results.json", { cache: "no-store" })
-  .then((response) => {
+async function loadQaLab() {
+  try {
+    const response = await fetch("./data/qa-lab-results.json", { cache: "no-store" });
     if (!response.ok) throw new Error("No published QA Lab data.");
-    return response.json();
-  })
-  .then((data) => { qaLabData = data; renderQaLab(data); })
-  .catch(() => renderQaPending(currentQaLanguage()));
+    qaLabData = await response.json();
+  } catch {
+    qaLabData = null;
+  }
+
+  try {
+    const response = await fetch("https://api.github.com/repos/jdelarosavaldez/joan-qa-engineering-portfolio/actions/workflows/portfolio-quality.yml/runs?branch=main&per_page=20", {
+      headers: { Accept: "application/vnd.github+json" },
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error("Live workflow state is unavailable.");
+    const result = await response.json();
+    const latest = qaLabData?.latestRun;
+    const active = (result.workflow_runs || []).find((run) =>
+      run.head_branch === "main" &&
+      ["push", "workflow_dispatch"].includes(run.event) &&
+      ["queued", "in_progress"].includes(run.status) &&
+      (!latest?.completedAt || Date.parse(run.created_at) > Date.parse(latest.completedAt))
+    );
+    qaLiveRun = active ? {
+      status: active.status,
+      runNumber: Number(active.run_number),
+      createdAt: active.created_at,
+      commit: String(active.head_sha || "").slice(0, 7),
+      actionsUrl: active.html_url,
+    } : null;
+  } catch {
+    qaLiveRun = null;
+  }
+
+  renderQaLab(qaLabData);
+}
+
+loadQaLab();

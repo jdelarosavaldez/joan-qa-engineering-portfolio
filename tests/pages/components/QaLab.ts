@@ -11,6 +11,7 @@ export class QaLab {
   readonly failed: Locator;
   readonly skipped: Locator;
   readonly runAction: Locator;
+  readonly runEvidence: Locator;
   private readonly page: Page;
 
   constructor(page: Page) {
@@ -19,11 +20,12 @@ export class QaLab {
     this.heading = this.root.getByRole("heading", { level: 2 });
     this.status = this.root.locator("[data-qa-status]");
     this.pendingMessage = this.root.locator("#qa-empty");
-    this.chart = this.root.getByRole("img");
+    this.chart = this.root.locator("#qa-history-chart");
     this.history = this.root.locator("#qa-history-list");
     this.passed = this.root.locator("#qa-passed");
     this.failed = this.root.locator("#qa-failed");
     this.skipped = this.root.locator("#qa-skipped");
+    this.runEvidence = this.root.locator('#qa-run-link');
     this.runAction = this.root.getByRole("link", { name: /Run checks|Ejecutar pruebas/ });
   }
 
