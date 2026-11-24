@@ -62,7 +62,7 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await portfolio.language.option("es").click();
   await expect(qaLab.status).toHaveText("Aprobado");
   await expect(qaLab.heading).toHaveText("Laboratorio de QA");
-  await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados recientes de CI/);
+  await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados de CI/);
 });
 
 test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ portfolio, page, qaLab }) => {
@@ -84,7 +84,7 @@ test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ 
 
   await expect(qaLab.status).toHaveText("Running");
   await expect(qaLab.passed).toHaveText("—");
-  await expect(qaLab.runEvidence).toHaveAttribute("href", /actions\/workflows\/portfolio-quality\.yml$/);
+  await expect(qaLab.runEvidence).toHaveAttribute("href", /actions\/runs\/9002$/);
 });
 
 test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ portfolio, qaLab, page }) => {
