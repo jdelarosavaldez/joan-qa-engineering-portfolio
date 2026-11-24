@@ -41,4 +41,12 @@ export class QualityFlow {
       startCircleClearance: shapeBox.x - (startCircle.x + startCircle.width),
     };
   }
+
+  async stationLabelWidths(): Promise<Array<{ label: string; clientWidth: number; scrollWidth: number }>> {
+    return this.root.locator(".station-label").evaluateAll((labels) => labels.map((label) => ({
+      label: label.textContent ?? "",
+      clientWidth: (label as HTMLElement).clientWidth,
+      scrollWidth: (label as HTMLElement).scrollWidth,
+    })));
+  }
 }
