@@ -17,7 +17,16 @@ function setLanguage(language) {
     const translation = element.dataset[language];
     if (!translation) continue;
     if (element instanceof HTMLMetaElement) element.content = translation;
-    else element.textContent = translation;
+    else if (element.classList.contains("station-label")) {
+      const breakAt = Number(element.dataset[`${language}Break`]);
+      if (Number.isInteger(breakAt) && breakAt > 0 && breakAt < translation.length) {
+        element.replaceChildren(
+          document.createTextNode(translation.slice(0, breakAt)),
+          document.createElement("wbr"),
+          document.createTextNode(translation.slice(breakAt)),
+        );
+      } else element.textContent = translation;
+    } else element.textContent = translation;
   }
 
   document.querySelectorAll("[data-en-label][data-es-label]").forEach((element) => {
@@ -202,3 +211,4 @@ window.setTimeout(() => {
 }, reducedMotion.matches ? 0 : 1700);
 
 document.querySelector("#year").textContent = String(new Date().getFullYear());
+
