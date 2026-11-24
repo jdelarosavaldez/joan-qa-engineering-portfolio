@@ -45,7 +45,7 @@ GitHub Actions runs type checks and browser tests for pull requests to `main` an
 
 ## QA Lab and project pipeline
 
-The homepage includes a bilingual QA Lab with the latest real Playwright run, pass/fail/skip counts, a recent-run outcome chart, and links to the test plan and CI source files. The result feed is generated during the GitHub Pages deployment from the completed Actions run; it exposes only an allowlisted summary, short commit, and public run links. The site shows Pending when there is no valid feed. The page checks public workflow metadata on load for queued/running runs and links to that live Actions run. Starting a run opens GitHub Actions and requires an authenticated account with repository write access; credentials are never placed in browser code.
+The homepage includes a bilingual QA Lab with the latest real Playwright run, pass/fail/skip counts, a recent-run outcome chart, and links to the test plan and CI source files. The result feed is generated during the GitHub Pages deployment from the completed Actions run; it exposes only an allowlisted summary, short commit, and public run links. The site shows Pending when no completed result is published. Workflow history is fetched during deployment and packaged as a static feed, so visitors' browsers do not call the GitHub API. Starting a run opens GitHub Actions and requires an authenticated account with repository write access; credentials are never placed in browser code.
 
 The homepage also links to the active QA Lab files and labels the UI/API case study and Python/Pytest project as Planned until their repositories exist.
 

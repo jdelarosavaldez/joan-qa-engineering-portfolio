@@ -103,7 +103,7 @@
         </div>
 
         <div class="qa-lab-results">
-          <div class="qa-latest" id="qa-latest" aria-live="polite">
+          <div class="qa-latest" id="qa-latest">
             <div class="qa-latest-head">
               <div>
                 <h3 data-en="Latest run" data-es="Última ejecución">Latest run</h3>
@@ -123,23 +123,25 @@
                data-en="Open this Actions run ↗" data-es="Abrir esta ejecución de Actions ↗">Open this Actions run ↗</a>
           </div>
 
-          <div class="qa-history">
-            <div class="qa-history-head">
-              <h3 data-en="Recent CI history" data-es="Historial reciente de CI">Recent CI history</h3>
-              <span data-en="Latest runs on main" data-es="Últimas ejecuciones en main">Latest runs on main</span>
-            </div>
-            <svg class="qa-chart" id="qa-history-chart" viewBox="0 0 420 132" role="img"
-                 aria-label="No CI runs yet" data-en-label="No CI runs yet" data-es-label="Aún no hay ejecuciones de CI" hidden>
-              <g class="qa-chart-axis" aria-hidden="true"></g>
-              <polyline class="qa-chart-line" aria-hidden="true"></polyline>
-              <g class="qa-chart-points"></g>
-            </svg>
+          <svg class="qa-chart" id="qa-history-chart" viewBox="0 0 420 132" role="img"
+               aria-label="No CI runs yet" data-en-label="No CI runs yet" data-es-label="Aún no hay ejecuciones de CI" hidden>
+            <g class="qa-chart-axis" aria-hidden="true"></g>
+            <polyline class="qa-chart-line" aria-hidden="true"></polyline>
+            <g class="qa-chart-points"></g>
+          </svg>
+          <p class="qa-empty" id="qa-empty" data-en="The chart will appear after the next CI run on main."
+             data-es="El gráfico aparecerá después de la próxima ejecución de CI en main.">
+            The chart will appear after the next CI run on main.
+          </p>
+
+          <details class="qa-history" id="qa-history">
+            <summary class="qa-history-head">
+              <span class="qa-history-title" data-en="Recent CI history" data-es="Historial reciente de CI">Recent CI history</span>
+              <span class="qa-history-context" data-en="Latest runs on main" data-es="Últimas ejecuciones en main">Latest runs on main</span>
+              <span class="qa-history-indicator" aria-hidden="true"></span>
+            </summary>
             <ol class="qa-history-list" id="qa-history-list"></ol>
-            <p class="qa-empty" id="qa-empty" data-en="The chart will appear after the next CI run on main."
-               data-es="El gráfico aparecerá después de la próxima ejecución de CI en main.">
-              The chart will appear after the next CI run on main.
-            </p>
-          </div>
+          </details>
         </div>
       </section>
 

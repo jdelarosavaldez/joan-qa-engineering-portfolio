@@ -57,6 +57,9 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await expect(qaLab.failed).toHaveText("0");
   await expect(qaLab.skipped).toHaveText("0");
   await expect(qaLab.chart).toBeVisible();
+  await expect(qaLab.historyPanel).not.toHaveAttribute("open", "");
+  await qaLab.expandHistory();
+  await expect(qaLab.historyPanel).toHaveAttribute("open", "");
   await expect(qaLab.history.getByRole("listitem")).toHaveCount(2);
 
   await portfolio.language.option("es").click();
@@ -65,26 +68,16 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados de CI/);
 });
 
-test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ portfolio, page, qaLab }) => {
-  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
-    status: 200,
-    contentType: "application/json",
-    body: JSON.stringify(successfulFeed),
-  }));
-  await stubWorkflowRuns(page, [{
-    id: 9002,
-    run_number: 22,
-    status: "in_progress",
-    event: "workflow_dispatch",
-    head_branch: "main",
-    created_at: "2026-11-25T01:00:00.000Z",
-    html_url: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/9002",
-  }]);
+test("[PF-QA-003] stays pending until a completed result is published @regression", async ({ portfolio, page, qaLab }) => {
+  const githubRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().startsWith("https://api.github.com/")) githubRequests.push(request.url());
+  });
+  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 404, body: "" }));
   await qaLab.reload();
 
-  await expect(qaLab.status).toHaveText("Running");
-  await expect(qaLab.passed).toHaveText("—");
-  await expect(qaLab.runEvidence).toHaveAttribute("href", /actions\/runs\/9002$/);
+  await expect(qaLab.status).toHaveText("Pending");
+  expect(githubRequests).toEqual([]);
 });
 
 test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ portfolio, qaLab, page }) => {
@@ -101,28 +94,19 @@ test("[PF-QA-004] keeps malformed public data in the pending state @regression",
   await expect(qaLab.chart).toBeHidden();
 });
 
-test("[PF-QA-005] keeps a live run visible after changing language without a published feed @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-005] localizes the pending state without published CI data @regression", async ({ portfolio, page, qaLab }) => {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 404, body: "" }));
-  await stubWorkflowRuns(page, [{
-    id: 9003,
-    run_number: 23,
-    status: "queued",
-    event: "push",
-    head_branch: "main",
-    created_at: "2026-11-25T02:00:00.000Z",
-    html_url: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/9003",
-  }]);
   await qaLab.reload();
-  await expect(qaLab.status).toHaveText("Queued");
+  await expect(qaLab.status).toHaveText("Pending");
 
   await portfolio.language.option("es").click();
 
-  await expect(qaLab.status).toHaveText("En cola");
-  await expect(qaLab.runEvidence).toHaveAttribute("href", /9003$/);
-  await expect(qaLab.passed).toHaveText("—");
+  await expect(qaLab.status).toHaveText("Pendiente");
+  await expect(qaLab.pendingMessage).toHaveText("El gráfico aparecerá después de la próxima ejecución de CI en main.");
+  await expect(qaLab.runEvidence).toBeHidden();
 });
 
-test("[PF-QA-006] filters unsafe and non-result history before rendering @regression", async ({ page, qaLab }) => {
+test("[PF-QA-006] filters unsafe and non-result history before rendering @regression", async ({ portfolio, page, qaLab }) => {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -136,7 +120,6 @@ test("[PF-QA-006] filters unsafe and non-result history before rendering @regres
       ],
     }),
   }));
-  await stubWorkflowRuns(page);
   await qaLab.reload();
 
   await expect(qaLab.history.getByRole("listitem")).toHaveCount(1);

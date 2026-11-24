@@ -29,7 +29,7 @@ const summary = {
   latestRun: {
     runId,
     runNumber: Number.isFinite(runNumber) ? runNumber : null,
-    status: workflowResult === "success" && values && failed === 0 ? "success" : "failure",
+    status: workflowResult,
     completedAt,
     commit: commit || null,
     passed,

@@ -14,36 +14,37 @@ try {
   // The workflow may fail before generating a summary artifact; the run metadata still gives a truthful failure state.
 }
 
-const response = await fetch(`https://api.github.com/repos/${repository}/actions/workflows/portfolio-quality.yml/runs?branch=main&status=completed&per_page=20`, {
-  headers: {
-    Accept: "application/vnd.github+json",
-    Authorization: `Bearer ${token}`,
-    "X-GitHub-Api-Version": "2022-11-28",
-  },
-});
-if (!response.ok) throw new Error(`Could not read public workflow history (HTTP ${response.status}).`);
-const result = await response.json();
-const allowedEvents = new Set(["push", "workflow_dispatch"]);
-const history = (result.workflow_runs || [])
-  .filter((run) => run.head_branch === "main" && allowedEvents.has(run.event) && ["success", "failure"].includes(run.conclusion))
-  .slice(0, 10)
-  .map((run) => ({
-    runId: String(run.id),
-    runNumber: Number(run.run_number),
-    status: run.conclusion,
-    completedAt: run.updated_at,
-    durationMs: run.run_started_at ? Math.max(0, Date.parse(run.updated_at) - Date.parse(run.run_started_at)) : null,
-    commit: String(run.head_sha || "").slice(0, 7) || null,
-    actionsUrl: run.html_url,
-  }));
-
-const conclusion = process.env.QA_WORKFLOW_CONCLUSION;
-if (!["success", "failure"].includes(conclusion)) {
-  throw new Error("Only completed success or failure runs can be published.");
+let history = [];
+try {
+  const response = await fetch(`https://api.github.com/repos/${repository}/actions/workflows/portfolio-quality.yml/runs?branch=main&status=completed&per_page=20`, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${token}`,
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+  if (!response.ok) throw new Error(`GitHub Actions history request returned HTTP ${response.status}.`);
+  const result = await response.json();
+  const allowedEvents = new Set(["push", "workflow_dispatch"]);
+  history = (result.workflow_runs || [])
+    .filter((run) => run.head_branch === "main" && allowedEvents.has(run.event) && ["success", "failure"].includes(run.conclusion))
+    .slice(0, 10)
+    .map((run) => ({
+      runId: String(run.id),
+      runNumber: Number(run.run_number),
+      status: run.conclusion,
+      completedAt: run.updated_at,
+      durationMs: run.run_started_at ? Math.max(0, Date.parse(run.updated_at) - Date.parse(run.run_started_at)) : null,
+      commit: String(run.head_sha || "").slice(0, 7) || null,
+      actionsUrl: run.html_url,
+    }));
+} catch {
+  // Preserve the static site deploy even if the optional history request is unavailable.
 }
 
+const conclusion = process.env.QA_WORKFLOW_CONCLUSION;
 const safeCount = (value) => Number.isInteger(value) && value >= 0 ? value : null;
-const currentEvent = {
+const currentEvent = ["success", "failure"].includes(conclusion) ? {
   runId: currentRunId,
   runNumber: Number(process.env.QA_WORKFLOW_RUN_NUMBER) || null,
   status: conclusion,
@@ -56,10 +57,10 @@ const currentEvent = {
   total: safeCount(summary?.total),
   durationMs: Number.isFinite(summary?.durationMs) && summary.durationMs >= 0 ? summary.durationMs : null,
   actionsUrl: process.env.QA_WORKFLOW_URL,
-};
-const latestRun = currentEvent;
+} : null;
 const previousRuns = history.filter((run) => run.runId !== currentRunId);
-const withCurrent = [currentEvent, ...previousRuns].slice(0, 10);
+const withCurrent = currentEvent ? [currentEvent, ...previousRuns].slice(0, 10) : previousRuns.slice(0, 10);
+const latestRun = currentEvent || withCurrent[0] || null;
 const output = { schemaVersion: 1, latestRun, history: withCurrent };
 
 await mkdir("dist/data", { recursive: true });

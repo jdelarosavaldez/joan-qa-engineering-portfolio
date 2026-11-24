@@ -7,6 +7,8 @@ export class QaLab {
   readonly pendingMessage: Locator;
   readonly chart: Locator;
   readonly history: Locator;
+  readonly historyPanel: Locator;
+  readonly historyToggle: Locator;
   readonly passed: Locator;
   readonly failed: Locator;
   readonly skipped: Locator;
@@ -22,11 +24,17 @@ export class QaLab {
     this.pendingMessage = this.root.locator("#qa-empty");
     this.chart = this.root.locator("#qa-history-chart");
     this.history = this.root.locator("#qa-history-list");
+    this.historyPanel = this.root.locator("#qa-history");
+    this.historyToggle = this.historyPanel.locator("summary");
     this.passed = this.root.locator("#qa-passed");
     this.failed = this.root.locator("#qa-failed");
     this.skipped = this.root.locator("#qa-skipped");
     this.runEvidence = this.root.locator('#qa-run-link');
     this.runAction = this.root.getByRole("link", { name: /Run checks|Ejecutar pruebas/ });
+  }
+
+  async expandHistory(): Promise<void> {
+    await this.historyToggle.click();
   }
 
   async reload(): Promise<void> {

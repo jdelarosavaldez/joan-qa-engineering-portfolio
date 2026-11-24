@@ -183,7 +183,13 @@ h1 span:last-child { white-space: nowrap; }
   color: var(--bone); font-weight: 700; text-underline-offset: .25rem;
 }
 .qa-auth-note { font-size: .82rem !important; }
-.qa-lab-results { min-width: 0; }
+.qa-lab-results {
+  min-width: 0;
+  padding: clamp(1.1rem, 2.4vw, 2rem);
+  border: 1px solid rgb(247 243 232 / 32%);
+  border-radius: 10px;
+  background: rgb(247 243 232 / 3%);
+}
 .qa-latest-head, .qa-history-head {
   display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .75rem 1.5rem;
 }
@@ -209,9 +215,19 @@ h1 span:last-child { white-space: nowrap; }
 .qa-metrics dt { color: var(--muted-bone); font-size: .78rem; }
 .qa-metrics dd { margin: .35rem 0 0; font-size: clamp(1.2rem, 2vw, 1.7rem); font-variant-numeric: tabular-nums; font-weight: 700; }
 .qa-run-link { display: inline-flex; min-height: 44px; align-items: center; margin-top: .35rem; color: var(--bone); font-size: .9rem; font-weight: 700; text-underline-offset: .25rem; }
-.qa-history { margin-top: 2.4rem; }
-.qa-history-head { align-items: center; }
-.qa-chart { display: block; width: 100%; max-width: 34rem; height: auto; margin-top: 1rem; overflow: visible; }
+.qa-chart { display: block; width: 100%; max-width: 34rem; height: auto; margin: 1.5rem 0 .75rem; overflow: visible; }
+.qa-history { margin-top: 1rem; border-top: 1px solid rgb(247 243 232 / 24%); }
+.qa-history-head {
+  display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: .5rem 1rem;
+  padding: .65rem 0; cursor: pointer; list-style: none;
+}
+.qa-history-head::-webkit-details-marker { display: none; }
+.qa-history-head:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; border-radius: 4px; }
+.qa-history-title { font-weight: 700; }
+.qa-history-context { margin-left: auto; color: var(--muted-bone); font-size: .82rem; }
+.qa-history-indicator::before { content: "+"; color: var(--orange); font-size: 1.25rem; font-weight: 700; }
+.qa-history[open] .qa-history-indicator::before { content: "−"; }
+.qa-history-list { padding-bottom: .75rem; }
 .qa-chart[hidden] { display: none; }
 .qa-chart-axis line { stroke: rgb(247 243 232 / 28%); stroke-width: 1; }
 .qa-chart-axis text { fill: var(--muted-bone); font: 12px "Bricolage Grotesque", sans-serif; }
@@ -242,4 +258,4 @@ h1 span:last-child { white-space: nowrap; }
   .qa-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1rem; }
 }
 
-.qa-status[data-qa-status="queued"], .qa-status[data-qa-status="in_progress"] { border-color: #7cad8d; color: var(--bone); }
+
