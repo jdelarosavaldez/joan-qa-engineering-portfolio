@@ -6,7 +6,7 @@ The public site opens in English and provides a visible `ES` control for equival
 
 This repository contains a bilingual portfolio site and small, executable quality-engineering projects. The goal is to show how I approach risk, design tests, automate checks, investigate failures, and communicate evidence—not only list tools.
 
-> **Project status:** the bilingual homepage and About section are merged into `main`. GitHub Pages deployment is prepared in [PR #9](https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/pull/9); the site is not live until Pages is enabled and a deployment run succeeds.
+> **Project status:** the bilingual homepage and About section are in `main`. The site is not live until GitHub Pages is enabled and a deployment run succeeds.
 
 ## Run the website locally
 
