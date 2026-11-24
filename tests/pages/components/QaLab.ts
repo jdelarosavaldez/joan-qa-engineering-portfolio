@@ -37,8 +37,8 @@ export class QaLab {
 
   async chartAxisLabelsClearGridline(): Promise<boolean> {
     return this.chart.evaluate((svg) => {
-      const label = svg.querySelector(".qa-chart-axis text");
-      const gridline = svg.querySelector(".qa-chart-axis line");
+      const label = svg.querySelector<SVGTextElement>(".qa-chart-axis text");
+      const gridline = svg.querySelector<SVGLineElement>(".qa-chart-axis line");
       if (!label || !gridline) return false;
       const labelBounds = label.getBBox();
       return labelBounds.x + labelBounds.width < Number(gridline.getAttribute("x1"));
