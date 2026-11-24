@@ -35,7 +35,8 @@ jobs:
     if: >-
       github.event_name == 'workflow_run' &&
       github.event.workflow_run.head_branch == 'main' &&
-      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch')
+      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch') &&
+      (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure')
     runs-on: ubuntu-latest
     concurrency:
       group: github-pages-production

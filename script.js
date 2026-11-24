@@ -29,7 +29,7 @@ function setLanguage(language) {
   });
   if (!welcomeBanner.hidden) welcomeMessage.textContent = welcomeCopy[language];
   document.title = pageTitle;
-  if (qaLabData) renderQaLab(qaLabData); else renderQaPending(language);
+  renderQaLab(qaLabData);
 }
 
 languageButtons.forEach((button) => {
@@ -219,6 +219,7 @@ const qaChartPoints = qaChart.querySelector(".qa-chart-points");
 const qaHistoryList = document.querySelector("#qa-history-list");
 const qaEmpty = document.querySelector("#qa-empty");
 let qaLabData = null;
+let qaLabFeedInvalid = false;
 let qaLiveRun = null;
 
 const qaMessages = {
@@ -274,7 +275,7 @@ function renderQaLab(payload) {
     const activeUrl = safeActionsUrl(qaLiveRun.actionsUrl);
     qaRunLink.hidden = !activeUrl;
     if (activeUrl) qaRunLink.href = activeUrl;
-    const activeHistory = Array.isArray(payload?.history) ? payload.history : [];
+    const activeHistory = normalizeQaHistory(payload?.history);
     renderQaHistory(activeHistory, language);
     if (!activeHistory.length) qaEmpty.textContent = language === "es"
       ? "El historial aparecerá cuando finalice esta ejecución."
@@ -283,7 +284,7 @@ function renderQaLab(payload) {
   }
 
   if (!latest || !["success", "failure"].includes(latest.status)) {
-    renderQaPending(language, Boolean(payload));
+    renderQaPending(language, qaLabFeedInvalid || Boolean(payload));
     return;
   }
 
@@ -303,10 +304,21 @@ function renderQaLab(payload) {
   qaRunLink.hidden = !actionsUrl;
   if (actionsUrl) qaRunLink.href = actionsUrl;
 
-  const history = Array.isArray(payload?.history)
-    ? payload.history.filter((item) => Number.isInteger(item.runNumber) && ["success", "failure"].includes(item.status) && safeActionsUrl(item.actionsUrl)).slice(0, 10)
-    : [];
+  const history = normalizeQaHistory(payload?.history);
   renderQaHistory(history, language);
+}
+
+function normalizeQaHistory(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item) =>
+      item &&
+      Number.isInteger(item.runNumber) &&
+      item.runNumber > 0 &&
+      ["success", "failure"].includes(item.status) &&
+      safeActionsUrl(item.actionsUrl)
+    )
+    .slice(0, 10);
 }
 
 function renderQaHistory(history, language) {
@@ -315,7 +327,7 @@ function renderQaHistory(history, language) {
   qaChartPoints.replaceChildren();
   qaChartLine.setAttribute("points", "");
   if (!history.length) {
-    qaChart.hidden = true;
+    qaChart.setAttribute("hidden", "");
     qaEmpty.hidden = false;
     qaEmpty.textContent = qaMessages[language].missing;
     return;
@@ -375,9 +387,16 @@ async function loadQaLab() {
   try {
     const response = await fetch("./data/qa-lab-results.json", { cache: "no-store" });
     if (!response.ok) throw new Error("No published QA Lab data.");
-    qaLabData = await response.json();
+    try {
+      qaLabData = await response.json();
+      qaLabFeedInvalid = qaLabData === null || typeof qaLabData !== "object";
+    } catch {
+      qaLabData = null;
+      qaLabFeedInvalid = true;
+    }
   } catch {
     qaLabData = null;
+    qaLabFeedInvalid = false;
   }
 
   try {

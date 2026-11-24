@@ -37,22 +37,29 @@ const history = (result.workflow_runs || [])
     actionsUrl: run.html_url,
   }));
 
+const conclusion = process.env.QA_WORKFLOW_CONCLUSION;
+if (!["success", "failure"].includes(conclusion)) {
+  throw new Error("Only completed success or failure runs can be published.");
+}
+
+const safeCount = (value) => Number.isInteger(value) && value >= 0 ? value : null;
 const currentEvent = {
   runId: currentRunId,
   runNumber: Number(process.env.QA_WORKFLOW_RUN_NUMBER) || null,
-  status: process.env.QA_WORKFLOW_CONCLUSION === "success" && summary?.failed === 0 ? "success" : "failure",
+  status: conclusion,
   completedAt: process.env.QA_WORKFLOW_COMPLETED_AT || new Date().toISOString(),
   commit: String(process.env.QA_WORKFLOW_SHA || "").slice(0, 7) || null,
-  passed: null,
-  failed: null,
-  skipped: null,
-  flaky: null,
-  total: null,
-  durationMs: null,
+  passed: safeCount(summary?.passed),
+  failed: safeCount(summary?.failed),
+  skipped: safeCount(summary?.skipped),
+  flaky: safeCount(summary?.flaky),
+  total: safeCount(summary?.total),
+  durationMs: Number.isFinite(summary?.durationMs) && summary.durationMs >= 0 ? summary.durationMs : null,
   actionsUrl: process.env.QA_WORKFLOW_URL,
 };
-const latestRun = summary || currentEvent;
-const withCurrent = history.some((run) => run.runId === currentRunId) ? history : [currentEvent, ...history].slice(0, 10);
+const latestRun = currentEvent;
+const previousRuns = history.filter((run) => run.runId !== currentRunId);
+const withCurrent = [currentEvent, ...previousRuns].slice(0, 10);
 const output = { schemaVersion: 1, latestRun, history: withCurrent };
 
 await mkdir("dist/data", { recursive: true });

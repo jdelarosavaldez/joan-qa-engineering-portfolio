@@ -97,6 +97,48 @@ test("[PF-QA-004] keeps malformed public data in the pending state @regression",
   await qaLab.reload();
 
   await expect(qaLab.status).toHaveText("Pending");
-  await expect(qaLab.pendingMessage).toBeVisible();
+  await expect(qaLab.pendingMessage).toHaveText("The published result is not available yet.");
   await expect(qaLab.chart).toBeHidden();
+});
+
+test("[PF-QA-005] keeps a live run visible after changing language without a published feed @regression", async ({ portfolio, page, qaLab }) => {
+  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 404, body: "" }));
+  await stubWorkflowRuns(page, [{
+    id: 9003,
+    run_number: 23,
+    status: "queued",
+    event: "push",
+    head_branch: "main",
+    created_at: "2026-11-25T02:00:00.000Z",
+    html_url: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/9003",
+  }]);
+  await qaLab.reload();
+  await expect(qaLab.status).toHaveText("Queued");
+
+  await portfolio.language.option("es").click();
+
+  await expect(qaLab.status).toHaveText("En cola");
+  await expect(qaLab.runEvidence).toHaveAttribute("href", /9003$/);
+  await expect(qaLab.passed).toHaveText("—");
+});
+
+test("[PF-QA-006] filters unsafe and non-result history before rendering @regression", async ({ page, qaLab }) => {
+  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({
+      ...successfulFeed,
+      history: [
+        successfulFeed.history[0],
+        { runNumber: 99, status: "cancelled", actionsUrl: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/99" },
+        { runNumber: 98, status: "failure", actionsUrl: "https://example.com/not-github" },
+        { runNumber: 97, status: "success", actionsUrl: null },
+      ],
+    }),
+  }));
+  await stubWorkflowRuns(page);
+  await qaLab.reload();
+
+  await expect(qaLab.history.getByRole("listitem")).toHaveCount(1);
+  await expect(qaLab.history.getByRole("link")).toHaveAttribute("href", /9001$/);
 });
