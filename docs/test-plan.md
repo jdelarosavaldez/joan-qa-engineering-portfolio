@@ -1,6 +1,6 @@
 # Portfolio test plan
 
-This plan traces browser checks to the portfolio's first implementation slice: the bilingual introduction, quality flow, About section, and responsive presentation. It is the test source of truth; expected copy lives in `tests/data/copy.ts`.
+This plan traces browser checks to the portfolio's first implementation slice: the bilingual introduction, quality flow, About section, and responsive presentation. It is the test source of truth; expected copy lives in `tests/data/test-data.ts`.
 
 | Case ID | Priority | Requirement / acceptance criteria | Preconditions | Steps | Expected result | Tags |
 | --- | --- | --- | --- | --- | --- | --- |

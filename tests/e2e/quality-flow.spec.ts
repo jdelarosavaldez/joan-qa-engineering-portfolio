@@ -1,16 +1,16 @@
 import { test, expect } from "../fixtures/portfolio.fixture";
-import { portfolioCopy } from "../data/copy";
+import { portfolioTestData } from "../data/test-data";
 import { HomePage } from "../pages/HomePage";
 
 test("[PF-FLOW-001] exposes all four quality stations with exact accessible names in both languages @smoke", async ({ portfolio }) => {
-  for (const stationName of portfolioCopy.en.stations) {
+  for (const stationName of portfolioTestData.en.stations) {
     const station = portfolio.flow.station(stationName);
     await expect(station).toBeVisible();
     await expect(station).toHaveAccessibleName(stationName);
   }
 
   await portfolio.language.select("es");
-  for (const stationName of portfolioCopy.es.stations) {
+  for (const stationName of portfolioTestData.es.stations) {
     const station = portfolio.flow.station(stationName);
     await expect(station).toBeVisible();
     await expect(station).toHaveAccessibleName(stationName);

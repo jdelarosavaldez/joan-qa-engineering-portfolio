@@ -1,4 +1,4 @@
-export const portfolioCopy = {
+export const portfolioTestData = {
   en: {
     title: "Joan De la Rosa — QA Engineer",
     name: "Joan De la Rosa",
@@ -17,4 +17,4 @@ export const portfolioCopy = {
   },
 } as const;
 
-export type PortfolioLanguage = keyof typeof portfolioCopy;
+export type PortfolioLanguage = keyof typeof portfolioTestData;
