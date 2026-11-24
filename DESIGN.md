@@ -40,7 +40,7 @@ Rounded QA steps, decision diamond, endpoint circles; restrained control corners
 
 ## Components
 
-Bilingual flow buttons/notes, circular JD wordmark, EN/ES selector. Visible 3px focus ring, 44px controls, reduced-motion support.
+Bilingual QA flow, notes, circular JD wordmark, EN/ES selector, and a profile section with practice areas. Visible 3px focus ring, 44px controls, reduced-motion support.
 
 ## Do's and Don'ts
 

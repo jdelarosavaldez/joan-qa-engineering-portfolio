@@ -79,7 +79,7 @@ The palette pairs a deep petroleum background with warm bone text and one warm o
 
 ## Layout
 
-The page uses a centered container capped at 1600px with a responsive horizontal gutter (`clamp(1.5rem, 7vw, 7rem)`). The title, flow, biography, and footer stay within that content width. The flow is a four-column grid; endpoint circles align to the centerline and sit in the page gutter beyond the first and last shapes. The final station label wraps to two balanced lines and centers under its shape. At 760px and below, the gutter becomes 1.5rem and the biography fills the content width. Keep workflow labels at least `.78rem`; use explicit soft hyphens for long words and verify no horizontal overflow by comparing element bounding boxes with the viewport. Tablet rules apply from 761px through 1024px. Keep the page free of horizontal overflow.
+The page uses a centered container capped at 1600px with a responsive horizontal gutter (`clamp(1.5rem, 7vw, 7rem)`). The title, flow, biography, profile section, and footer stay within that content width. The flow is a four-column grid; endpoint circles align to the centerline and sit in the page gutter beyond the first and last shapes. The final station label wraps to two balanced lines and centers under its shape. At 760px and below, the gutter becomes 1.5rem and the biography fills the content width. Keep workflow labels at least `.78rem`; use explicit soft hyphens for long words and verify no horizontal overflow by comparing element bounding boxes with the viewport. Tablet rules apply from 761px through 1024px. Keep the page free of horizontal overflow.
 
 ## Elevation & Depth
 
@@ -99,6 +99,10 @@ The circular “JD.” wordmark links to the page start. The EN/ES selector is v
 
 Four real buttons represent strategy, manual testing, automation, and quality throughout. Each button opens its associated description by click, hover, or keyboard focus. A visible note remains hoverable; a click-open note closes on a second click, blur, outside click, or Escape. Keep the final label centered below its orange shape. The progress stroke animates once on entry and stops at Automation.
 
+### Profile section
+
+The profile section follows the homepage introduction. It presents a short, bilingual summary grounded in Joan's supplied résumé and a compact list of practice areas. Do not include employer names, contact details, or an unreviewed résumé download. The résumé file format remains deferred for Joan's decision.
+
 ### Welcome banner
 
 The banner appears after the initial entrance sequence, announces its text after becoming visible with `role="status"`, and can be dismissed by button or Escape. Its primary action scrolls to the QA flow. Reserve enough responsive height for either translation while it is pending or visible to prevent a late layout shift, then release the space when it is dismissed.
@@ -113,4 +117,4 @@ Use the existing one-time entrance sequence and short state transitions. Respect
 - Use the workflow shapes only to express the actual QA stages.
 - Do not add invented experience, metrics, test results, reports, or employer material.
 - Do not use generic QA icons or color as the only state indicator.
-- Do not add gradients, shadows, cards, or extra sections outside an approved slice.
+- Do not add gradients, shadows, cards, or sections outside the approved slice.
