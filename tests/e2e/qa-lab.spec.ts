@@ -68,6 +68,7 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await expect(qaLab.status).toHaveText("Aprobado");
   await expect(qaLab.heading).toHaveText("Laboratorio de QA");
   await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados de CI/);
+  expect(await qaLab.chartAxisLabelsClearGridline()).toBe(true);
 });
 
 test("[PF-QA-003] stays pending until a completed result is published @regression", async ({ portfolio, page, qaLab }) => {
@@ -75,10 +76,15 @@ test("[PF-QA-003] stays pending until a completed result is published @regressio
   page.on("request", (request) => {
     if (request.url().startsWith("https://api.github.com/")) githubRequests.push(request.url());
   });
-  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 404, body: "" }));
+  await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ schemaVersion: 1, latestRun: null, history: [] }),
+  }));
   await qaLab.reload();
 
   await expect(qaLab.status).toHaveText("Pending");
+  await expect(qaLab.pendingMessage).toHaveText("The chart will appear after the next CI run on main.");
   expect(githubRequests).toEqual([]);
 });
 

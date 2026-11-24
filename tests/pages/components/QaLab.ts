@@ -35,6 +35,16 @@ export class QaLab {
     this.runAction = this.root.getByRole("link", { name: /Run checks|Ejecutar pruebas/ });
   }
 
+  async chartAxisLabelsClearGridline(): Promise<boolean> {
+    return this.chart.evaluate((svg) => {
+      const label = svg.querySelector(".qa-chart-axis text");
+      const gridline = svg.querySelector(".qa-chart-axis line");
+      if (!label || !gridline) return false;
+      const labelBounds = label.getBBox();
+      return labelBounds.x + labelBounds.width < Number(gridline.getAttribute("x1"));
+    });
+  }
+
   async expandHistory(): Promise<void> {
     await this.historyToggle.click();
   }

@@ -268,7 +268,7 @@ function renderQaLab(payload) {
   const latest = payload?.schemaVersion === 1 ? payload.latestRun : null;
 
   if (!latest || !["success", "failure"].includes(latest.status)) {
-    renderQaPending(language, qaLabFeedInvalid || Boolean(payload));
+    renderQaPending(language, qaLabFeedInvalid);
     return;
   }
 
@@ -320,7 +320,7 @@ function renderQaHistory(history, language) {
   }
 
   const ns = "http://www.w3.org/2000/svg";
-  const xStart = 42;
+  const xStart = 92;
   const xEnd = 402;
   const successY = 34;
   const failureY = 88;
@@ -328,11 +328,13 @@ function renderQaHistory(history, language) {
   const ordered = [...history].reverse();
 
   const topLabel = document.createElementNS(ns, "text");
-  topLabel.setAttribute("x", "0"); topLabel.setAttribute("y", String(successY + 4));
+  topLabel.setAttribute("x", String(xStart - 12)); topLabel.setAttribute("y", String(successY + 4));
+  topLabel.setAttribute("text-anchor", "end");
   topLabel.textContent = qaMessages[language].passed;
   qaChartAxis.append(topLabel);
   const bottomLabel = document.createElementNS(ns, "text");
-  bottomLabel.setAttribute("x", "0"); bottomLabel.setAttribute("y", String(failureY + 4));
+  bottomLabel.setAttribute("x", String(xStart - 12)); bottomLabel.setAttribute("y", String(failureY + 4));
+  bottomLabel.setAttribute("text-anchor", "end");
   bottomLabel.textContent = qaMessages[language].failed;
   qaChartAxis.append(bottomLabel);
   for (const y of [successY, failureY]) {
@@ -375,7 +377,11 @@ async function loadQaLab() {
     if (!response.ok) throw new Error("No published QA Lab data.");
     try {
       qaLabData = await response.json();
-      qaLabFeedInvalid = qaLabData === null || typeof qaLabData !== "object";
+      qaLabFeedInvalid = !qaLabData ||
+        typeof qaLabData !== "object" ||
+        qaLabData.schemaVersion !== 1 ||
+        !Object.hasOwn(qaLabData, "latestRun") ||
+        !Array.isArray(qaLabData.history);
     } catch {
       qaLabData = null;
       qaLabFeedInvalid = true;
