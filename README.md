@@ -31,7 +31,7 @@ npm run qa:check
 npm run qa:test
 ```
 
-Playwright starts the local preview server automatically during `qa:test`. The suite checks the page title and main content, English/Spanish switching, keyboard navigation and station controls, reduced-motion behavior, horizontal overflow, and section overlap at 375 × 812 and 1440 × 900. It saves full-page screenshots with each viewport's test output.
+Playwright starts the local preview server automatically during `qa:test`. The suite checks the page title and main content, English/Spanish switching, keyboard navigation and station controls, reduced-motion behavior, horizontal overflow, and section overlap at 375 × 812, 1440 × 900, and 1920 × 1080. It saves full-page screenshots with each viewport's test output.
 
 To open the HTML report after a run:
 
@@ -88,3 +88,4 @@ The GitHub Pages workflow and setup details are in [docs/deployment.md](docs/dep
 - [Design proposal](DESIGN.md)
 - [Technical roadmap](ROADMAP.md)
 - [GitHub Pages deployment](docs/deployment.md)
+

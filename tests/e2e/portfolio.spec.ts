@@ -93,3 +93,22 @@ test("station notes are available by keyboard and respect reduced motion", async
   await page.keyboard.press("Enter");
   await expect(strategy).toHaveAttribute("aria-expanded", "true");
 });
+
+
+test("wide screens give the Strategy station breathing room from the start endpoint", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await openPortfolio(page);
+
+  const startCircle = await page.locator(".flow-start").boundingBox();
+  const strategyShape = await page.locator(".station:first-child .station-shape").boundingBox();
+  expect(startCircle).not.toBeNull();
+  expect(strategyShape).not.toBeNull();
+  expect(strategyShape!.x - (startCircle!.x + startCircle!.width)).toBeGreaterThanOrEqual(12);
+
+  await page.screenshot({
+    path: testInfo.outputPath("portfolio-1920x1080.png"),
+    fullPage: true,
+    animations: "disabled",
+  });
+});
+
