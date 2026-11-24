@@ -95,7 +95,7 @@ h1 span:last-child { white-space: nowrap; }
 .about { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(15rem, .85fr); gap: clamp(3rem, 8vw, 8rem); padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(5rem, 9vw, 8rem); border-top: 1px solid rgb(247 243 232 / 30%); }
 .about-copy h2 { margin: 0; font-size: clamp(2.25rem, 4vw, 3.5rem); line-height: 1.12; }
 .about-copy p { max-width: 58ch; margin: 1.8rem 0 0; color: var(--muted-bone); font-family: "Literata", Georgia, serif; font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.58; text-wrap: pretty; }
-.practice h3 { margin: 0 0 1.5rem; color: var(--orange); font-size: .85rem; font-weight: 700; letter-spacing: .04em; }
+.practice h3 { margin: 0 0 1.5rem; color: var(--muted-bone); font-size: .85rem; font-weight: 700; letter-spacing: .04em; }
 .practice ul { margin: 0; padding: 0; list-style: none; }
 .practice li { padding: 1.2rem 0; border-top: 1px solid rgb(247 243 232 / 30%); font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.4; text-wrap: balance; }
 .practice li:last-child { border-bottom: 1px solid rgb(247 243 232 / 30%); }
