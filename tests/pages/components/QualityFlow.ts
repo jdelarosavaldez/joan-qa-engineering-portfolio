@@ -24,4 +24,21 @@ export class QualityFlow {
     if (!noteId) throw new Error(`Station "${name}" must expose aria-controls.`);
     return this.page.locator(`#${noteId}`);
   }
+
+  async strategySpacing(): Promise<{ labelAlignment: number; shapeOffset: number; startCircleClearance: number }> {
+    const startCircle = await this.root.locator(".flow-start").boundingBox();
+    const strategy = this.station("Strategy");
+    const stationBox = await strategy.boundingBox();
+    const shapeBox = await strategy.locator(".station-shape").boundingBox();
+    const labelBox = await strategy.locator(".station-label").boundingBox();
+    if (!startCircle || !stationBox || !shapeBox || !labelBox) {
+      throw new Error("Strategy and the flow start circle must have measurable dimensions.");
+    }
+
+    return {
+      labelAlignment: Math.abs(labelBox.x - stationBox.x),
+      shapeOffset: shapeBox.x - labelBox.x,
+      startCircleClearance: shapeBox.x - (startCircle.x + startCircle.width),
+    };
+  }
 }

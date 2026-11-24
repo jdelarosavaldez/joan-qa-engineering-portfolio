@@ -4,7 +4,7 @@
   "private": true,
   "description": "Playwright quality checks for Joan De la Rosa's portfolio website",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "qa:check": "tsc --noEmit",

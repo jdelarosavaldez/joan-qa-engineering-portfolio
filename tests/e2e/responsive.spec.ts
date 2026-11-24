@@ -22,6 +22,13 @@ test("[PF-LAYOUT-001] fits mobile, desktop, and wide viewports without overflow 
         .toBeLessThanOrEqual(next.y + 1);
     }
 
+    if (viewport.width >= 1600) {
+      const spacing = await portfolio.flow.strategySpacing();
+      expect(spacing.labelAlignment, "the Strategy label should stay aligned with the station").toBeLessThanOrEqual(1);
+      expect(spacing.shapeOffset, "the Strategy shape should be offset from its label").toBeGreaterThanOrEqual(12);
+      expect(spacing.startCircleClearance, "the Strategy shape should clear the start circle").toBeGreaterThanOrEqual(12);
+    }
+
     await page.screenshot({
       path: testInfo.outputPath(`portfolio-${viewport.width}x${viewport.height}.png`),
       fullPage: true,
