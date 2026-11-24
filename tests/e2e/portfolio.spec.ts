@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const desktop = { width: 1440, height: 900 };
+const wide = { width: 1920, height: 1080 };
 const mobile = { width: 375, height: 812 };
 
 async function openPortfolio(page: Page) {
@@ -41,7 +42,7 @@ test("the About link works with keyboard activation", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 2, name: "About my work" })).toBeVisible();
 });
 
-for (const viewport of [mobile, desktop]) {
+for (const viewport of [mobile, desktop, wide]) {
   test(`fits ${viewport.width}x${viewport.height} without page overflow or section overlap`, async ({ page }, testInfo) => {
     await page.setViewportSize(viewport);
     await openPortfolio(page);
@@ -70,6 +71,17 @@ for (const viewport of [mobile, desktop]) {
       ).toBeLessThanOrEqual(next.y + 1);
     }
 
+    if (viewport.width >= 1600) {
+      const startCircle = await page.locator(".flow-start").boundingBox();
+      const strategyShape = await page.locator(".station:first-child .station-shape").boundingBox();
+      expect(startCircle).not.toBeNull();
+      expect(strategyShape).not.toBeNull();
+      expect(
+        strategyShape!.x - (startCircle!.x + startCircle!.width),
+        "the Strategy shape should have at least 12px of space from the start circle on wide screens",
+      ).toBeGreaterThanOrEqual(12);
+    }
+
     await page.screenshot({
       path: testInfo.outputPath(`portfolio-${viewport.width}x${viewport.height}.png`),
       fullPage: true,
@@ -93,22 +105,3 @@ test("station notes are available by keyboard and respect reduced motion", async
   await page.keyboard.press("Enter");
   await expect(strategy).toHaveAttribute("aria-expanded", "true");
 });
-
-
-test("wide screens give the Strategy station breathing room from the start endpoint", async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  await openPortfolio(page);
-
-  const startCircle = await page.locator(".flow-start").boundingBox();
-  const strategyShape = await page.locator(".station:first-child .station-shape").boundingBox();
-  expect(startCircle).not.toBeNull();
-  expect(strategyShape).not.toBeNull();
-  expect(strategyShape!.x - (startCircle!.x + startCircle!.width)).toBeGreaterThanOrEqual(12);
-
-  await page.screenshot({
-    path: testInfo.outputPath("portfolio-1920x1080.png"),
-    fullPage: true,
-    animations: "disabled",
-  });
-});
-
