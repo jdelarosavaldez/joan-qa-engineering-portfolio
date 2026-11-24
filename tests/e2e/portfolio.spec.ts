@@ -73,9 +73,18 @@ for (const viewport of [mobile, desktop, wide]) {
 
     if (viewport.width >= 1600) {
       const startCircle = await page.locator(".flow-start").boundingBox();
+      const strategyButton = await page.locator(".station:first-child").boundingBox();
       const strategyShape = await page.locator(".station:first-child .station-shape").boundingBox();
+      const strategyLabel = await page.locator(".station:first-child .station-label").boundingBox();
       expect(startCircle).not.toBeNull();
+      expect(strategyButton).not.toBeNull();
       expect(strategyShape).not.toBeNull();
+      expect(strategyLabel).not.toBeNull();
+      expect(Math.abs(strategyLabel!.x - strategyButton!.x)).toBeLessThanOrEqual(1);
+      expect(
+        strategyShape!.x - strategyLabel!.x,
+        "the Strategy shape should move right while its label stays aligned with the station",
+      ).toBeGreaterThanOrEqual(12);
       expect(
         strategyShape!.x - (startCircle!.x + startCircle!.width),
         "the Strategy shape should have at least 12px of space from the start circle on wide screens",
