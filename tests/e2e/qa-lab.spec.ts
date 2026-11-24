@@ -65,7 +65,7 @@ test("[PF-QA-002] renders real-result fields and recent run outcomes in English 
   await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados recientes de CI/);
 });
 
-test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ page, qaLab }) => {
+test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ portfolio, page, qaLab }) => {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -87,7 +87,7 @@ test("[PF-QA-003] reports an active main-branch workflow @regression", async ({ 
   await expect(qaLab.runEvidence).toHaveAttribute("href", /actions\/workflows\/portfolio-quality\.yml$/);
 });
 
-test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ qaLab, page }) => {
+test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ portfolio, qaLab, page }) => {
   await stubWorkflowRuns(page);
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
     status: 200,

@@ -254,7 +254,7 @@ function renderQaPending(language, invalid = false) {
   qaRunLink.hidden = true;
   qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaDuration.textContent = "—";
   qaHistoryList.replaceChildren();
-  qaChart.hidden = true;
+  qaChart.setAttribute("hidden", "");
   qaEmpty.hidden = false;
   qaEmpty.textContent = invalid ? messages.invalid : messages.missing;
 }
@@ -367,7 +367,7 @@ function renderQaHistory(history, language) {
 
   qaChartLine.setAttribute("points", points.join(" "));
   qaChart.setAttribute("aria-label", `${qaMessages[language].chart} ${ordered.map((run) => `#${run.runNumber} ${run.status}`).join(", ")}`);
-  qaChart.hidden = false;
+  qaChart.removeAttribute("hidden");
   qaEmpty.hidden = true;
 }
 
