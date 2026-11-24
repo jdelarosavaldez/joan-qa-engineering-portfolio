@@ -6,11 +6,11 @@ The public site opens in English and provides a visible `ES` control for equival
 
 This repository contains a bilingual portfolio site and small, executable quality-engineering projects. The goal is to show how I approach risk, design tests, automate checks, investigate failures, and communicate evidence—not only list tools.
 
-> **Project status:** the bilingual homepage and About section are in `main`. The site is not live until GitHub Pages is enabled and a deployment run succeeds.
+> **Project status:** the bilingual portfolio is published at [jdelarosavaldez.github.io/joan-qa-engineering-portfolio](https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/). GitHub Actions packages and deploys the static site from `main`.
 
 ## Run the website locally
 
-The website is static HTML, CSS, and JavaScript. From the repository root, run this local preview server:
+The website is static HTML, CSS, and JavaScript. From the repository root, run:
 
 ```sh
 python3 -m http.server 8000 --bind 127.0.0.1
@@ -18,10 +18,33 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Python is only the local file server; it does not implement the website. Stop it with `Ctrl+C`.
 
+## Run the portfolio QA checks
+
+The portfolio's browser checks use Playwright and TypeScript. The framework runs the static site with the Python preview server; it does not add a build framework to the website.
+
+**Requirements:** Node.js 22 or newer, npm, and Python 3. GitHub Actions uses Node.js 24.
+
+```sh
+npm ci
+npx playwright install chromium
+npm run qa:check
+npm run qa:test
+```
+
+Playwright starts the local preview server automatically during `qa:test`. The suite checks the page title and main content, English/Spanish switching, keyboard navigation and station controls, reduced-motion behavior, horizontal overflow, and section overlap at 375 × 812 and 1440 × 900. It saves full-page screenshots with each viewport's test output.
+
+To open the HTML report after a run:
+
+```sh
+npm run qa:report
+```
+
+GitHub Actions runs type checks and browser tests for pull requests to `main` and pushes to `main`. Each run uploads the HTML report, screenshots, and failure artifacts for 14 days. See [Portfolio quality workflow](https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/workflows/portfolio-quality.yml) for the latest real result; no sample CI status is displayed as live data.
+
 ## Portfolio map
 
 - **Website:** static HTML/CSS/JavaScript with bilingual content and self-hosted fonts.
-- **QA Lab:** planned Playwright + TypeScript checks for the portfolio. Status stays pending until real CI checks run.
+- **QA Lab:** Playwright + TypeScript checks for this portfolio, with real GitHub Actions reports and screenshot evidence.
 - **UI and API case study:** a clean-room project using a public practice application, with positive, negative, edge, and regression coverage.
 - **Python and Pytest:** a separately runnable API or integration-testing project.
 - **Docker and CI:** reproducible local dependencies and quality gates.
@@ -32,7 +55,7 @@ Each published case study will include its goal, risks, test strategy, architect
 ## Glossary
 
 - **Evidence:** a reviewable artifact that supports a test result, such as a report excerpt, trace, screenshot, or CI run. It must come from an actual execution.
-- **QA Lab:** the portfolio's own test area. Its status remains pending until its checks have run; any later status links to the corresponding real CI evidence.
+- **QA Lab:** the portfolio's own test area. Its status is supported by the latest real workflow run and linked CI evidence.
 
 ## Engineering principles
 
@@ -51,13 +74,12 @@ Project roles and attribution rules are defined in [DESIGN.md](DESIGN.md#project
 
 ## Deployment status
 
-The GitHub Pages workflow and first-time setup are documented in [docs/deployment.md](docs/deployment.md). The expected project URL is [https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/](https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/). It becomes live only after the repository's Pages source is set to GitHub Actions, the deployment PR is merged, and its workflow succeeds.
+The GitHub Pages workflow and setup details are in [docs/deployment.md](docs/deployment.md). The live site is [https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/](https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/). Deployment runs from `main`; pull requests package the static site but do not deploy it.
 
 ## Current limitations
 
 - The Claude Reviewer GitHub App is installed only on this repository. The [review workflow](.github/workflows/claude-review.yml) reviews diffs from public, same-repository PRs and posts an App-authored comment when its Actions credentials are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
-- The site currently has no build tool or automated browser checks.
-- Astro and the earlier starter proposal are paused; the current site has no package manifest or third-party runtime dependencies.
+- The site remains a static page; Astro and the earlier starter proposal are paused.
 - CV delivery format, public contact details, and custom domain are not included or configured.
 - The initial practice target and starter-template license still need validation before implementation.
 
