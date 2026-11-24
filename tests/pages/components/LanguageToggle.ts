@@ -9,8 +9,8 @@ export class LanguageToggle {
   }
 
   option(language: "en" | "es"): Locator {
-    const accessibleName = language === "en" ? "EN — English" : "ES — Spanish";
-    return this.group.getByRole("button", { name: accessibleName });
+    const prefix = language === "en" ? "EN" : "ES";
+    return this.group.getByRole("button", { name: new RegExp(`^${prefix}`) });
   }
 
   async select(language: "en" | "es"): Promise<void> {
