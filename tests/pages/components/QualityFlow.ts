@@ -1,0 +1,27 @@
+import { type Locator, type Page } from "@playwright/test";
+
+export class QualityFlow {
+  readonly root: Locator;
+  private readonly page: Page;
+
+  constructor(page: Page) {
+    this.page = page;
+    // The accessible name changes with the selected language; the flow's fragment ID is its stable contract.
+    this.root = page.locator("#flow");
+  }
+
+  station(name: string): Locator {
+    return this.root.getByRole("button", { name });
+  }
+
+  async openStation(name: string): Promise<void> {
+    await this.station(name).click();
+  }
+
+  async noteFor(name: string): Promise<Locator> {
+    const station = this.station(name);
+    const noteId = await station.getAttribute("aria-controls");
+    if (!noteId) throw new Error(`Station "${name}" must expose aria-controls.`);
+    return this.page.locator(`#${noteId}`);
+  }
+}

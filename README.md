@@ -20,7 +20,7 @@ Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Python is only the local 
 
 ## Run the portfolio QA checks
 
-The portfolio's browser checks use Playwright and TypeScript. The framework runs the static site with the Python preview server; it does not add a build framework to the website.
+The portfolio's browser checks use Playwright and TypeScript with page objects, fixtures, centralized bilingual test data, stable case IDs, and a traceable [test plan](docs/test-plan.md). An axe scan checks the introduction in English and Spanish. The framework runs the static site with the Python preview server; it does not add a build framework to the website.
 
 **Requirements:** Node.js 22 or newer, npm, and Python 3. GitHub Actions uses Node.js 24.
 
@@ -31,7 +31,9 @@ npm run qa:check
 npm run qa:test
 ```
 
-Playwright starts the local preview server automatically during `qa:test`. The suite checks the page title and main content, English/Spanish switching, keyboard navigation and station controls, reduced-motion behavior, horizontal overflow, and section overlap at 375 × 812, 1440 × 900, and 1920 × 1080. It saves full-page screenshots with each viewport's test output.
+Playwright starts the local preview server automatically during `qa:test`. The suite checks the page title and main content, English/Spanish switching, keyboard navigation and station controls, reduced-motion behavior, WCAG-tagged axe results, horizontal overflow, and section overlap at 375 × 812, 1440 × 900, and 1920 × 1080. Test titles use case IDs such as `[PF-HOME-001]` and `@smoke` / `@regression` tags; the plan maps each ID to its acceptance criteria. It saves full-page screenshots with each viewport's test output.
+
+Page objects in `tests/pages/` keep selectors and interactions close to the page they represent. Specs use accessible roles and labels through those objects; expected bilingual copy lives in `tests/data/copy.ts`, and the shared fixture in `tests/fixtures/` opens the portfolio consistently.
 
 To open the HTML report after a run:
 
