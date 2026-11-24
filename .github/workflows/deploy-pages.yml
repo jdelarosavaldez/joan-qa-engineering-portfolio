@@ -1,20 +1,22 @@
-name: Deploy portfolio to GitHub Pages
+name: Publish QA Lab and portfolio to GitHub Pages
 
 on:
   pull_request:
     branches: [main]
-  push:
+  workflow_run:
+    workflows: ["Portfolio quality checks"]
+    types: [completed]
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  package:
+  package-preview:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out pull request
         uses: actions/checkout@v6
         with:
           persist-credentials: false
@@ -24,27 +26,84 @@ jobs:
           cp index.html styles.css script.js dist/
           cp assets/fonts/* dist/assets/fonts/
           touch dist/.nojekyll
-      - name: Upload Pages artifact
+      - name: Validate Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: package
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch')
     runs-on: ubuntu-latest
     concurrency:
       group: github-pages-production
       cancel-in-progress: false
     permissions:
+      actions: read
+      contents: read
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check out tested revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - name: Skip if a newer main revision exists
+        id: freshness
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          current_sha=$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq .sha)
+          if [ "$current_sha" = "$EXPECTED_SHA" ]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            echo "A newer main revision exists; skipping this stale deployment."
+          fi
+      - name: Download the sanitized summary from the completed CI run
+        if: steps.freshness.outputs.current == 'true'
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: portfolio-qa-evidence
+          path: qa-artifacts
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Prepare public website and QA history
+        if: steps.freshness.outputs.current == 'true'
+        run: |
+          mkdir -p dist/assets/fonts
+          cp index.html styles.css script.js dist/
+          cp assets/fonts/* dist/assets/fonts/
+          node scripts/prepare-qa-lab-feed.mjs
+          touch dist/.nojekyll
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          QA_WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+          QA_WORKFLOW_RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          QA_WORKFLOW_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          QA_WORKFLOW_SHA: ${{ github.event.workflow_run.head_sha }}
+          QA_WORKFLOW_URL: ${{ github.event.workflow_run.html_url }}
+          QA_WORKFLOW_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
+          QA_WORKFLOW_COMPLETED_AT: ${{ github.event.workflow_run.updated_at }}
       - name: Configure GitHub Pages
+        if: steps.freshness.outputs.current == 'true'
         uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        if: steps.freshness.outputs.current == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
       - name: Deploy website
+        if: steps.freshness.outputs.current == 'true'
         id: deployment
         uses: actions/deploy-pages@v4

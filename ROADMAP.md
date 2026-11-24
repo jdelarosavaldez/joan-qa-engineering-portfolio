@@ -29,7 +29,11 @@ This portfolio grows through independently runnable milestones. A project moves 
 - [x] Add Playwright + TypeScript checks for page content, language switching, keyboard behavior, reduced motion, 375 × 812 and desktop layouts, overflow, and section overlap.
 - [x] Save responsive screenshots and configure GitHub Actions to retain reports and evidence artifacts.
 - [x] Add the smallest necessary GitHub Actions workflow, with Node.js 24 and the Python static preview server.
-- [ ] Verify the first PR workflow run and review its reports/screenshots before calling the QA Lab operational.
+- [x] Add a bilingual QA Lab with a real latest-run summary, a recent Actions outcome chart, and source links.
+- [x] Generate a sanitized summary from Playwright JSON and package it with the Pages deployment; keep raw reports/traces out of the public feed.
+- [x] Add a GitHub Actions entry point for Joan to request a run; the workflow is protected by GitHub repository write access.
+- [ ] Merge the QA Lab PR, then verify that the first main-branch deployment publishes real data and inspect the live EN/ES view.
+- [ ] Decide whether to transfer the current portfolio E2E suite to a separate repository before starting the independent UI/API case study.
 
 ## Milestone 3 — UI and API practice case study
 

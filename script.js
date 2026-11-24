@@ -29,6 +29,7 @@ function setLanguage(language) {
   });
   if (!welcomeBanner.hidden) welcomeMessage.textContent = welcomeCopy[language];
   document.title = pageTitle;
+  if (qaLabData) renderQaLab(qaLabData);
 }
 
 languageButtons.forEach((button) => {
@@ -203,3 +204,159 @@ window.setTimeout(() => {
 
 document.querySelector("#year").textContent = String(new Date().getFullYear());
 
+
+const qaStatus = document.querySelector("#qa-status");
+const qaRunMeta = document.querySelector("#qa-run-meta");
+const qaRunLink = document.querySelector("#qa-run-link");
+const qaPassed = document.querySelector("#qa-passed");
+const qaFailed = document.querySelector("#qa-failed");
+const qaSkipped = document.querySelector("#qa-skipped");
+const qaDuration = document.querySelector("#qa-duration");
+const qaChart = document.querySelector("#qa-history-chart");
+const qaChartAxis = qaChart.querySelector(".qa-chart-axis");
+const qaChartLine = qaChart.querySelector(".qa-chart-line");
+const qaChartPoints = qaChart.querySelector(".qa-chart-points");
+const qaHistoryList = document.querySelector("#qa-history-list");
+const qaEmpty = document.querySelector("#qa-empty");
+let qaLabData = null;
+
+const qaMessages = {
+  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", run: "Run", on: "on", runs: "Recent runs", chart: "Recent CI outcomes, newest first.", invalid: "The published result is not available yet." },
+  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", run: "Ejecución", on: "el", runs: "Ejecuciones recientes", chart: "Resultados recientes de CI, del más nuevo al más antiguo.", invalid: "El resultado publicado aún no está disponible." },
+};
+
+function currentQaLanguage() {
+  return document.documentElement.dataset.language === "es" ? "es" : "en";
+}
+
+function safeActionsUrl(value) {
+  return typeof value === "string" && /^https:\/\/github\.com\/jdelarosavaldez\/joan-qa-engineering-portfolio\/actions\/runs\/\d+$/.test(value) ? value : null;
+}
+
+function formatQaDate(value, language) {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return new Intl.DateTimeFormat(language === "es" ? "es-DO" : "en-US", { dateStyle: "medium" }).format(parsed);
+}
+
+function formatQaDuration(value, language) {
+  if (!Number.isFinite(value) || value < 0) return "—";
+  const seconds = Math.round(value / 1000);
+  return language === "es" ? `${seconds} s` : `${seconds}s`;
+}
+
+function renderQaPending(language, invalid = false) {
+  const messages = qaMessages[language];
+  qaStatus.textContent = messages.pending;
+  qaStatus.dataset.qaStatus = "pending";
+  qaRunMeta.textContent = invalid ? messages.invalid : messages.noResult;
+  qaRunLink.hidden = true;
+  qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaDuration.textContent = "—";
+  qaHistoryList.replaceChildren();
+  qaChart.hidden = true;
+  qaEmpty.hidden = false;
+  qaEmpty.textContent = invalid ? messages.invalid : messages.missing;
+}
+
+function renderQaLab(payload) {
+  if (!qaStatus) return;
+  const language = currentQaLanguage();
+  const messages = qaMessages[language];
+  const latest = payload?.schemaVersion === 1 ? payload.latestRun : null;
+
+  if (!latest || !["success", "failure"].includes(latest.status)) {
+    renderQaPending(language, Boolean(payload));
+    return;
+  }
+
+  const isSuccess = latest.status === "success";
+  qaStatus.textContent = isSuccess ? messages.passed : messages.failed;
+  qaStatus.dataset.qaStatus = latest.status;
+  const date = formatQaDate(latest.completedAt, language);
+  qaRunMeta.textContent = [`#${latest.runNumber}`, date].filter(Boolean).join(" · ") || messages.noResult;
+
+  const countsValid = ["passed", "failed", "skipped"].every((key) => Number.isInteger(latest[key]) && latest[key] >= 0);
+  qaPassed.textContent = countsValid ? String(latest.passed) : "—";
+  qaFailed.textContent = countsValid ? String(latest.failed) : "—";
+  qaSkipped.textContent = countsValid ? String(latest.skipped) : "—";
+  qaDuration.textContent = Number.isFinite(latest.durationMs) ? formatQaDuration(latest.durationMs, language) : "—";
+
+  const actionsUrl = safeActionsUrl(latest.actionsUrl);
+  qaRunLink.hidden = !actionsUrl;
+  if (actionsUrl) qaRunLink.href = actionsUrl;
+
+  const history = Array.isArray(payload.history)
+    ? payload.history.filter((item) => Number.isInteger(item.runNumber) && ["success", "failure"].includes(item.status) && safeActionsUrl(item.actionsUrl)).slice(0, 10)
+    : [];
+  renderQaHistory(history, language);
+}
+
+function renderQaHistory(history, language) {
+  qaHistoryList.replaceChildren();
+  qaChartAxis.replaceChildren();
+  qaChartPoints.replaceChildren();
+  qaChartLine.setAttribute("points", "");
+  if (!history.length) {
+    qaChart.hidden = true;
+    qaEmpty.hidden = false;
+    qaEmpty.textContent = qaMessages[language].missing;
+    return;
+  }
+
+  const ns = "http://www.w3.org/2000/svg";
+  const xStart = 42;
+  const xEnd = 402;
+  const successY = 34;
+  const failureY = 88;
+  const points = [];
+  const ordered = [...history].reverse();
+
+  const topLabel = document.createElementNS(ns, "text");
+  topLabel.setAttribute("x", "0"); topLabel.setAttribute("y", String(successY + 4));
+  topLabel.textContent = qaMessages[language].passed;
+  qaChartAxis.append(topLabel);
+  const bottomLabel = document.createElementNS(ns, "text");
+  bottomLabel.setAttribute("x", "0"); bottomLabel.setAttribute("y", String(failureY + 4));
+  bottomLabel.textContent = qaMessages[language].failed;
+  qaChartAxis.append(bottomLabel);
+  for (const y of [successY, failureY]) {
+    const line = document.createElementNS(ns, "line");
+    line.setAttribute("x1", String(xStart)); line.setAttribute("x2", String(xEnd));
+    line.setAttribute("y1", String(y)); line.setAttribute("y2", String(y));
+    qaChartAxis.append(line);
+  }
+
+  ordered.forEach((run, index) => {
+    const x = ordered.length === 1 ? (xStart + xEnd) / 2 : xStart + (xEnd - xStart) * index / (ordered.length - 1);
+    const y = run.status === "success" ? successY : failureY;
+    points.push(`${x},${y}`);
+    const circle = document.createElementNS(ns, "circle");
+    circle.setAttribute("cx", String(x)); circle.setAttribute("cy", String(y)); circle.setAttribute("r", "6");
+    circle.setAttribute("class", "qa-chart-point"); circle.dataset.status = run.status;
+    const title = document.createElementNS(ns, "title");
+    title.textContent = `#${run.runNumber} · ${run.status === "success" ? qaMessages[language].passed : qaMessages[language].failed}`;
+    circle.append(title); qaChartPoints.append(circle);
+
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = safeActionsUrl(run.actionsUrl);
+    link.target = "_blank"; link.rel = "noreferrer";
+    const label = run.status === "success" ? qaMessages[language].passed : qaMessages[language].failed;
+    const runDate = formatQaDate(run.completedAt, language);
+    link.textContent = `#${run.runNumber} · ${label}${runDate ? ` · ${runDate}` : ""}`;
+    item.append(link); qaHistoryList.append(item);
+  });
+
+  qaChartLine.setAttribute("points", points.join(" "));
+  qaChart.setAttribute("aria-label", `${qaMessages[language].chart} ${ordered.map((run) => `#${run.runNumber} ${run.status}`).join(", ")}`);
+  qaChart.hidden = false;
+  qaEmpty.hidden = true;
+}
+
+fetch("./data/qa-lab-results.json", { cache: "no-store" })
+  .then((response) => {
+    if (!response.ok) throw new Error("No published QA Lab data.");
+    return response.json();
+  })
+  .then((data) => { qaLabData = data; renderQaLab(data); })
+  .catch(() => renderQaPending(currentQaLanguage()));
