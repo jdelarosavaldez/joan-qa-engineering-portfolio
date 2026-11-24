@@ -202,3 +202,4 @@ window.setTimeout(() => {
 }, reducedMotion.matches ? 0 : 1700);
 
 document.querySelector("#year").textContent = String(new Date().getFullYear());
+
