@@ -2,15 +2,26 @@
 
 **QA Engineer | SDET | Quality Engineering**
 
-The public site will open in English and provide a visible `ES` control for the equivalent Spanish version.
+The public site opens in English and provides a visible `ES` control for equivalent Spanish content.
 
-This repository will contain a public portfolio site and small, executable quality-engineering projects. The goal is to show how I approach risk, design tests, automate checks, investigate failures, and communicate evidence—not only list tools.
+This repository contains a bilingual portfolio site and small, executable quality-engineering projects. The goal is to show how I approach risk, design tests, automate checks, investigate failures, and communicate evidence—not only list tools.
 
-> **Project status:** the first bilingual homepage is under review on a feature branch. It is a small static view with no deployment yet. See [DESIGN.md](DESIGN.md) for the current scope and open decisions.
+> **Project status:** the bilingual homepage and About section are merged into `main`. GitHub Pages deployment is prepared in [PR #9](https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/pull/9); the site is not live until Pages is enabled and a deployment run succeeds.
+
+## Run the website locally
+
+The website is static HTML, CSS, and JavaScript. From the repository root, run this local preview server:
+
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1
+```
+
+Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Python is only the local file server; it does not implement the website. Stop it with `Ctrl+C`.
 
 ## Portfolio map
 
-- **Website and QA Lab:** the first homepage view is implemented as static HTML, CSS, and JavaScript. Its design is being reviewed before choosing any framework; any CI status must come from a real run.
+- **Website:** static HTML/CSS/JavaScript with bilingual content and self-hosted fonts.
+- **QA Lab:** planned Playwright + TypeScript checks for the portfolio. Status stays pending until real CI checks run.
 - **UI and API case study:** a clean-room project using a public practice application, with positive, negative, edge, and regression coverage.
 - **Python and Pytest:** a separately runnable API or integration-testing project.
 - **Docker and CI:** reproducible local dependencies and quality gates.
@@ -38,16 +49,20 @@ We work one small, reviewable slice at a time on a short-lived branch. Codex pre
 
 Project roles and attribution rules are defined in [DESIGN.md](DESIGN.md#project-roles). Claude Design can explore visual directions and prototypes before implementation; its output is a proposal for review. Do not commit a raw CV, personal contact details, confidential employer material, private URLs, credentials, or other private data to any branch of this public repository.
 
+## Deployment status
+
+The GitHub Pages workflow and first-time setup are documented in [docs/deployment.md](docs/deployment.md). The expected project URL is [https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/](https://jdelarosavaldez.github.io/joan-qa-engineering-portfolio/). It becomes live only after the repository's Pages source is set to GitHub Actions, the deployment PR is merged, and its workflow succeeds.
+
 ## Current limitations
 
 - The Claude Reviewer GitHub App is installed only on this repository. The [review workflow](.github/workflows/claude-review.yml) reviews diffs from public, same-repository PRs and posts an App-authored comment when its Actions credentials are configured; see [Claude Reviewer setup](docs/claude-reviewer-setup.md).
-- The initial homepage is a static prototype with a short bilingual biography; it has no build tooling, automation framework, or deployment yet.
-- Astro and the earlier starter proposal are paused while the static homepage design is reviewed. The first view has no package manifest or third-party runtime dependencies.
-- The public GitHub repository is created and connected to this local repository. GitHub Pages is not configured yet.
-- Résumé details, employment dates, project metrics, and public contact details are not included.
+- The site currently has no build tool or automated browser checks.
+- Astro and the earlier starter proposal are paused; the current site has no package manifest or third-party runtime dependencies.
+- CV delivery format, public contact details, and custom domain are not included or configured.
 - The initial practice target and starter-template license still need validation before implementation.
 
 ## Project documents
 
 - [Design proposal](DESIGN.md)
 - [Technical roadmap](ROADMAP.md)
+- [GitHub Pages deployment](docs/deployment.md)
