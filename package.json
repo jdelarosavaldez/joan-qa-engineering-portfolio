@@ -1,0 +1,20 @@
+{
+  "name": "joan-qa-engineering-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright quality checks for Joan De la Rosa's portfolio website",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "qa:check": "tsc --noEmit",
+    "qa:test": "playwright test",
+    "qa:test:headed": "playwright test --headed",
+    "qa:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  }
+}

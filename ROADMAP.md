@@ -12,23 +12,24 @@ This portfolio grows through independently runnable milestones. A project moves 
 - [ ] Verify Astro/template versions, license, runtime requirements, and GitHub Pages setup using primary sources.
 - [x] Establish the exact GitHub repository and remote before setting the Pages URL/base.
 - [x] Merge the review workflow: Joan owns decisions and merges; Codex implements each authorized slice on a short-lived branch, keeps the PR in draft while work is in progress, and marks it ready for review; Claude reviews and comments when the GitHub integration is active.
-- [ ] Review the first homepage view and refine the visual system before expanding beyond this slice.
+- [x] Review the first homepage view and refine the visual system before expanding beyond this slice.
 
 ## Milestone 1 — Portfolio site
 
 - [x] Agree the site's language: English by default, with a visible switch to equivalent Spanish content.
 - [x] Confirm the concise, general bio wording with Joan.
-- [ ] Review the homepage visual proposal with Claude; record Joan's accepted decisions before expanding the site.
+- [x] Review the homepage visual proposal with Claude; record Joan's accepted decisions before expanding the site.
 - [x] Keep implementation on a task branch and prepare the first reviewable homepage slice for `main`; Joan merges after review.
 - [x] Implement the initial responsive portfolio view and confirmed introductory content; keep project results and testing out of this slice.
-- [ ] Review the rendered site at mobile and desktop before expanding it.
-- [ ] Publish only after the site content, repository visibility, and privacy have been reviewed.
+- [x] Review the rendered site at mobile and desktop before expanding it.
+- [x] Publish the reviewed site on GitHub Pages.
 
 ## Milestone 2 — QA Lab: test the portfolio
 
-- [ ] Add Playwright + TypeScript checks for approved behavior, keyboard/focus, reduced motion, 375 px and desktop layouts, and overflow.
-- [ ] Save screenshots and link actual execution evidence; show QA Lab status as pending until CI produces a real result.
-- [ ] Add the smallest necessary GitHub Actions build/test workflow after local verification.
+- [x] Add Playwright + TypeScript checks for page content, language switching, keyboard behavior, reduced motion, 375 × 812 and desktop layouts, overflow, and section overlap.
+- [x] Save responsive screenshots and configure GitHub Actions to retain reports and evidence artifacts.
+- [x] Add the smallest necessary GitHub Actions workflow, with Node.js 24 and the Python static preview server.
+- [ ] Verify the first PR workflow run and review its reports/screenshots before calling the QA Lab operational.
 
 ## Milestone 3 — UI and API practice case study
 
