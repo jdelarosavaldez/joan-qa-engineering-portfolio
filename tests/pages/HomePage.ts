@@ -1,4 +1,5 @@
 import { type Locator, type Page } from "@playwright/test";
+import { portfolioTestData, type PortfolioLanguage } from "../data/test-data";
 import { AboutSection } from "./AboutSection";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { QualityFlow } from "./components/QualityFlow";
@@ -19,9 +20,6 @@ export class HomePage {
   }
 
   async open(): Promise<void> {
-    await this.page.addInitScript(() => {
-      window.sessionStorage.setItem("portfolio-welcome-dismissed", "true");
-    });
     await this.page.goto("/");
     await this.page.evaluate(() => document.fonts.ready);
   }
@@ -38,8 +36,8 @@ export class HomePage {
     return this.hero.locator(".bio");
   }
 
-  get aboutLink(): Locator {
-    return this.page.getByRole("link", { name: "More about my work" });
+  aboutLink(language: PortfolioLanguage = "en"): Locator {
+    return this.page.getByRole("link", { name: portfolioTestData[language].aboutLink });
   }
 
   async documentDimensions(): Promise<{ viewportWidth: number; documentWidth: number }> {
@@ -49,13 +47,13 @@ export class HomePage {
     }));
   }
 
-  async layoutBoxes(): Promise<Array<{ name: string; x: number; y: number; width: number; height: number }>> {
+  async layoutBoxes(language: PortfolioLanguage): Promise<Array<{ name: string; x: number; y: number; width: number; height: number }>> {
     const elements: Array<{ name: string; locator: Locator }> = [
       { name: "name", locator: this.title },
       { name: "role", locator: this.role },
       { name: "quality flow", locator: this.flow.root },
       { name: "introduction", locator: this.introduction },
-      { name: "about link", locator: this.aboutLink },
+      { name: "about link", locator: this.aboutLink(language) },
     ];
 
     return Promise.all(elements.map(async ({ name, locator }) => {
@@ -63,5 +61,9 @@ export class HomePage {
       if (!box) throw new Error(`Could not measure ${name}.`);
       return { name, ...box };
     }));
+  }
+
+  async captureScreenshot(): Promise<Buffer> {
+    return this.page.screenshot({ fullPage: true, animations: "disabled" });
   }
 }

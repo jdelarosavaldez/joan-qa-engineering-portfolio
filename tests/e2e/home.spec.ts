@@ -11,7 +11,7 @@ test("[PF-HOME-001] presents Joan and the English portfolio introduction by defa
 });
 
 test("[PF-NAV-001] opens About from the keyboard @regression", async ({ portfolio, page }) => {
-  await portfolio.aboutLink.focus();
+  await portfolio.aboutLink().focus();
   await expect(portfolio.aboutLink).toBeFocused();
   await page.keyboard.press("Enter");
 

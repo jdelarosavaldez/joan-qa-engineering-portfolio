@@ -33,7 +33,7 @@ npm run qa:test
 
 Playwright starts the local preview server automatically during `qa:test`. The suite checks the page title and main content, English/Spanish switching, keyboard navigation and station controls, reduced-motion behavior, WCAG-tagged axe results, horizontal overflow, and section overlap at 375 × 812, 1440 × 900, and 1920 × 1080. At 1920 px it also checks Strategy's alignment and clearance from the start circle. Test titles use case IDs such as `[PF-HOME-001]` and `@smoke` / `@regression` tags; the plan maps each ID to its acceptance criteria. It saves full-page screenshots with each viewport's test output.
 
-Page objects in `tests/pages/` keep selectors and interactions close to the page they represent. Specs use accessible roles and labels through those objects; expected bilingual copy lives in `tests/data/copy.ts`, and the shared fixture in `tests/fixtures/` opens the portfolio consistently.
+Page objects in `tests/pages/` keep selectors and interactions close to the page they represent. Specs use accessible roles and labels through those objects; expected bilingual UI text lives in `tests/data/test-data.ts`, and the shared fixture in `tests/fixtures/` opens the portfolio consistently.
 
 To open the HTML report after a run:
 

@@ -25,9 +25,9 @@ export class QualityFlow {
     return this.page.locator(`#${noteId}`);
   }
 
-  async strategySpacing(): Promise<{ labelAlignment: number; shapeOffset: number; startCircleClearance: number }> {
+  async strategySpacing(strategyName: string): Promise<{ labelAlignment: number; shapeOffset: number; startCircleClearance: number }> {
     const startCircle = await this.root.locator(".flow-start").boundingBox();
-    const strategy = this.station("Strategy");
+    const strategy = this.station(strategyName);
     const stationBox = await strategy.boundingBox();
     const shapeBox = await strategy.locator(".station-shape").boundingBox();
     const labelBox = await strategy.locator(".station-label").boundingBox();
