@@ -1,8 +1,9 @@
 import { test, expect } from "../fixtures/portfolio.fixture";
+import { type Page } from "@playwright/test";
 
 const workflowRunsUrl = "https://api.github.com/repos/jdelarosavaldez/joan-qa-engineering-portfolio/actions/workflows/portfolio-quality.yml/runs";
 
-async function stubWorkflowRuns(page, workflow_runs = []) {
+async function stubWorkflowRuns(page: Page, workflow_runs: Array<Record<string, unknown>> = []) {
   await page.route(workflowRunsUrl + "**", (route) => route.fulfill({
     status: 200,
     contentType: "application/json",
