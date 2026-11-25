@@ -248,6 +248,25 @@ function updateQaCaseListFocusability() {
   qaCaseList.tabIndex = canScroll ? 0 : -1;
 }
 
+let qaCaseListMeasureFrame = null;
+function scheduleQaCaseListFocusability() {
+  if (qaCaseListMeasureFrame !== null) window.cancelAnimationFrame(qaCaseListMeasureFrame);
+  qaCaseListMeasureFrame = window.requestAnimationFrame(() => {
+    qaCaseListMeasureFrame = null;
+    updateQaCaseListFocusability();
+  });
+}
+
+const qaCaseListResizeObserver = "ResizeObserver" in window
+  ? new ResizeObserver(scheduleQaCaseListFocusability)
+  : null;
+qaCaseListResizeObserver?.observe(qaCaseList);
+window.addEventListener("resize", scheduleQaCaseListFocusability);
+if (document.fonts) {
+  document.fonts.ready.then(scheduleQaCaseListFocusability);
+  document.fonts.addEventListener("loadingdone", scheduleQaCaseListFocusability);
+}
+
 qaRunDetails?.addEventListener("toggle", () => {
   updateQaCaseListFocusability();
   revealQaCasesOnce();
@@ -365,7 +384,9 @@ function renderQaCases(value, language, upstreamTruncated = false) {
   const cases = normalized.cases;
   const hasMoreCases = upstreamTruncated || normalized.truncated;
   qaCaseList.classList.remove("is-revealed");
+  qaCaseListResizeObserver?.disconnect();
   qaCaseList.replaceChildren();
+  qaCaseListResizeObserver?.observe(qaCaseList);
   qaCaseCount.textContent = hasMoreCases
     ? qaMessages[language].casesTruncated(cases.length)
     : `${cases.length} ${cases.length === 1 ? qaMessages[language].casesOne : qaMessages[language].casesMany}`;
@@ -393,6 +414,7 @@ function renderQaCases(value, language, upstreamTruncated = false) {
     fragment.append(item);
   });
   qaCaseList.append(fragment);
+  qaCaseList.querySelectorAll("li").forEach((item) => qaCaseListResizeObserver?.observe(item));
   updateQaCaseListFocusability();
   revealQaCasesOnce();
 }

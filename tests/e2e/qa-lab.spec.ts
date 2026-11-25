@@ -222,3 +222,23 @@ test("[PF-QA-012] limits oversized case feeds and supports keyboard scrolling @r
   await expect(qaLab.caseList).toHaveCSS("outline-width", "3px");
   expect(await qaLab.scrollCasesToEndWithKeyboard()).toBeGreaterThan(0);
 });
+test("[PF-QA-013] restores keyboard access after viewport reflow makes the case list scrollable @regression", async ({ portfolio, page, qaLab }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const cases = Array.from({ length: 4 }, (_, index) => ({
+    caseId: "PF-REFLOW-" + String(index + 1).padStart(3, "0"),
+    title: "responsive case detail ".repeat(20),
+    status: "passed",
+    durationMs: 100,
+  }));
+  await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, passed: 4, total: 4, cases } });
+  await qaLab.reload();
+  await page.evaluate(() => document.fonts.ready);
+  await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(4);
+  await qaLab.expandRunDetails();
+  await expect(qaLab.caseList).toHaveAttribute("tabindex", "-1");
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(qaLab.caseList).toHaveAttribute("tabindex", "0");
+  await qaLab.caseList.focus();
+  await expect(qaLab.caseList).toHaveCSS("outline-width", "3px");
+  expect(await qaLab.scrollCasesToEndWithKeyboard()).toBeGreaterThan(0);
+});
