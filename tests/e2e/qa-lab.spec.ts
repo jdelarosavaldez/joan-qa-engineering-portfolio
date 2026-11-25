@@ -41,9 +41,10 @@ test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smok
   await qaLab.reload();
   await expect(qaLab.heading).toBeVisible();
   await expect(qaLab.status).toHaveText("Pending");
-  await expect(qaLab.runDetailsToggle).toBeVisible();
-  await expect(qaLab.runDetails).not.toHaveAttribute("open", "");
-  await expect(qaLab.runDetailsToggle).toContainText("Waiting for a published CI result.");
+  await expect(qaLab.runDetails).toBeHidden();
+  await expect(qaLab.runMeta).toBeVisible();
+  await expect(qaLab.runMeta).toHaveText("Waiting for a published CI result.");
+  await expect(qaLab.runDetailsToggle).toBeHidden();
   await expect(qaLab.chart).toBeHidden();
   await expect(qaLab.runAction).toHaveAttribute("href", /actions\/workflows\/portfolio-quality\.yml$/);
   await expect(portfolio.title).toBeVisible();
@@ -56,8 +57,9 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   await expect(qaLab.status).toHaveAttribute("role", "status");
   await expect(qaLab.status.locator("xpath=ancestor::summary")).toHaveCount(0);
   await expect(qaLab.status).toHaveText("Passed");
-  await expect(qaLab.runDetailsToggle).toContainText("#21");
-  await expect(qaLab.runDetailsToggle).toContainText("Nov");
+  await expect(qaLab.runMeta).toContainText("#21");
+  await expect(qaLab.runMeta).toContainText("Nov");
+  await expect(qaLab.runDetailsToggle).toContainText("Show execution details");
   await expect(qaLab.runDetails).not.toHaveAttribute("open", "");
   await expect(qaLab.passed).toBeHidden();
   await expect(qaLab.chart).toBeHidden();
@@ -93,10 +95,10 @@ test("[PF-QA-003] stays pending when there is no completed run @regression", asy
   await publishFeed(page, { schemaVersion: 2, latestRun: null, history: [] });
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
-  await expect(qaLab.runDetailsToggle).toContainText("Waiting for a published CI result.");
-  await qaLab.expandRunDetails();
-  await expect(qaLab.pendingMessage).toHaveText("The chart will appear after the next CI run on main.");
-  await expect(qaLab.caseEmpty).toHaveText("No case details are included in this published run.");
+  await expect(qaLab.runDetails).toBeHidden();
+  await expect(qaLab.runMeta).toHaveText("Waiting for a published CI result.");
+  await expect(qaLab.pendingMessage).toBeHidden();
+  await expect(qaLab.caseEmpty).toBeHidden();
   expect(githubRequests).toEqual([]);
 });
 
@@ -104,8 +106,8 @@ test("[PF-QA-004] keeps malformed public data in the pending state @regression",
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 200, contentType: "application/json", body: "{malformed" }));
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
-  await qaLab.expandRunDetails();
-  await expect(qaLab.pendingMessage).toHaveText("The published result is not available yet.");
+  await expect(qaLab.runDetails).toBeHidden();
+  await expect(qaLab.runMeta).toHaveText("The published result is not available yet.");
   await expect(qaLab.chart).toBeHidden();
 });
 
@@ -115,9 +117,8 @@ test("[PF-QA-005] localizes an empty published feed @regression", async ({ portf
   await expect(qaLab.status).toHaveText("Pending");
   await portfolio.language.option("es").click();
   await expect(qaLab.status).toHaveText("Pendiente");
-  await qaLab.expandRunDetails();
-  await expect(qaLab.pendingMessage).toHaveText("El gráfico aparecerá después de la próxima ejecución de CI en main.");
-  await expect(qaLab.caseEmpty).toHaveText("Esta ejecución publicada no incluye detalles de casos.");
+  await expect(qaLab.runDetails).toBeHidden();
+  await expect(qaLab.runMeta).toHaveText("Esperando un resultado publicado de CI.");
   await expect(qaLab.runEvidence).toBeHidden();
 });
 

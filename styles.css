@@ -236,7 +236,9 @@ h1 span:last-child { white-space: nowrap; }
 .qa-run-details > summary::-webkit-details-marker { display: none; }
 .qa-run-details > summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; border-radius: 6px; }
 .qa-run-summary-title { margin: 0; font-size: 1.35rem; font-weight: 700; }
-.qa-run-summary-meta { min-width: 0; color: var(--bone); font-size: .9rem; line-height: 1.45; }
+.qa-run-summary-meta { min-width: 0; margin: .4rem 0 .7rem; color: var(--bone); font-size: .9rem; line-height: 1.45; }
+.qa-run-disclosure-label { min-width: 0; }
+.qa-run-details[hidden] { display: none; }
 .qa-run-disclosure-indicator { flex: 0 0 auto; }
 .qa-run-disclosure-indicator::before { content: "+"; color: var(--orange); font-size: 1.5rem; font-weight: 700; }
 .qa-run-details[open] .qa-run-disclosure-indicator::before { content: "−"; }

@@ -299,6 +299,7 @@ function formatQaDuration(value, language) {
 
 function renderQaPending(language, invalid = false) {
   const messages = qaMessages[language];
+  qaRunDetails.hidden = true;
   qaStatus.textContent = messages.pending;
   qaStatus.dataset.qaStatus = "pending";
   qaRunMeta.textContent = invalid ? messages.invalid : messages.noResult;
@@ -328,6 +329,7 @@ function renderQaLab(payload) {
   }
 
   const isSuccess = latest.status === "success";
+  qaRunDetails.hidden = false;
   qaStatus.textContent = isSuccess ? messages.passed : messages.failed;
   qaStatus.dataset.qaStatus = latest.status;
   const date = formatQaDate(latest.completedAt, language);
