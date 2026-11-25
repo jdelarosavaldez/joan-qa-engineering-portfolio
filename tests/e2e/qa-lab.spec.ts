@@ -44,6 +44,12 @@ test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smok
   await expect(qaLab.runDetails).toBeHidden();
   await expect(qaLab.runMeta).toBeVisible();
   await expect(qaLab.runMeta).toHaveText("Waiting for a published CI result.");
+  await expect(qaLab.passed).toBeVisible();
+  await expect(qaLab.passed).toHaveText("—");
+  await expect(qaLab.failed).toHaveText("—");
+  await expect(qaLab.skipped).toHaveText("—");
+  await expect(qaLab.flaky).toHaveText("—");
+  await expect(qaLab.duration).toHaveText("—");
   await expect(qaLab.runDetailsToggle).toBeHidden();
   await expect(qaLab.passed).toBeVisible();
   await expect(qaLab.passed).toHaveText("—");
