@@ -233,8 +233,8 @@ test("[PF-QA-013] restores keyboard access after viewport reflow makes the case 
   await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, passed: 4, total: 4, cases } });
   await qaLab.reload();
   await page.evaluate(() => document.fonts.ready);
-  await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(4);
   await qaLab.expandRunDetails();
+  await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(4);
   await expect(qaLab.caseList).toHaveAttribute("tabindex", "-1");
   await page.setViewportSize({ width: 375, height: 812 });
   await expect(qaLab.caseList).toHaveAttribute("tabindex", "0");
