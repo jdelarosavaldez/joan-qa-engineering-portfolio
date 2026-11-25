@@ -32,7 +32,7 @@ export class QaLab {
     this.chart = this.root.locator("#qa-history-chart");
     this.history = this.root.locator("#qa-history-list");
     this.runDetails = this.root.locator("#qa-run-details");
-    this.runDetailsToggle = this.runDetails.locator(":scope > summary");
+    this.runDetailsToggle = this.runDetails.locator("summary.qa-run-summary");
     this.caseList = this.root.locator("#qa-case-list");
     this.caseEmpty = this.root.locator("#qa-case-empty");
     this.historyPanel = this.root.locator("#qa-history");
