@@ -62,6 +62,10 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   await qaLab.runDetailsToggle.press("Space");
   await expect(qaLab.runDetails).toHaveAttribute("open", "");
   await expect(qaLab.passed).toHaveText("3");
+  await expect(qaLab.failed).toHaveText("0");
+  await expect(qaLab.skipped).toHaveText("0");
+  await expect(qaLab.flaky).toHaveText("0");
+  await expect(qaLab.duration).toContainText("42");
   await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(3);
   await expect(qaLab.caseRow("PF-HOME-001")).toContainText("loads the portfolio");
   await qaLab.expandHistory();

@@ -232,8 +232,17 @@ const qaCaseList = document.querySelector("#qa-case-list");
 const qaCaseEmpty = document.querySelector("#qa-case-empty");
 const qaCaseCount = document.querySelector("#qa-case-count");
 let qaCasesAnimated = false;
+const qaRunDetails = document.querySelector("#qa-run-details");
 let qaLabData = null;
 let qaLabFeedInvalid = false;
+
+function revealQaCasesOnce() {
+  if (!qaRunDetails?.open || qaCasesAnimated || reducedMotion.matches || !qaCaseList.children.length) return;
+  requestAnimationFrame(() => qaCaseList.classList.add("is-revealed"));
+  qaCasesAnimated = true;
+  window.setTimeout(() => qaCaseList.classList.remove("is-revealed"), 1000);
+}
+qaRunDetails?.addEventListener("toggle", revealQaCasesOnce);
 
 const qaMessages = {
   en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet.", caseEmpty: "No case details are included in this published run.", casesOne: "test case", casesMany: "test cases", casesTruncated: "Showing the first 100 cases · more were omitted.", caseStatus: { passed: "Passed", failed: "Failed", skipped: "Skipped", flaky: "Flaky" } },
@@ -343,6 +352,7 @@ function formatQaCaseDuration(value, language) {
 
 function renderQaCases(value, language, casesTruncated = false) {
   const cases = normalizeQaCases(value);
+  qaCaseList.classList.remove("is-revealed");
   qaCaseList.replaceChildren();
   qaCaseCount.textContent = casesTruncated ? qaMessages[language].casesTruncated : `${cases.length} ${cases.length === 1 ? qaMessages[language].casesOne : qaMessages[language].casesMany}`;
   qaCaseEmpty.hidden = cases.length > 0;
@@ -369,11 +379,7 @@ function renderQaCases(value, language, casesTruncated = false) {
     fragment.append(item);
   });
   qaCaseList.append(fragment);
-
-  if (cases.length && !qaCasesAnimated && !reducedMotion.matches) {
-    requestAnimationFrame(() => qaCaseList.classList.add("is-revealed"));
-    qaCasesAnimated = true;
-  }
+  revealQaCasesOnce();
 }
 
 function normalizeQaHistory(value) {

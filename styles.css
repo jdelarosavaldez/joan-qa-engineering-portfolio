@@ -186,6 +186,7 @@ h1 span:last-child { white-space: nowrap; }
   .welcome-slot { transition-duration: .01ms; }
   .welcome-banner { align-items: stretch; }
   .welcome-start { justify-content: center; }
+  .qa-run-details[open] .qa-run-details-body, .qa-case-list.is-revealed li { animation: none !important; }
 }
 
 
