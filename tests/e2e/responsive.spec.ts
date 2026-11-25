@@ -22,7 +22,7 @@ for (const layout of layouts) {
       reducedMotion: "reduce",
     });
 
-    test(`[PF-LAYOUT-${layout.caseId}] ${layout.width}px ${language.toUpperCase()} keeps the page and quality flow aligned without overflow @regression`, async ({ portfolio }, testInfo) => {
+    test(`[PF-LAYOUT-${layout.caseId}] should keep content visible without overflow or overlap and align the QA flow at ${layout.width}px in ${language.toUpperCase()} @regression`, async ({ portfolio }, testInfo) => {
       if (language === "es") await portfolio.language.select("es");
 
       const { viewportWidth, documentWidth } = await portfolio.documentDimensions();
@@ -59,7 +59,7 @@ for (const layout of layouts) {
   });
 }
 
-test("[PF-MOTION-001] keeps the hero static when reduced motion is requested @regression", async ({ portfolio, page }) => {
+test("[PF-MOTION-001] should disable hero animation and smooth scrolling when reduced motion is enabled @regression", async ({ portfolio, page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await portfolio.open();
 

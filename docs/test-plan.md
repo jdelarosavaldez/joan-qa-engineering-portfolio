@@ -1,6 +1,6 @@
 # Portfolio test plan
 
-This plan traces browser checks to the portfolio's first implementation slice: the bilingual introduction, quality flow, About section, and responsive presentation. Expected UI text used by assertions lives in `tests/data/test-data.ts`.
+This plan traces browser checks to the portfolio's first implementation slice: the bilingual introduction, quality flow, About section, and responsive presentation. Expected UI text used by assertions lives in `tests/data/test-data.ts`. Each automated case title follows `[PF-*] should <observable expected result> @tag`; case IDs remain stable and tags stay at the end.
 
 | Case ID | Priority | Requirement / acceptance criteria | Preconditions | Steps | Expected result | Tags |
 | --- | --- | --- | --- | --- | --- | --- |
