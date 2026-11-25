@@ -4,15 +4,22 @@ export class QaLab {
   readonly root: Locator;
   readonly heading: Locator;
   readonly status: Locator;
+  readonly runMeta: Locator;
   readonly pendingMessage: Locator;
   readonly chart: Locator;
   readonly history: Locator;
+  readonly runDetails: Locator;
+  readonly runDetailsToggle: Locator;
+  readonly caseList: Locator;
+  readonly caseCount: Locator;
+  readonly caseEmpty: Locator;
   readonly historyPanel: Locator;
   readonly historyToggle: Locator;
   readonly passed: Locator;
   readonly failed: Locator;
   readonly skipped: Locator;
   readonly flaky: Locator;
+  readonly duration: Locator;
   readonly runAction: Locator;
   readonly runEvidence: Locator;
   private readonly page: Page;
@@ -22,15 +29,22 @@ export class QaLab {
     this.root = page.locator("#qa-lab");
     this.heading = this.root.getByRole("heading", { level: 2 });
     this.status = this.root.locator("[data-qa-status]");
+    this.runMeta = this.root.locator("#qa-run-meta");
     this.pendingMessage = this.root.locator("#qa-empty");
     this.chart = this.root.locator("#qa-history-chart");
     this.history = this.root.locator("#qa-history-list");
+    this.runDetails = this.root.locator("#qa-run-details");
+    this.runDetailsToggle = this.runDetails.locator("summary.qa-run-summary");
+    this.caseList = this.root.locator("#qa-case-list");
+    this.caseCount = this.root.locator("#qa-case-count");
+    this.caseEmpty = this.root.locator("#qa-case-empty");
     this.historyPanel = this.root.locator("#qa-history");
     this.historyToggle = this.historyPanel.locator("summary");
     this.passed = this.root.locator("#qa-passed");
     this.failed = this.root.locator("#qa-failed");
     this.skipped = this.root.locator("#qa-skipped");
     this.flaky = this.root.locator("#qa-flaky");
+    this.duration = this.root.locator("#qa-duration");
     this.runEvidence = this.root.locator('#qa-run-link');
     this.runAction = this.root.getByRole("link", { name: /Run checks|Ejecutar pruebas/ });
   }
@@ -43,6 +57,28 @@ export class QaLab {
       const labelBounds = label.getBBox();
       return labelBounds.x + labelBounds.width < Number(gridline.getAttribute("x1"));
     });
+  }
+
+  caseRow(caseId: string): Locator {
+    return this.caseList.getByRole("listitem").filter({ hasText: caseId });
+  }
+
+  async expandRunDetails(): Promise<void> {
+    await this.runDetailsToggle.click();
+  }
+
+  async collapseRunDetails(): Promise<void> {
+    await this.runDetailsToggle.click();
+  }
+
+  async scrollCasesToEndWithKeyboard(): Promise<number> {
+    await this.caseList.focus();
+    await this.caseList.press("End");
+    await this.page.waitForFunction(() => {
+      const list = document.querySelector<HTMLElement>("#qa-case-list");
+      return list !== null && list.scrollTop > 0;
+    }, undefined, { timeout: 2000 });
+    return this.caseList.evaluate((list) => list.scrollTop);
   }
 
   async expandHistory(): Promise<void> {

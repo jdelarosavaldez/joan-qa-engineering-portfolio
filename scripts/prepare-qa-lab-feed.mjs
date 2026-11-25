@@ -37,6 +37,8 @@ try {
       durationMs: run.run_started_at ? Math.max(0, Date.parse(run.updated_at) - Date.parse(run.run_started_at)) : null,
       commit: String(run.head_sha || "").slice(0, 7) || null,
       actionsUrl: run.html_url,
+      cases: [],
+      casesTruncated: false,
     }));
 } catch {
   // Preserve the static site deploy even if the optional history request is unavailable.
@@ -44,6 +46,24 @@ try {
 
 const conclusion = process.env.QA_WORKFLOW_CONCLUSION;
 const safeCount = (value) => Number.isInteger(value) && value >= 0 ? value : null;
+const normalizeCaseTitle = (value) => value
+  .replace(/[\u0000-\u001F\u007F]/g, " ")
+  .replace(/\s+/g, " ")
+  .trim()
+  .slice(0, 180);
+const normalizedCases = Array.isArray(summary?.cases) ? summary.cases.filter((item) =>
+  item &&
+  (item.caseId === null || typeof item.caseId === "string") &&
+  typeof item.title === "string" &&
+  ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
+  Number.isFinite(item.durationMs) &&
+  item.durationMs >= 0
+).map((item) => ({
+  caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
+  title: normalizeCaseTitle(item.title),
+  status: item.status,
+  durationMs: Math.round(item.durationMs),
+})).filter((item) => item.title.length > 0) : [];
 const currentEvent = ["success", "failure"].includes(conclusion) ? {
   runId: currentRunId,
   runNumber: Number(process.env.QA_WORKFLOW_RUN_NUMBER) || null,
@@ -57,11 +77,13 @@ const currentEvent = ["success", "failure"].includes(conclusion) ? {
   total: safeCount(summary?.total),
   durationMs: Number.isFinite(summary?.durationMs) && summary.durationMs >= 0 ? summary.durationMs : null,
   actionsUrl: process.env.QA_WORKFLOW_URL,
+  cases: normalizedCases.slice(0, 100),
+  casesTruncated: summary?.casesTruncated === true || normalizedCases.length > 100,
 } : null;
 const previousRuns = history.filter((run) => run.runId !== currentRunId);
 const withCurrent = currentEvent ? [currentEvent, ...previousRuns].slice(0, 10) : previousRuns.slice(0, 10);
 const latestRun = currentEvent || withCurrent[0] || null;
-const output = { schemaVersion: 1, latestRun, history: withCurrent };
+const output = { schemaVersion: 2, latestRun, history: withCurrent };
 
 await mkdir("dist/data", { recursive: true });
 await writeFile("dist/data/qa-lab-results.json", JSON.stringify(output, null, 2) + "\n", "utf8");

@@ -104,45 +104,44 @@
         </div>
 
         <div class="qa-lab-results">
-          <div class="qa-latest" id="qa-latest">
-            <div class="qa-latest-head">
-              <div>
-                <h3 data-en="Latest run" data-es="Última ejecución">Latest run</h3>
-                <p id="qa-run-meta" data-en="Waiting for a published CI result." data-es="Esperando un resultado publicado de CI.">
-                  Waiting for a published CI result.
-                </p>
-              </div>
-              <span class="qa-status" id="qa-status" role="status" data-qa-status="pending">Pending</span>
-            </div>
-            <dl class="qa-metrics" id="qa-metrics">
-              <div><dt data-en="Passed" data-es="Aprobadas">Passed</dt><dd id="qa-passed">—</dd></div>
-              <div><dt data-en="Failed" data-es="Fallidas">Failed</dt><dd id="qa-failed">—</dd></div>
-              <div><dt data-en="Skipped" data-es="Omitidas">Skipped</dt><dd id="qa-skipped">—</dd></div>
-              <div><dt data-en="Flaky" data-es="Inestables">Flaky</dt><dd id="qa-flaky">—</dd></div>
-              <div><dt data-en="Duration" data-es="Duración">Duration</dt><dd id="qa-duration">—</dd></div>
-            </dl>
-            <a class="qa-run-link" id="qa-run-link" hidden target="_blank" rel="noreferrer"
-               data-en="Open this Actions run ↗" data-es="Abrir esta ejecución de Actions ↗">Open this Actions run ↗</a>
+          <div class="qa-run-header">
+            <h3 class="qa-run-summary-title" id="qa-run-heading" data-en="Latest run" data-es="Última ejecución">Latest run</h3>
+            <span class="qa-status" id="qa-status" role="status" aria-live="polite" data-qa-status="pending">Pending</span>
           </div>
-
-          <svg class="qa-chart" id="qa-history-chart" viewBox="0 0 420 132" role="img"
-               aria-label="No CI runs yet" data-en-label="No CI runs yet" data-es-label="Aún no hay ejecuciones de CI" hidden>
-            <g class="qa-chart-axis" aria-hidden="true"></g>
-            <polyline class="qa-chart-line" aria-hidden="true"></polyline>
-            <g class="qa-chart-points"></g>
-          </svg>
-          <p class="qa-empty" id="qa-empty" data-en="The chart will appear after the next CI run on main."
-             data-es="El gráfico aparecerá después de la próxima ejecución de CI en main.">
-            The chart will appear after the next CI run on main.
-          </p>
-
-          <details class="qa-history" id="qa-history">
-            <summary class="qa-history-head">
-              <span class="qa-history-title" data-en="Recent CI history" data-es="Historial reciente de CI">Recent CI history</span>
-              <span class="qa-history-indicator" aria-hidden="true"></span>
+          <p class="qa-run-summary-meta" id="qa-run-meta" data-en="Waiting for a published CI result." data-es="Esperando un resultado publicado de CI.">Waiting for a published CI result.</p>
+          <dl class="qa-metrics" id="qa-metrics">
+                <div><dt data-en="Passed" data-es="Aprobadas">Passed</dt><dd id="qa-passed" data-qa-metric="passed">—</dd></div>
+                <div><dt data-en="Failed" data-es="Fallidas">Failed</dt><dd id="qa-failed" data-qa-metric="failed">—</dd></div>
+                <div><dt data-en="Skipped" data-es="Omitidas">Skipped</dt><dd id="qa-skipped" data-qa-metric="skipped">—</dd></div>
+                <div><dt data-en="Flaky" data-es="Inestables">Flaky</dt><dd id="qa-flaky" data-qa-metric="flaky">—</dd></div>
+                <div><dt data-en="Duration" data-es="Duración">Duration</dt><dd id="qa-duration">—</dd></div>
+              </dl>
+          <details class="qa-run-details" id="qa-run-details" hidden>
+            <summary class="qa-run-summary" aria-controls="qa-run-details-content" aria-labelledby="qa-run-heading qa-run-disclosure-label">
+              <span class="qa-run-disclosure-label" id="qa-run-disclosure-label" data-en="Show execution details" data-es="Ver detalles de ejecución">Show execution details</span>
+              <span class="qa-run-disclosure-indicator" aria-hidden="true"></span>
             </summary>
-            <ol class="qa-history-list" id="qa-history-list"></ol>
-            <p class="qa-history-empty" id="qa-history-empty" data-en="No runs have been published yet." data-es="Aún no se han publicado ejecuciones.">No runs have been published yet.</p>
+            <div class="qa-run-details-body" id="qa-run-details-content">              <a class="qa-run-link" id="qa-run-link" hidden target="_blank" rel="noreferrer"
+                 data-en="Open this Actions run ↗" data-es="Abrir esta ejecución de Actions ↗">Open this Actions run ↗</a>
+              <section class="qa-terminal" aria-labelledby="qa-terminal-title">
+                <div class="qa-terminal-head">
+                  <h4 id="qa-terminal-title" data-en="Execution output" data-es="Salida de ejecución">Execution output</h4>
+                  <span id="qa-case-count" class="qa-case-count">—</span>
+                </div>
+                <p class="qa-terminal-note" data-en="Sanitized Playwright case results from this published CI run." data-es="Resultados de casos Playwright depurados de esta ejecución publicada de CI.">Sanitized Playwright case results from this published CI run.</p>
+                <ol class="qa-case-list" id="qa-case-list" aria-labelledby="qa-terminal-title" tabindex="-1"></ol>
+                <p class="qa-case-empty" id="qa-case-empty" data-en="No case details are included in this published run." data-es="Esta ejecución publicada no incluye detalles de casos.">No case details are included in this published run.</p>
+              </section>
+              <svg class="qa-chart" id="qa-history-chart" viewBox="0 0 420 132" role="img" aria-label="No CI runs yet" data-en-label="No CI runs yet" data-es-label="Aún no hay ejecuciones de CI" hidden>
+                <g class="qa-chart-axis" aria-hidden="true"></g><polyline class="qa-chart-line" aria-hidden="true"></polyline><g class="qa-chart-points"></g>
+              </svg>
+              <p class="qa-empty" id="qa-empty" data-en="The chart will appear after the next CI run on main." data-es="El gráfico aparecerá después de la próxima ejecución de CI en main.">The chart will appear after the next CI run on main.</p>
+              <details class="qa-history" id="qa-history">
+                <summary class="qa-history-head"><span class="qa-history-title" data-en="Recent CI history" data-es="Historial reciente de CI">Recent CI history</span><span class="qa-history-indicator" aria-hidden="true"></span></summary>
+                <ol class="qa-history-list" id="qa-history-list"></ol>
+                <p class="qa-history-empty" id="qa-history-empty" data-en="No runs have been published yet." data-es="Aún no se han publicado ejecuciones.">No runs have been published yet.</p>
+              </details>
+            </div>
           </details>
         </div>
       </section>
