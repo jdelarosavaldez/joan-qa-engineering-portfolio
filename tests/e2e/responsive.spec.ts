@@ -16,29 +16,29 @@ const layouts = [
 
 for (const layout of layouts) {
   const language = layout.language as PortfolioLanguage;
-  test.describe(\`\${layout.width}px \${language.toUpperCase()}\`, () => {
+  test.describe(`${layout.width}px ${language.toUpperCase()}`, () => {
     test.use({
       viewport: { width: layout.width, height: layout.height },
       reducedMotion: "reduce",
     });
 
-    test(\`[PF-LAYOUT-\${layout.caseId}] \${layout.width}px \${language.toUpperCase()} should render without overflow or overlap and align the QA flow @regression\`, async ({ portfolio }, testInfo) => {
+    test(`[PF-LAYOUT-${layout.caseId}] ${layout.width}px ${language.toUpperCase()} should render without overflow or overlap and align the QA flow @regression`, async ({ portfolio }, testInfo) => {
       if (language === "es") await portfolio.language.select("es");
 
       const { viewportWidth, documentWidth } = await portfolio.documentDimensions();
-      expect(documentWidth, \`\${layout.width}px \${language} page should not scroll horizontally\`)
+      expect(documentWidth, `${layout.width}px ${language} page should not scroll horizontally`)
         .toBeLessThanOrEqual(viewportWidth + 1);
 
       const boxes = await portfolio.layoutBoxes(language);
       for (let index = 0; index < boxes.length - 1; index += 1) {
         const current = boxes[index];
         const next = boxes[index + 1];
-        expect(current.y + current.height, \`\${current.name} should not overlap \${next.name}\`)
+        expect(current.y + current.height, `${current.name} should not overlap ${next.name}`)
           .toBeLessThanOrEqual(next.y + 1);
       }
 
       for (const label of await portfolio.flow.stationLabelWidths()) {
-        expect(label.scrollWidth, \`station label "\${label.label}" should fit\`)
+        expect(label.scrollWidth, `station label "${label.label}" should fit`)
           .toBeLessThanOrEqual(label.clientWidth);
       }
 
@@ -51,7 +51,7 @@ for (const layout of layouts) {
       expect(spacing.axisOffset, "the flow line should pass through the vertical centers of its shapes").toBeLessThanOrEqual(1);
       expect(spacing.strategyCenterOffset, "Strategy's shape and label should share a center").toBeLessThanOrEqual(1);
 
-      await testInfo.attach(\`portfolio-\${layout.width}x\${layout.height}-\${language}\`, {
+      await testInfo.attach(`portfolio-${layout.width}x${layout.height}-${language}`, {
         body: await portfolio.captureScreenshot(),
         contentType: "image/png",
       });
