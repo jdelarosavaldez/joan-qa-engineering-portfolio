@@ -43,6 +43,12 @@ npm run qa:report
 
 GitHub Actions runs type checks and browser tests for pull requests to `main` and pushes to `main`. Each run uploads the HTML report, screenshots, and failure artifacts for 14 days. See [Portfolio quality workflow](https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/workflows/portfolio-quality.yml) for the latest real result; no sample CI status is displayed as live data.
 
+## QA Lab and project pipeline
+
+The homepage includes a bilingual QA Lab with the latest real Playwright run, pass/fail/skip/flaky counts, a recent-run outcome chart, and links to the test plan and CI source files. The result feed is generated during the GitHub Pages deployment from the completed Actions run; it exposes only an allowlisted summary, short commit, and public run links. The site shows Pending when no completed result is published. Workflow history is fetched during deployment and packaged as a static feed, so visitors' browsers do not call the GitHub API. Starting a run opens GitHub Actions and requires an authenticated account with repository write access; credentials are never placed in browser code.
+
+The homepage also links to the active QA Lab files and labels the UI/API case study and Python/Pytest project as Planned until their repositories exist.
+
 ## Portfolio map
 
 - **Website:** static HTML/CSS/JavaScript with bilingual content and self-hosted fonts.

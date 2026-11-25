@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#102b32" />
     <meta name="description" content="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation." data-en="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation." data-es="Joan De la Rosa — ingeniero de QA enfocado en pruebas manuales y automatización de pruebas." />
     <title>Joan De la Rosa — QA Engineer</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=qa-lab-design-20261124i" />
     <script src="./script.js" defer></script>
   </head>
   <body>
@@ -83,6 +83,109 @@
             <li data-en="API and integration testing" data-es="Pruebas de API e integración">API and integration testing</li>
             <li data-en="Automation and defect investigation" data-es="Automatización e investigación de defectos">Automation and defect investigation</li>
           </ul>
+        </div>
+      </section>
+      <section class="qa-lab" id="qa-lab" aria-labelledby="qa-lab-title">
+        <div class="qa-lab-intro">
+          <h2 id="qa-lab-title" data-en="QA Lab" data-es="Laboratorio de QA">QA Lab</h2>
+          <p data-en="The portfolio checks itself. Every result below comes from a real GitHub Actions run."
+             data-es="El portafolio se prueba a sí mismo. Cada resultado viene de una ejecución real de GitHub Actions.">
+            The portfolio checks itself. Every result below comes from a real GitHub Actions run.
+          </p>
+          <a class="qa-run" href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/workflows/portfolio-quality.yml"
+             target="_blank" rel="noreferrer" data-en="Run checks in GitHub Actions ↗" data-es="Ejecutar pruebas en GitHub Actions ↗">
+            Run checks in GitHub Actions ↗
+          </a>
+          <p class="qa-auth-note" data-en="Starting a run requires GitHub sign-in and repository write access."
+             data-es="Para iniciar una ejecución necesitas iniciar sesión en GitHub y tener acceso de escritura al repositorio.">
+            Starting a run requires GitHub sign-in and repository write access.
+          </p>
+        </div>
+
+        <div class="qa-lab-results">
+          <div class="qa-latest" id="qa-latest">
+            <div class="qa-latest-head">
+              <div>
+                <h3 data-en="Latest run" data-es="Última ejecución">Latest run</h3>
+                <p id="qa-run-meta" data-en="Waiting for a published CI result." data-es="Esperando un resultado publicado de CI.">
+                  Waiting for a published CI result.
+                </p>
+              </div>
+              <span class="qa-status" id="qa-status" role="status" data-qa-status="pending">Pending</span>
+            </div>
+            <dl class="qa-metrics">
+              <div><dt data-en="Passed" data-es="Aprobadas">Passed</dt><dd id="qa-passed">—</dd></div>
+              <div><dt data-en="Failed" data-es="Fallidas">Failed</dt><dd id="qa-failed">—</dd></div>
+              <div><dt data-en="Skipped" data-es="Omitidas">Skipped</dt><dd id="qa-skipped">—</dd></div>
+              <div><dt data-en="Flaky" data-es="Inestables">Flaky</dt><dd id="qa-flaky">—</dd></div>
+              <div><dt data-en="Duration" data-es="Duración">Duration</dt><dd id="qa-duration">—</dd></div>
+            </dl>
+            <a class="qa-run-link" id="qa-run-link" hidden target="_blank" rel="noreferrer"
+               data-en="Open this Actions run ↗" data-es="Abrir esta ejecución de Actions ↗">Open this Actions run ↗</a>
+          </div>
+
+          <svg class="qa-chart" id="qa-history-chart" viewBox="0 0 420 132" role="img"
+               aria-label="No CI runs yet" data-en-label="No CI runs yet" data-es-label="Aún no hay ejecuciones de CI" hidden>
+            <g class="qa-chart-axis" aria-hidden="true"></g>
+            <polyline class="qa-chart-line" aria-hidden="true"></polyline>
+            <g class="qa-chart-points"></g>
+          </svg>
+          <p class="qa-empty" id="qa-empty" data-en="The chart will appear after the next CI run on main."
+             data-es="El gráfico aparecerá después de la próxima ejecución de CI en main.">
+            The chart will appear after the next CI run on main.
+          </p>
+
+          <details class="qa-history" id="qa-history">
+            <summary class="qa-history-head">
+              <span class="qa-history-title" data-en="Recent CI history" data-es="Historial reciente de CI">Recent CI history</span>
+              <span class="qa-history-context" data-en="Latest runs on main" data-es="Últimas ejecuciones en main">Latest runs on main</span>
+              <span class="qa-history-indicator" aria-hidden="true"></span>
+            </summary>
+            <ol class="qa-history-list" id="qa-history-list"></ol>
+          </details>
+        </div>
+      </section>
+
+      <section class="project-pipeline" id="projects" aria-labelledby="projects-title">
+        <div class="pipeline-intro">
+          <h2 id="projects-title" data-en="On the build list" data-es="En desarrollo">On the build list</h2>
+          <p data-en="Follow the work as each project takes shape." data-es="Sigue el avance a medida que cada proyecto toma forma.">
+            Follow the work as each project takes shape.
+          </p>
+        </div>
+        <div class="pipeline-list">
+          <article class="pipeline-item">
+            <h3 data-en="QA Lab · Playwright portfolio checks" data-es="Laboratorio QA · Pruebas Playwright del portafolio">
+              QA Lab · Playwright portfolio checks
+            </h3>
+            <span class="project-status is-active" data-en="In progress" data-es="En progreso">In progress</span>
+            <div class="pipeline-links">
+              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/docs/test-plan.md" target="_blank" rel="noreferrer"
+                 data-en="Test plan" data-es="Plan de pruebas">Test plan</a>
+              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/.github/workflows/portfolio-quality.yml" target="_blank" rel="noreferrer"
+                 data-en="CI workflow" data-es="Workflow de CI">CI workflow</a>
+              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/scripts/create-qa-summary.mjs" target="_blank" rel="noreferrer"
+                 data-en="Result publisher" data-es="Publicador de resultados">Result publisher</a>
+              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/scripts/prepare-qa-lab-feed.mjs" target="_blank" rel="noreferrer"
+                 data-en="Feed builder" data-es="Generador del feed">Feed builder</a>
+            </div>
+          </article>
+          <article class="pipeline-item">
+            <h3 data-en="UI and API practice case study" data-es="Caso práctico de pruebas UI y API">UI and API practice case study</h3>
+            <span class="project-status" data-en="Planned" data-es="Planificado">Planned</span>
+            <div class="pipeline-links">
+              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/ROADMAP.md#milestone-3--ui-and-api-practice-case-study" target="_blank" rel="noreferrer"
+                 data-en="Roadmap" data-es="Hoja de ruta">Roadmap</a>
+            </div>
+          </article>
+          <article class="pipeline-item">
+            <h3 data-en="Python and Pytest API suite" data-es="Suite de API con Python y Pytest">Python and Pytest API suite</h3>
+            <span class="project-status" data-en="Planned" data-es="Planificado">Planned</span>
+            <div class="pipeline-links">
+              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/ROADMAP.md#milestone-4--python-and-pytest-api-testing" target="_blank" rel="noreferrer"
+                 data-en="Roadmap" data-es="Hoja de ruta">Roadmap</a>
+            </div>
+          </article>
         </div>
       </section>
     </main>

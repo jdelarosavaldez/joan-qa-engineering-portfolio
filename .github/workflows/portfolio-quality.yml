@@ -5,6 +5,7 @@ on:
     branches: [main]
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,7 +35,16 @@ jobs:
         run: npm run qa:check
       - name: Run portfolio checks
         run: npm run qa:test
-      - name: Upload test reports and screenshots
+      - name: Create a sanitized QA summary
+        if: always()
+        run: node scripts/create-qa-summary.mjs
+        env:
+          QA_ACTIONS_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          QA_COMMIT: ${{ github.sha }}
+          QA_RUN_ID: ${{ github.run_id }}
+          QA_RUN_NUMBER: ${{ github.run_number }}
+          QA_WORKFLOW_RESULT: ${{ job.status }}
+      - name: Upload test reports and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -42,5 +52,6 @@ jobs:
           path: |
             playwright-report/
             test-results/
+            qa-summary/
           if-no-files-found: warn
           retention-days: 14

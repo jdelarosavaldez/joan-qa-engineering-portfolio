@@ -60,6 +60,10 @@ Keep translations equivalent. Don't invent experience, metrics, results, reports
 
 The page self-hosts Bricolage Grotesque and Literata from `assets/fonts/` under the SIL Open Font License 1.1. This avoids third-party font requests from visitor browsers. Keep the font license notices with the redistributed files.
 
+## QA Lab panel pattern
+
+The QA Lab result uses one fine-border panel within the portfolio's flat visual system. Keep the latest real status, metrics, and trend chart visible; place run-by-run history in a native, keyboard-accessible disclosure inside the same panel. Avoid decorative card grids and shadows.
+
 ## Accessibility and verification acceptance
 
 - Normal text meets WCAG AA contrast (at least 4.5:1); large text and non-text controls meet their applicable contrast thresholds.
