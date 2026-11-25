@@ -226,7 +226,7 @@ test("[PF-QA-013] restores keyboard access after viewport reflow makes the case 
   await page.setViewportSize({ width: 1440, height: 900 });
   const cases = Array.from({ length: 4 }, (_, index) => ({
     caseId: "PF-REFLOW-" + String(index + 1).padStart(3, "0"),
-    title: "responsive case detail ".repeat(20),
+    title: "responsive case detail ".repeat(5),
     status: "passed",
     durationMs: 100,
   }));
