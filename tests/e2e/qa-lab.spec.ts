@@ -69,6 +69,7 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   await expect(qaLab.skipped).toHaveText("0");
   await expect(qaLab.flaky).toHaveText("0");
   await expect(qaLab.duration).toContainText("42");
+  await expect(qaLab.chart).toBeVisible();
   await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(3);
   await expect(qaLab.caseRow("PF-HOME-001")).toContainText("loads the portfolio");
   await qaLab.expandHistory();
@@ -171,6 +172,7 @@ test("[PF-QA-009] shows no sample rows when published cases are unavailable @reg
   await qaLab.reload();
   await qaLab.expandRunDetails();
   await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(0);
+  await expect(qaLab.caseList).toHaveAttribute("tabindex", "-1");
   await expect(qaLab.caseEmpty).toHaveText("No case details are included in this published run.");
 });
 
@@ -215,5 +217,8 @@ test("[PF-QA-012] limits oversized case feeds and supports keyboard scrolling @r
   await qaLab.expandRunDetails();
   await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(100);
   await expect(qaLab.caseCount).toHaveText("Showing 100 cases · more were omitted.");
+  await expect(qaLab.caseList).toHaveAttribute("tabindex", "0");
+  await qaLab.caseList.focus();
+  await expect(qaLab.caseList).toHaveCSS("outline-width", "3px");
   expect(await qaLab.scrollCasesToEndWithKeyboard()).toBeGreaterThan(0);
 });

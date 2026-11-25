@@ -295,6 +295,7 @@ h1 span:last-child { white-space: nowrap; }
 .qa-case-count { color: var(--muted-bone); font-size: .78rem; }
 .qa-terminal-note { margin: .45rem 0 .75rem; color: var(--muted-bone); font-size: .78rem; line-height: 1.45; }
 .qa-case-list { display: grid; max-height: 23rem; overflow: auto; margin: 0; padding: 0; border-top: 1px solid rgb(247 243 232 / 18%); list-style: none; }
+.qa-case-list:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .qa-case-list li {
   display: grid; grid-template-columns: minmax(7.5rem, auto) minmax(0, 1fr) auto auto;
   align-items: start; gap: .45rem .8rem; padding: .65rem .15rem; border-bottom: 1px solid rgb(247 243 232 / 14%);

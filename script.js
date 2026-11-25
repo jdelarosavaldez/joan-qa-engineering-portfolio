@@ -242,7 +242,16 @@ function revealQaCasesOnce() {
   qaCasesAnimated = true;
   window.setTimeout(() => qaCaseList.classList.remove("is-revealed"), 1000);
 }
-qaRunDetails?.addEventListener("toggle", revealQaCasesOnce);
+
+function updateQaCaseListFocusability() {
+  const canScroll = Boolean(qaRunDetails?.open && qaCaseList.scrollHeight > qaCaseList.clientHeight + 1);
+  qaCaseList.tabIndex = canScroll ? 0 : -1;
+}
+
+qaRunDetails?.addEventListener("toggle", () => {
+  updateQaCaseListFocusability();
+  revealQaCasesOnce();
+});
 
 const qaMessages = {
   en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet.", caseEmpty: "No case details are included in this published run.", casesOne: "test case", casesMany: "test cases", casesTruncated: (count) => `Showing ${count} cases · more were omitted.`, caseStatus: { passed: "Passed", failed: "Failed", skipped: "Skipped", flaky: "Flaky" } },
@@ -384,6 +393,7 @@ function renderQaCases(value, language, upstreamTruncated = false) {
     fragment.append(item);
   });
   qaCaseList.append(fragment);
+  updateQaCaseListFocusability();
   revealQaCasesOnce();
 }
 
