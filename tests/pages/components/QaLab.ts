@@ -71,6 +71,12 @@ export class QaLab {
     await this.runDetailsToggle.click();
   }
 
+  async scrollCasesToEndWithKeyboard(): Promise<number> {
+    await this.caseList.focus();
+    await this.caseList.press("End");
+    return this.caseList.evaluate((list) => list.scrollTop);
+  }
+
   async expandHistory(): Promise<void> {
     await this.historyToggle.click();
   }

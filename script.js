@@ -245,8 +245,8 @@ function revealQaCasesOnce() {
 qaRunDetails?.addEventListener("toggle", revealQaCasesOnce);
 
 const qaMessages = {
-  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet.", caseEmpty: "No case details are included in this published run.", casesOne: "test case", casesMany: "test cases", casesTruncated: "Showing the first 100 cases · more were omitted.", caseStatus: { passed: "Passed", failed: "Failed", skipped: "Skipped", flaky: "Flaky" } },
-  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", runs: "Ejecuciones recientes", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible.", historyEmpty: "Aún no se han publicado ejecuciones.", caseEmpty: "Esta ejecución publicada no incluye detalles de casos.", casesOne: "caso de prueba", casesMany: "casos de prueba", casesTruncated: "Se muestran los primeros 100 casos · se omitieron más.", caseStatus: { passed: "Aprobado", failed: "Fallido", skipped: "Omitido", flaky: "Inestable" } },
+  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet.", caseEmpty: "No case details are included in this published run.", casesOne: "test case", casesMany: "test cases", casesTruncated: (count) => `Showing ${count} cases · more were omitted.`, caseStatus: { passed: "Passed", failed: "Failed", skipped: "Skipped", flaky: "Flaky" } },
+  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", runs: "Ejecuciones recientes", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible.", historyEmpty: "Aún no se han publicado ejecuciones.", caseEmpty: "Esta ejecución publicada no incluye detalles de casos.", casesOne: "caso de prueba", casesMany: "casos de prueba", casesTruncated: (count) => `Se muestran ${count} casos · se omitieron más.`, caseStatus: { passed: "Aprobado", failed: "Fallido", skipped: "Omitido", flaky: "Inestable" } },
 };
 
 function currentQaLanguage() {
@@ -324,24 +324,24 @@ function renderQaLab(payload) {
 
 
 function normalizeQaCases(value) {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((item) =>
-      item &&
-      ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
-      typeof item.title === "string" &&
-      item.title.trim().length > 0 &&
-      (item.caseId === null || typeof item.caseId === "string") &&
-      Number.isFinite(item.durationMs) &&
-      item.durationMs >= 0
-    )
-    .slice(0, 100)
-    .map((item) => ({
-      caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
-      title: item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180),
-      status: item.status,
-      durationMs: Math.round(item.durationMs),
-    }));
+  if (!Array.isArray(value)) return { cases: [], truncated: false };
+  const validCases = value.filter((item) =>
+    item &&
+    ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
+    typeof item.title === "string" &&
+    item.title.trim().length > 0 &&
+    (item.caseId === null || typeof item.caseId === "string") &&
+    Number.isFinite(item.durationMs) &&
+    item.durationMs >= 0
+  );
+  const truncated = validCases.length > 100;
+  const cases = validCases.slice(0, 100).map((item) => ({
+    caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
+    title: item.title.replace(/[\\u0000-\\u001F\\u007F]/g, " ").replace(/\\s+/g, " ").trim().slice(0, 180),
+    status: item.status,
+    durationMs: Math.round(item.durationMs),
+  }));
+  return { cases, truncated };
 }
 
 function formatQaCaseDuration(value, language) {
@@ -350,11 +350,15 @@ function formatQaCaseDuration(value, language) {
   return formatQaDuration(value, language);
 }
 
-function renderQaCases(value, language, casesTruncated = false) {
-  const cases = normalizeQaCases(value);
+function renderQaCases(value, language, upstreamTruncated = false) {
+  const normalized = normalizeQaCases(value);
+  const cases = normalized.cases;
+  const hasMoreCases = upstreamTruncated || normalized.truncated;
   qaCaseList.classList.remove("is-revealed");
   qaCaseList.replaceChildren();
-  qaCaseCount.textContent = casesTruncated ? qaMessages[language].casesTruncated : `${cases.length} ${cases.length === 1 ? qaMessages[language].casesOne : qaMessages[language].casesMany}`;
+  qaCaseCount.textContent = hasMoreCases
+    ? qaMessages[language].casesTruncated(cases.length)
+    : `${cases.length} ${cases.length === 1 ? qaMessages[language].casesOne : qaMessages[language].casesMany}`;
   qaCaseEmpty.hidden = cases.length > 0;
   qaCaseEmpty.textContent = qaMessages[language].caseEmpty;
 
