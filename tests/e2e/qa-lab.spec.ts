@@ -45,6 +45,12 @@ test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smok
   await expect(qaLab.runMeta).toBeVisible();
   await expect(qaLab.runMeta).toHaveText("Waiting for a published CI result.");
   await expect(qaLab.runDetailsToggle).toBeHidden();
+  await expect(qaLab.passed).toBeVisible();
+  await expect(qaLab.passed).toHaveText("—");
+  await expect(qaLab.failed).toHaveText("—");
+  await expect(qaLab.skipped).toHaveText("—");
+  await expect(qaLab.flaky).toHaveText("—");
+  await expect(qaLab.duration).toHaveText("—");
   await expect(qaLab.chart).toBeHidden();
   await expect(qaLab.runAction).toHaveAttribute("href", /actions\/workflows\/portfolio-quality\.yml$/);
   await expect(portfolio.title).toBeVisible();
@@ -61,7 +67,13 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   await expect(qaLab.runMeta).toContainText("Nov");
   await expect(qaLab.runDetailsToggle).toContainText("Show execution details");
   await expect(qaLab.runDetails).not.toHaveAttribute("open", "");
-  await expect(qaLab.passed).toBeHidden();
+  await expect(qaLab.passed).toBeVisible();
+  await expect(qaLab.passed).toHaveText("3");
+  await expect(qaLab.failed).toHaveText("0");
+  await expect(qaLab.skipped).toHaveText("0");
+  await expect(qaLab.flaky).toHaveText("0");
+  await expect(qaLab.duration).toContainText("42");
+  await expect(qaLab.chart).toBeHidden();
   await expect(qaLab.chart).toBeHidden();
   await qaLab.runDetailsToggle.focus();
   await qaLab.runDetailsToggle.press("Space");
@@ -86,7 +98,7 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   expect(await qaLab.chartAxisLabelsClearGridline()).toBe(true);
   await qaLab.runDetailsToggle.press("Space");
   await expect(qaLab.runDetails).not.toHaveAttribute("open", "");
-  await expect(qaLab.passed).toBeHidden();
+  await expect(qaLab.passed).toBeVisible();
 });
 
 test("[PF-QA-003] stays pending when there is no completed run @regression", async ({ portfolio, page, qaLab }) => {
