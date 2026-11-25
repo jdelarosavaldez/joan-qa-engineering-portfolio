@@ -226,16 +226,18 @@ h1 span:last-child { white-space: nowrap; }
   border-radius: 12px;
   background: var(--lab-surface);
 }
- .qa-run-details > summary {
-  display: flex; min-height: 72px; align-items: center; justify-content: space-between; gap: 1rem;
+.qa-run-header {
+  display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: .75rem 1rem;
+}
+.qa-run-details > summary {
+  display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 1rem;
   cursor: pointer; list-style: none;
 }
 .qa-run-details > summary::-webkit-details-marker { display: none; }
 .qa-run-details > summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; border-radius: 6px; }
-.qa-run-summary-copy { display: grid; min-width: 0; gap: .4rem; }
 .qa-run-summary-title { margin: 0; font-size: 1.35rem; font-weight: 700; }
-.qa-run-summary-meta { color: var(--bone); font-size: .9rem; line-height: 1.45; }
-.qa-run-summary-state { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .7rem; }
+.qa-run-summary-meta { min-width: 0; color: var(--bone); font-size: .9rem; line-height: 1.45; }
+.qa-run-disclosure-indicator { flex: 0 0 auto; }
 .qa-run-disclosure-indicator::before { content: "+"; color: var(--orange); font-size: 1.5rem; font-weight: 700; }
 .qa-run-details[open] .qa-run-disclosure-indicator::before { content: "−"; }
 .qa-run-details-body { padding-top: 1rem; border-top: 1px solid rgb(247 243 232 / 30%); }

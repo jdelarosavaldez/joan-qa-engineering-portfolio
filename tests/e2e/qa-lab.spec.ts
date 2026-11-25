@@ -52,6 +52,9 @@ test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smok
 test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, successfulFeed);
   await qaLab.reload();
+  await expect(page.getByRole("heading", { name: "Latest run", level: 3 })).toBeVisible();
+  await expect(qaLab.status).toHaveAttribute("role", "status");
+  await expect(qaLab.status.locator("xpath=ancestor::summary")).toHaveCount(0);
   await expect(qaLab.status).toHaveText("Passed");
   await expect(qaLab.runDetailsToggle).toContainText("#21");
   await expect(qaLab.runDetailsToggle).toContainText("Nov");
@@ -74,6 +77,7 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   await portfolio.language.option("es").click();
   await expect(qaLab.status).toHaveText("Aprobado");
   await expect(qaLab.heading).toHaveText("Laboratorio de QA");
+  await expect(page.getByRole("heading", { name: "Última ejecución", level: 3 })).toBeVisible();
   await expect(qaLab.caseRow("PF-HOME-001")).toContainText("Aprobado");
   await expect(qaLab.chart).toHaveAttribute("aria-label", /Resultados de CI/);
   expect(await qaLab.chartAxisLabelsClearGridline()).toBe(true);
@@ -170,14 +174,16 @@ test("[PF-QA-009] shows no sample rows when published cases are unavailable @reg
   await expect(qaLab.caseEmpty).toHaveText("No case details are included in this published run.");
 });
 
-test("[PF-QA-010] rejects malformed case fields and renders accepted titles as text @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-010] rejects malformed and control-only titles while rendering accepted titles as text @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, cases: [
     { caseId: "<img>", title: "<script>alert(1)</script>", status: "running", durationMs: -4 },
+    { caseId: "PF-QA-010-BLANK", title: "\u0001\u0002", status: "passed", durationMs: 1 },
     { caseId: "PF-QA-010", title: "<b>safe text</b>", status: "passed", durationMs: 5 },
   ] } });
   await qaLab.reload();
   await qaLab.expandRunDetails();
   await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(1);
+  await expect(qaLab.caseCount).toHaveText("1 test case");
   await expect(qaLab.caseRow("PF-QA-010")).toContainText("<b>safe text</b>");
   await expect(qaLab.caseList.locator("script, b, img")).toHaveCount(0);
 });

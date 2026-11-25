@@ -325,23 +325,24 @@ function renderQaLab(payload) {
 
 function normalizeQaCases(value) {
   if (!Array.isArray(value)) return { cases: [], truncated: false };
-  const validCases = value.filter((item) =>
-    item &&
-    ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
-    typeof item.title === "string" &&
-    item.title.trim().length > 0 &&
-    (item.caseId === null || typeof item.caseId === "string") &&
-    Number.isFinite(item.durationMs) &&
-    item.durationMs >= 0
-  );
+  const validCases = value.map((item) => {
+    if (!item || typeof item.title !== "string") return null;
+    const title = item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180);
+    if (!title ||
+      !["passed", "failed", "skipped", "flaky"].includes(item.status) ||
+      (item.caseId !== null && typeof item.caseId !== "string") ||
+      !Number.isFinite(item.durationMs) ||
+      item.durationMs < 0
+    ) return null;
+    return {
+      caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
+      title,
+      status: item.status,
+      durationMs: Math.round(item.durationMs),
+    };
+  }).filter(Boolean);
   const truncated = validCases.length > 100;
-  const cases = validCases.slice(0, 100).map((item) => ({
-    caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
-    title: item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180),
-    status: item.status,
-    durationMs: Math.round(item.durationMs),
-  }));
-  return { cases, truncated };
+  return { cases: validCases.slice(0, 100), truncated };
 }
 
 function formatQaCaseDuration(value, language) {

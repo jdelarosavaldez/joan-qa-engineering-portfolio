@@ -46,6 +46,24 @@ try {
 
 const conclusion = process.env.QA_WORKFLOW_CONCLUSION;
 const safeCount = (value) => Number.isInteger(value) && value >= 0 ? value : null;
+const normalizeCaseTitle = (value) => value
+  .replace(/[\u0000-\u001F\u007F]/g, " ")
+  .replace(/\s+/g, " ")
+  .trim()
+  .slice(0, 180);
+const normalizedCases = Array.isArray(summary?.cases) ? summary.cases.filter((item) =>
+  item &&
+  (item.caseId === null || typeof item.caseId === "string") &&
+  typeof item.title === "string" &&
+  ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
+  Number.isFinite(item.durationMs) &&
+  item.durationMs >= 0
+).map((item) => ({
+  caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
+  title: normalizeCaseTitle(item.title),
+  status: item.status,
+  durationMs: Math.round(item.durationMs),
+})).filter((item) => item.title.length > 0) : [];
 const currentEvent = ["success", "failure"].includes(conclusion) ? {
   runId: currentRunId,
   runNumber: Number(process.env.QA_WORKFLOW_RUN_NUMBER) || null,
@@ -59,20 +77,8 @@ const currentEvent = ["success", "failure"].includes(conclusion) ? {
   total: safeCount(summary?.total),
   durationMs: Number.isFinite(summary?.durationMs) && summary.durationMs >= 0 ? summary.durationMs : null,
   actionsUrl: process.env.QA_WORKFLOW_URL,
-  cases: Array.isArray(summary?.cases) ? summary.cases.slice(0, 100).filter((item) =>
-    item &&
-    (item.caseId === null || typeof item.caseId === "string") &&
-    typeof item.title === "string" &&
-    ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
-    Number.isFinite(item.durationMs) &&
-    item.durationMs >= 0
-  ).map((item) => ({
-    caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
-    title: item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180),
-    status: item.status,
-    durationMs: Math.round(item.durationMs),
-  })) : [],
-  casesTruncated: summary?.casesTruncated === true,
+  cases: normalizedCases.slice(0, 100),
+  casesTruncated: summary?.casesTruncated === true || normalizedCases.length > 100,
 } : null;
 const previousRuns = history.filter((run) => run.runId !== currentRunId);
 const withCurrent = currentEvent ? [currentEvent, ...previousRuns].slice(0, 10) : previousRuns.slice(0, 10);

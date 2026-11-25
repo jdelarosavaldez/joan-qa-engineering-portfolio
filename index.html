@@ -104,16 +104,14 @@
         </div>
 
         <div class="qa-lab-results">
+          <div class="qa-run-header">
+            <h3 class="qa-run-summary-title" id="qa-run-heading" data-en="Latest run" data-es="Última ejecución">Latest run</h3>
+            <span class="qa-status" id="qa-status" role="status" aria-live="polite" data-qa-status="pending">Pending</span>
+          </div>
           <details class="qa-run-details" id="qa-run-details">
-            <summary class="qa-run-summary" aria-controls="qa-run-details-content">
-              <div class="qa-run-summary-copy">
-                <h3 class="qa-run-summary-title" data-en="Latest run" data-es="Última ejecución">Latest run</h3>
-                <span class="qa-run-summary-meta" id="qa-run-meta" data-en="Waiting for a published CI result." data-es="Esperando un resultado publicado de CI.">Waiting for a published CI result.</span>
-              </div>
-              <span class="qa-run-summary-state">
-                <span class="qa-status" id="qa-status" role="status" data-qa-status="pending">Pending</span>
-                <span class="qa-run-disclosure-indicator" aria-hidden="true"></span>
-              </span>
+            <summary class="qa-run-summary" aria-controls="qa-run-details-content" aria-labelledby="qa-run-heading qa-run-meta">
+              <span class="qa-run-summary-meta" id="qa-run-meta" data-en="Waiting for a published CI result." data-es="Esperando un resultado publicado de CI.">Waiting for a published CI result.</span>
+              <span class="qa-run-disclosure-indicator" aria-hidden="true"></span>
             </summary>
             <div class="qa-run-details-body" id="qa-run-details-content">
               <dl class="qa-metrics" id="qa-metrics">
