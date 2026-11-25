@@ -197,7 +197,7 @@ test("[PF-QA-011] reports the rendered count when published cases were truncated
   await expect(qaLab.caseCount).toHaveText("Se muestran 98 casos · se omitieron más.");
 });
 
-test("[PF-QA-012] limits oversized case feeds and supports keyboard scrolling @regression", async ({ page, qaLab }) => {
+test("[PF-QA-012] limits oversized case feeds and supports keyboard scrolling @regression", async ({ portfolio, page, qaLab }) => {
   const cases = Array.from({ length: 101 }, (_, index) => ({
     caseId: `PF-LIMIT-${String(index + 1).padStart(3, "0")}`,
     title: `published test case ${index + 1}`,

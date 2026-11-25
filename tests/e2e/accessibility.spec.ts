@@ -7,6 +7,7 @@ import { portfolioTestData } from "../data/test-data";
 const wcagAaTags = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22a", "wcag22aa"];
 
 async function openScrollableQaResults(page: Page, qaLab: QaLab): Promise<void> {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   const cases = Array.from({ length: 32 }, (_, index) => ({
     caseId: `PF-A11Y-${String(index + 1).padStart(3, "0")}`,
     title: `accessible result row ${index + 1}`,
