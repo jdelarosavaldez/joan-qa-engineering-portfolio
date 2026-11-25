@@ -337,7 +337,7 @@ function normalizeQaCases(value) {
   const truncated = validCases.length > 100;
   const cases = validCases.slice(0, 100).map((item) => ({
     caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
-    title: item.title.replace(/[\\u0000-\\u001F\\u007F]/g, " ").replace(/\\s+/g, " ").trim().slice(0, 180),
+    title: item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180),
     status: item.status,
     durationMs: Math.round(item.durationMs),
   }));
