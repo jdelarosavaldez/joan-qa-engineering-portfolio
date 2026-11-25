@@ -87,10 +87,10 @@ h1 span:last-child { white-space: nowrap; }
 .shape-goal { background: var(--orange); }
 .station-label { max-width: 13rem; font-size: clamp(.9rem, 1.3vw, 1rem); font-weight: 700; }
 .station:last-child .station-label { width: 5.25rem; text-align: center; text-wrap: balance; }
-.station-notes { position: relative; min-height: 3.4rem; margin-top: 1rem; }
+.station-notes { position: relative; min-height: 3.4rem; margin-top: .6rem; }
 .station-notes p { position: absolute; left: 50%; width: min(26rem, 90%); margin: 0; padding: .65rem .9rem; border-radius: 8px; background: var(--bone); color: var(--petrol); font-size: .95rem; line-height: 1.4; opacity: 0; visibility: hidden; transform: translate(-50%, 4px); pointer-events: none; transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms; }
 .station-notes p.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; transition-delay: 0s; }
-.bio { width: min(43rem, 72%); margin: 2.2rem 0 0 auto; font-family: "Literata", Georgia, serif; font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.58; color: var(--bone); }
+.bio { width: min(43rem, 72%); margin: 1.35rem 0 0 auto; font-family: "Literata", Georgia, serif; font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.58; color: var(--bone); }
 .about-link { display: flex; width: fit-content; min-height: 44px; align-items: center; margin: 1.1rem 0 0 auto; color: var(--bone); font-size: .95rem; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: .25rem; }
 .about { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(15rem, .85fr); gap: clamp(3rem, 8vw, 8rem); padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(5rem, 9vw, 8rem); border-top: 1px solid rgb(247 243 232 / 30%); }
 .about-copy h2 { margin: 0; font-size: clamp(2.25rem, 4vw, 3.5rem); line-height: 1.12; }
@@ -133,9 +133,9 @@ h1 span:last-child { white-space: nowrap; }
   .station-shape { width: 2.7rem; height: 2.1rem; }
   .shape-decision { width: 1.65rem; height: 1.65rem; }
   .station-label, .station:last-child .station-label { width: min(100%, 5.25rem); font-size: .78rem; line-height: 1.2; overflow-wrap: normal; hyphens: manual; }
-  .station-notes { min-height: 4.8rem; }
+  .station-notes { min-height: 4.8rem; margin-top: .6rem; }
   .station-notes p { width: 100%; font-size: .9rem; }
-  .bio { width: 100%; margin-top: 2rem; font-size: 1rem; }
+  .bio { width: 100%; margin-top: 1.2rem; font-size: 1rem; }
   .about-link { margin-left: 0; }
   .about { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 0 5rem; }
   .about-copy p { margin-top: 1.25rem; }
