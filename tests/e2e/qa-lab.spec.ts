@@ -91,7 +91,7 @@ test("[PF-QA-003] stays pending when there is no completed run @regression", asy
   expect(githubRequests).toEqual([]);
 });
 
-test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ qaLab, page }) => {
+test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ portfolio, qaLab, page }) => {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 200, contentType: "application/json", body: "{malformed" }));
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
@@ -112,7 +112,7 @@ test("[PF-QA-005] localizes an empty published feed @regression", async ({ portf
   await expect(qaLab.runEvidence).toBeHidden();
 });
 
-test("[PF-QA-006] filters unsafe links from recent CI history @regression", async ({ page, qaLab }) => {
+test("[PF-QA-006] filters unsafe links from recent CI history @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, history: [successfulFeed.history[0],
     { runNumber: 99, status: "cancelled", actionsUrl: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/99" },
     { runNumber: 98, status: "failure", actionsUrl: "https://example.com/not-github" },
@@ -125,7 +125,7 @@ test("[PF-QA-006] filters unsafe links from recent CI history @regression", asyn
   await expect(qaLab.history.getByRole("link")).toHaveAttribute("href", /9001$/);
 });
 
-test("[PF-QA-007] colors statuses and metric values by semantic outcome @regression", async ({ page, qaLab }) => {
+test("[PF-QA-007] colors statuses and metric values by semantic outcome @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, mixedStatusFeed);
   await qaLab.reload();
   await qaLab.expandRunDetails();
@@ -140,7 +140,7 @@ test("[PF-QA-007] colors statuses and metric values by semantic outcome @regress
   await expect(qaLab.caseRow("PF-QA-014").locator(".qa-case-status")).toHaveCSS("color", "rgb(255, 224, 138)");
 });
 
-test("[PF-QA-008] renders long markup-like titles as text and fits mobile @regression", async ({ page, qaLab }) => {
+test("[PF-QA-008] renders long markup-like titles as text and fits mobile @regression", async ({ portfolio, page, qaLab }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   const longTitle = "<img src=x onerror=alert(1)> " + "long case title ".repeat(15);
   const cases = Array.from({ length: 32 }, (_, index) => ({
@@ -158,7 +158,7 @@ test("[PF-QA-008] renders long markup-like titles as text and fits mobile @regre
   expect(documentWidth).toBeLessThanOrEqual(viewportWidth + 1);
 });
 
-test("[PF-QA-009] shows no sample rows when published cases are unavailable @regression", async ({ page, qaLab }) => {
+test("[PF-QA-009] shows no sample rows when published cases are unavailable @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, cases: [] } });
   await qaLab.reload();
   await qaLab.expandRunDetails();
@@ -166,7 +166,7 @@ test("[PF-QA-009] shows no sample rows when published cases are unavailable @reg
   await expect(qaLab.caseEmpty).toHaveText("No case details are included in this published run.");
 });
 
-test("[PF-QA-010] rejects malformed case fields and renders accepted titles as text @regression", async ({ page, qaLab }) => {
+test("[PF-QA-010] rejects malformed case fields and renders accepted titles as text @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, cases: [
     { caseId: "<img>", title: "<script>alert(1)</script>", status: "running", durationMs: -4 },
     { caseId: "PF-QA-010", title: "<b>safe text</b>", status: "passed", durationMs: 5 },
