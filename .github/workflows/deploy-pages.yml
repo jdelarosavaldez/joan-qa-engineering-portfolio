@@ -31,23 +31,18 @@ jobs:
         with:
           path: dist
 
-  deploy:
+  prepare-deploy:
     if: >-
       github.event_name == 'workflow_run' &&
       github.event.workflow_run.head_branch == 'main' &&
       (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    concurrency:
-      group: github-pages-production
-      cancel-in-progress: false
+    outputs:
+      current: ${{ steps.freshness.outputs.current }}
     permissions:
       actions: read
       contents: read
       pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out tested revision
         uses: actions/checkout@v6
@@ -95,15 +90,29 @@ jobs:
           QA_WORKFLOW_URL: ${{ github.event.workflow_run.html_url }}
           QA_WORKFLOW_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
           QA_WORKFLOW_COMPLETED_AT: ${{ github.event.workflow_run.updated_at }}
-      - name: Configure GitHub Pages
-        if: steps.freshness.outputs.current == 'true'
-        uses: actions/configure-pages@v5
       - name: Upload Pages artifact
         if: steps.freshness.outputs.current == 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
+
+  deploy:
+    needs: prepare-deploy
+    if: needs.prepare-deploy.outputs.current == 'true'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: github-pages-production
+      cancel-in-progress: false
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
       - name: Deploy website
-        if: steps.freshness.outputs.current == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
