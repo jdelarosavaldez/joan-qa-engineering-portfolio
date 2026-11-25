@@ -57,11 +57,25 @@ const currentEvent = ["success", "failure"].includes(conclusion) ? {
   total: safeCount(summary?.total),
   durationMs: Number.isFinite(summary?.durationMs) && summary.durationMs >= 0 ? summary.durationMs : null,
   actionsUrl: process.env.QA_WORKFLOW_URL,
+  cases: Array.isArray(summary?.cases) ? summary.cases.slice(0, 100).filter((item) =>
+    item &&
+    (item.caseId === null || typeof item.caseId === "string") &&
+    typeof item.title === "string" &&
+    ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
+    Number.isFinite(item.durationMs) &&
+    item.durationMs >= 0
+  ).map((item) => ({
+    caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
+    title: item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180),
+    status: item.status,
+    durationMs: Math.round(item.durationMs),
+  })) : [],
+  casesTruncated: summary?.casesTruncated === true,
 } : null;
 const previousRuns = history.filter((run) => run.runId !== currentRunId);
 const withCurrent = currentEvent ? [currentEvent, ...previousRuns].slice(0, 10) : previousRuns.slice(0, 10);
 const latestRun = currentEvent || withCurrent[0] || null;
-const output = { schemaVersion: 1, latestRun, history: withCurrent };
+const output = { schemaVersion: 2, latestRun, history: withCurrent };
 
 await mkdir("dist/data", { recursive: true });
 await writeFile("dist/data/qa-lab-results.json", JSON.stringify(output, null, 2) + "\n", "utf8");

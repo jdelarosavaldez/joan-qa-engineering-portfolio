@@ -228,12 +228,16 @@ const qaChartPoints = qaChart.querySelector(".qa-chart-points");
 const qaHistoryList = document.querySelector("#qa-history-list");
 const qaHistoryEmpty = document.querySelector("#qa-history-empty");
 const qaEmpty = document.querySelector("#qa-empty");
+const qaCaseList = document.querySelector("#qa-case-list");
+const qaCaseEmpty = document.querySelector("#qa-case-empty");
+const qaCaseCount = document.querySelector("#qa-case-count");
+let qaCasesAnimated = false;
 let qaLabData = null;
 let qaLabFeedInvalid = false;
 
 const qaMessages = {
-  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet." },
-  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", runs: "Ejecuciones recientes", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible.", historyEmpty: "Aún no se han publicado ejecuciones." },
+  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet.", caseEmpty: "No case details are included in this published run.", casesOne: "test case", casesMany: "test cases", caseStatus: { passed: "Passed", failed: "Failed", skipped: "Skipped", flaky: "Flaky" } },
+  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", runs: "Ejecuciones recientes", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible.", historyEmpty: "Aún no se han publicado ejecuciones.", caseEmpty: "Esta ejecución publicada no incluye detalles de casos.", casesOne: "caso de prueba", casesMany: "casos de prueba", caseStatus: { passed: "Aprobado", failed: "Fallido", skipped: "Omitido", flaky: "Inestable" } },
 };
 
 function currentQaLanguage() {
@@ -264,6 +268,10 @@ function renderQaPending(language, invalid = false) {
   qaRunLink.hidden = true;
   qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaFlaky.textContent = qaDuration.textContent = "—";
   qaHistoryList.replaceChildren();
+  qaCaseList.replaceChildren();
+  qaCaseCount.textContent = "—";
+  qaCaseEmpty.hidden = false;
+  qaCaseEmpty.textContent = qaMessages[language].caseEmpty;
   qaHistoryEmpty.hidden = false;
   qaHistoryEmpty.textContent = messages.historyEmpty;
   qaChart.setAttribute("hidden", "");
@@ -275,7 +283,7 @@ function renderQaLab(payload) {
   if (!qaStatus) return;
   const language = currentQaLanguage();
   const messages = qaMessages[language];
-  const latest = payload?.schemaVersion === 1 ? payload.latestRun : null;
+  const latest = [1, 2].includes(payload?.schemaVersion) ? payload.latestRun : null;
 
   if (!latest || !["success", "failure"].includes(latest.status)) {
     renderQaPending(language, qaLabFeedInvalid);
@@ -300,8 +308,72 @@ function renderQaLab(payload) {
   qaRunLink.hidden = !actionsUrl;
   if (actionsUrl) qaRunLink.href = actionsUrl;
 
+  renderQaCases(latest.cases, language);
   const history = normalizeQaHistory(payload?.history);
   renderQaHistory(history, language);
+}
+
+
+function normalizeQaCases(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item) =>
+      item &&
+      ["passed", "failed", "skipped", "flaky"].includes(item.status) &&
+      typeof item.title === "string" &&
+      item.title.trim().length > 0 &&
+      (item.caseId === null || typeof item.caseId === "string") &&
+      Number.isFinite(item.durationMs) &&
+      item.durationMs >= 0
+    )
+    .slice(0, 100)
+    .map((item) => ({
+      caseId: typeof item.caseId === "string" ? item.caseId.slice(0, 48) : null,
+      title: item.title.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, 180),
+      status: item.status,
+      durationMs: Math.round(item.durationMs),
+    }));
+}
+
+function formatQaCaseDuration(value, language) {
+  if (!Number.isFinite(value) || value < 0) return "—";
+  if (value < 1000) return language === "es" ? `${Math.round(value)} ms` : `${Math.round(value)}ms`;
+  return formatQaDuration(value, language);
+}
+
+function renderQaCases(value, language) {
+  const cases = normalizeQaCases(value);
+  qaCaseList.replaceChildren();
+  qaCaseCount.textContent = `${cases.length} ${cases.length === 1 ? qaMessages[language].casesOne : qaMessages[language].casesMany}`;
+  qaCaseEmpty.hidden = cases.length > 0;
+  qaCaseEmpty.textContent = qaMessages[language].caseEmpty;
+
+  const fragment = document.createDocumentFragment();
+  cases.forEach((testCase, index) => {
+    const item = document.createElement("li");
+    item.style.setProperty("--case-index", String(index));
+    const caseId = document.createElement("code");
+    caseId.className = "qa-case-id";
+    caseId.textContent = testCase.caseId || "—";
+    const title = document.createElement("span");
+    title.className = "qa-case-title";
+    title.textContent = testCase.title;
+    const status = document.createElement("span");
+    status.className = "qa-case-status";
+    status.dataset.status = testCase.status;
+    status.textContent = qaMessages[language].caseStatus[testCase.status];
+    const duration = document.createElement("span");
+    duration.className = "qa-case-duration";
+    duration.textContent = formatQaCaseDuration(testCase.durationMs, language);
+    item.append(caseId, title, status, duration);
+    fragment.append(item);
+  });
+  qaCaseList.append(fragment);
+
+  if (cases.length && !qaCasesAnimated && !reducedMotion.matches) {
+    requestAnimationFrame(() => qaCaseList.classList.add("is-revealed"));
+    qaCasesAnimated = true;
+  }
 }
 
 function normalizeQaHistory(value) {
@@ -391,7 +463,8 @@ async function loadQaLab() {
       qaLabData = await response.json();
       qaLabFeedInvalid = !qaLabData ||
         typeof qaLabData !== "object" ||
-        qaLabData.schemaVersion !== 1 ||
+        ![1, 2].includes(qaLabData.schemaVersion) ||
+        (qaLabData.schemaVersion === 2 && qaLabData.latestRun !== null && !Array.isArray(qaLabData.latestRun?.cases)) ||
         !Object.hasOwn(qaLabData, "latestRun") ||
         !Array.isArray(qaLabData.history);
     } catch {

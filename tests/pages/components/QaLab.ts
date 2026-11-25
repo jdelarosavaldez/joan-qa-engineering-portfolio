@@ -7,6 +7,10 @@ export class QaLab {
   readonly pendingMessage: Locator;
   readonly chart: Locator;
   readonly history: Locator;
+  readonly runDetails: Locator;
+  readonly runDetailsToggle: Locator;
+  readonly caseList: Locator;
+  readonly caseEmpty: Locator;
   readonly historyPanel: Locator;
   readonly historyToggle: Locator;
   readonly passed: Locator;
@@ -25,6 +29,10 @@ export class QaLab {
     this.pendingMessage = this.root.locator("#qa-empty");
     this.chart = this.root.locator("#qa-history-chart");
     this.history = this.root.locator("#qa-history-list");
+    this.runDetails = this.root.locator("#qa-run-details");
+    this.runDetailsToggle = this.runDetails.locator("summary");
+    this.caseList = this.root.locator("#qa-case-list");
+    this.caseEmpty = this.root.locator("#qa-case-empty");
     this.historyPanel = this.root.locator("#qa-history");
     this.historyToggle = this.historyPanel.locator("summary");
     this.passed = this.root.locator("#qa-passed");
@@ -43,6 +51,18 @@ export class QaLab {
       const labelBounds = label.getBBox();
       return labelBounds.x + labelBounds.width < Number(gridline.getAttribute("x1"));
     });
+  }
+
+  caseRow(caseId: string): Locator {
+    return this.caseList.getByRole("listitem").filter({ hasText: caseId });
+  }
+
+  async expandRunDetails(): Promise<void> {
+    await this.runDetailsToggle.click();
+  }
+
+  async collapseRunDetails(): Promise<void> {
+    await this.runDetailsToggle.click();
   }
 
   async expandHistory(): Promise<void> {
