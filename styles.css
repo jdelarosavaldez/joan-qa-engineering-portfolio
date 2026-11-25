@@ -232,7 +232,7 @@ h1 span:last-child { white-space: nowrap; }
 .qa-run-details > summary::-webkit-details-marker { display: none; }
 .qa-run-details > summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; border-radius: 6px; }
 .qa-run-summary-copy { display: grid; min-width: 0; gap: .4rem; }
-.qa-run-summary-title { font-size: 1.35rem; font-weight: 700; }
+.qa-run-summary-title { margin: 0; font-size: 1.35rem; font-weight: 700; }
 .qa-run-summary-meta { color: var(--bone); font-size: .9rem; line-height: 1.45; }
 .qa-run-summary-state { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .7rem; }
 .qa-run-disclosure-indicator::before { content: "+"; color: var(--orange); font-size: 1.5rem; font-weight: 700; }
@@ -245,6 +245,7 @@ h1 span:last-child { white-space: nowrap; }
   color: var(--bone); font-size: .82rem; font-weight: 700; white-space: nowrap;
 }
 .qa-status[data-qa-status="success"] { border-color: var(--qa-passed); background: var(--qa-passed); color: var(--petrol); }
+.project-status.is-active { border-color: var(--bone); background: var(--bone); color: var(--green); }
 .qa-status[data-qa-status="failure"] { border-color: var(--qa-failed); background: var(--qa-failed); color: var(--petrol); }
 .qa-status[data-qa-status="skipped"] { border-color: var(--qa-skipped); background: var(--qa-skipped); color: var(--petrol); }
 .qa-status[data-qa-status="flaky"] { border-color: var(--qa-flaky); background: var(--qa-flaky); color: var(--petrol); }

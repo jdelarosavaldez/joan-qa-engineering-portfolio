@@ -37,6 +37,8 @@ try {
       durationMs: run.run_started_at ? Math.max(0, Date.parse(run.updated_at) - Date.parse(run.run_started_at)) : null,
       commit: String(run.head_sha || "").slice(0, 7) || null,
       actionsUrl: run.html_url,
+      cases: [],
+      casesTruncated: false,
     }));
 } catch {
   // Preserve the static site deploy even if the optional history request is unavailable.

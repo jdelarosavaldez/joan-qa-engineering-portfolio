@@ -177,3 +177,19 @@ test("[PF-QA-010] rejects malformed case fields and renders accepted titles as t
   await expect(qaLab.caseRow("PF-QA-010")).toContainText("<b>safe text</b>");
   await expect(qaLab.caseList.locator("script, b, img")).toHaveCount(0);
 });
+test("[PF-QA-011] identifies case lists that exceed the published limit @regression", async ({ portfolio, page, qaLab }) => {
+  const cases = Array.from({ length: 100 }, (_, index) => ({
+    caseId: `PF-LIMIT-${String(index + 1).padStart(3, "0")}`,
+    title: `published test case ${index + 1}`,
+    status: "passed",
+    durationMs: 100,
+  }));
+  await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, passed: 101, total: 101, cases, casesTruncated: true } });
+  await qaLab.reload();
+  await qaLab.expandRunDetails();
+  await expect(qaLab.caseList.getByRole("listitem")).toHaveCount(100);
+  await expect(qaLab.caseCount).toHaveText("Showing the first 100 cases · more were omitted.");
+  await portfolio.language.option("es").click();
+  await expect(qaLab.caseCount).toHaveText("Se muestran los primeros 100 casos · se omitieron más.");
+});
+

@@ -11,6 +11,7 @@ export class QaLab {
   readonly runDetails: Locator;
   readonly runDetailsToggle: Locator;
   readonly caseList: Locator;
+  readonly caseCount: Locator;
   readonly caseEmpty: Locator;
   readonly historyPanel: Locator;
   readonly historyToggle: Locator;
@@ -34,6 +35,7 @@ export class QaLab {
     this.runDetails = this.root.locator("#qa-run-details");
     this.runDetailsToggle = this.runDetails.locator("summary.qa-run-summary");
     this.caseList = this.root.locator("#qa-case-list");
+    this.caseCount = this.root.locator("#qa-case-count");
     this.caseEmpty = this.root.locator("#qa-case-empty");
     this.historyPanel = this.root.locator("#qa-history");
     this.historyToggle = this.historyPanel.locator("summary");
