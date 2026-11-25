@@ -4,6 +4,7 @@ export class QaLab {
   readonly root: Locator;
   readonly heading: Locator;
   readonly status: Locator;
+  readonly runMeta: Locator;
   readonly pendingMessage: Locator;
   readonly chart: Locator;
   readonly history: Locator;
@@ -26,6 +27,7 @@ export class QaLab {
     this.root = page.locator("#qa-lab");
     this.heading = this.root.getByRole("heading", { level: 2 });
     this.status = this.root.locator("[data-qa-status]");
+    this.runMeta = this.root.locator("#qa-run-meta");
     this.pendingMessage = this.root.locator("#qa-empty");
     this.chart = this.root.locator("#qa-history-chart");
     this.history = this.root.locator("#qa-history-list");

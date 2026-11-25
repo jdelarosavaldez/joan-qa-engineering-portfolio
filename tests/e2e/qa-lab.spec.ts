@@ -42,7 +42,7 @@ test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smok
   await expect(qaLab.status).toHaveText("Pending");
   await expect(qaLab.runDetailsToggle).toBeVisible();
   await expect(qaLab.runDetails).not.toHaveAttribute("open", "");
-  await expect(qaLab.pendingMessage).toBeVisible();
+  await expect(qaLab.runDetailsToggle).toContainText("Waiting for a published CI result.");
   await expect(qaLab.chart).toBeHidden();
   await expect(qaLab.runAction).toHaveAttribute("href", /actions\/workflows\/portfolio-quality\.yml$/);
   await expect(portfolio.title).toBeVisible();
@@ -83,6 +83,8 @@ test("[PF-QA-003] stays pending when there is no completed run @regression", asy
   await publishFeed(page, { schemaVersion: 2, latestRun: null, history: [] });
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
+  await expect(qaLab.runDetailsToggle).toContainText("Waiting for a published CI result.");
+  await qaLab.expandRunDetails();
   await expect(qaLab.pendingMessage).toHaveText("The chart will appear after the next CI run on main.");
   await expect(qaLab.caseEmpty).toHaveText("No case details are included in this published run.");
   expect(githubRequests).toEqual([]);
@@ -92,6 +94,7 @@ test("[PF-QA-004] keeps malformed public data in the pending state @regression",
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 200, contentType: "application/json", body: "{malformed" }));
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
+  await qaLab.expandRunDetails();
   await expect(qaLab.pendingMessage).toHaveText("The published result is not available yet.");
   await expect(qaLab.chart).toBeHidden();
 });
@@ -102,6 +105,7 @@ test("[PF-QA-005] localizes an empty published feed @regression", async ({ portf
   await expect(qaLab.status).toHaveText("Pending");
   await portfolio.language.option("es").click();
   await expect(qaLab.status).toHaveText("Pendiente");
+  await qaLab.expandRunDetails();
   await expect(qaLab.pendingMessage).toHaveText("El gráfico aparecerá después de la próxima ejecución de CI en main.");
   await expect(qaLab.caseEmpty).toHaveText("Esta ejecución publicada no incluye detalles de casos.");
   await expect(qaLab.runEvidence).toBeHidden();
