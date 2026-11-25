@@ -1,4 +1,5 @@
 import { test, expect } from "../fixtures/portfolio.fixture";
+import { type Page } from "@playwright/test";
 
 const successfulFeed = {
   schemaVersion: 2,
@@ -29,7 +30,7 @@ const mixedStatusFeed = {
     ],
   },
 };
-async function publishFeed(page, feed: unknown) {
+async function publishFeed(page: Page, feed: unknown) {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({
     status: 200, contentType: "application/json", body: JSON.stringify(feed),
   }));
