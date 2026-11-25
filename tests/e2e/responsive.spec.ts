@@ -16,13 +16,13 @@ const layouts = [
 
 for (const layout of layouts) {
   const language = layout.language as PortfolioLanguage;
-  test.describe(`[PF-LAYOUT-${layout.caseId}] ${layout.width}px ${language.toUpperCase()}`, () => {
+  test.describe(`${layout.width}px ${language.toUpperCase()}`, () => {
     test.use({
       viewport: { width: layout.width, height: layout.height },
       reducedMotion: "reduce",
     });
 
-    test(`keeps the page and quality flow aligned without overflow @regression`, async ({ portfolio }, testInfo) => {
+    test(`[PF-LAYOUT-${layout.caseId}] ${layout.width}px ${language.toUpperCase()} keeps the page and quality flow aligned without overflow @regression`, async ({ portfolio }, testInfo) => {
       if (language === "es") await portfolio.language.select("es");
 
       const { viewportWidth, documentWidth } = await portfolio.documentDimensions();
