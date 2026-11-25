@@ -74,6 +74,10 @@ export class QaLab {
   async scrollCasesToEndWithKeyboard(): Promise<number> {
     await this.caseList.focus();
     await this.caseList.press("End");
+    await this.page.waitForFunction(() => {
+      const list = document.querySelector<HTMLElement>("#qa-case-list");
+      return list !== null && list.scrollTop > 0;
+    }, undefined, { timeout: 2000 });
     return this.caseList.evaluate((list) => list.scrollTop);
   }
 
