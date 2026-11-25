@@ -7,7 +7,7 @@ const welcomeMessage = document.querySelector("#welcome-message");
 const welcomeSlot = document.querySelector(".welcome-slot");
 const welcomeCopy = {
   en: "Welcome to my QA test. Explore how I approach quality.",
-  es: "Bienvenido a mi prueba de QA. Explora mi enfoque de calidad.",
+  es: "Bienvenido a mi prueba de QA. Explora cómo abordo la calidad.",
 };
 
 function setLanguage(language) {
@@ -144,8 +144,11 @@ document.addEventListener("pointerdown", (event) => {
 
 const welcomeClose = document.querySelector(".welcome-close");
 const welcomeStart = document.querySelector(".welcome-start");
+const welcomeValidate = document.querySelector(".welcome-validate");
 const introTitle = document.querySelector("#intro-title");
 const flow = document.querySelector("#flow");
+const qaLab = document.querySelector("#qa-lab");
+const qaLabTitle = document.querySelector("#qa-lab-title");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function readWelcomePreference() {
@@ -175,11 +178,15 @@ function dismissWelcome(focusTarget = null) {
 welcomeClose.addEventListener("click", () => {
   dismissWelcome(introTitle);
 });
-welcomeStart.addEventListener("click", (event) => {
+function followWelcomeLink(event, target, hash) {
   event.preventDefault();
-  dismissWelcome(flow);
-  flow.scrollIntoView({ behavior: reducedMotion.matches ? "auto" : "smooth", block: "center" });
-});
+  window.history.pushState(null, "", `#${hash}`);
+  target.scrollIntoView({ behavior: reducedMotion.matches ? "auto" : "smooth", block: "start" });
+  target.focus({ preventScroll: true });
+}
+
+welcomeStart.addEventListener("click", (event) => followWelcomeLink(event, flow, "flow"));
+welcomeValidate.addEventListener("click", (event) => followWelcomeLink(event, qaLabTitle, "qa-lab"));
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
@@ -219,13 +226,14 @@ const qaChartAxis = qaChart.querySelector(".qa-chart-axis");
 const qaChartLine = qaChart.querySelector(".qa-chart-line");
 const qaChartPoints = qaChart.querySelector(".qa-chart-points");
 const qaHistoryList = document.querySelector("#qa-history-list");
+const qaHistoryEmpty = document.querySelector("#qa-history-empty");
 const qaEmpty = document.querySelector("#qa-empty");
 let qaLabData = null;
 let qaLabFeedInvalid = false;
 
 const qaMessages = {
-  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet." },
-  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", runs: "Ejecuciones recientes", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible." },
+  en: { pending: "Pending", passed: "Passed", failed: "Failed", noResult: "Waiting for a published CI result.", missing: "The chart will appear after the next CI run on main.", runs: "Recent runs", chart: "CI outcomes from oldest to newest.", invalid: "The published result is not available yet.", historyEmpty: "No runs have been published yet." },
+  es: { pending: "Pendiente", passed: "Aprobado", failed: "Fallido", noResult: "Esperando un resultado publicado de CI.", missing: "El gráfico aparecerá después de la próxima ejecución de CI en main.", runs: "Ejecuciones recientes", chart: "Resultados de CI del más antiguo al más reciente.", invalid: "El resultado publicado aún no está disponible.", historyEmpty: "Aún no se han publicado ejecuciones." },
 };
 
 function currentQaLanguage() {
@@ -256,6 +264,8 @@ function renderQaPending(language, invalid = false) {
   qaRunLink.hidden = true;
   qaPassed.textContent = qaFailed.textContent = qaSkipped.textContent = qaFlaky.textContent = qaDuration.textContent = "—";
   qaHistoryList.replaceChildren();
+  qaHistoryEmpty.hidden = false;
+  qaHistoryEmpty.textContent = messages.historyEmpty;
   qaChart.setAttribute("hidden", "");
   qaEmpty.hidden = false;
   qaEmpty.textContent = invalid ? messages.invalid : messages.missing;
@@ -309,6 +319,8 @@ function normalizeQaHistory(value) {
 
 function renderQaHistory(history, language) {
   qaHistoryList.replaceChildren();
+  qaHistoryEmpty.hidden = history.length > 0;
+  qaHistoryEmpty.textContent = qaMessages[language].historyEmpty;
   qaChartAxis.replaceChildren();
   qaChartPoints.replaceChildren();
   qaChartLine.setAttribute("points", "");
