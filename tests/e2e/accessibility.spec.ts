@@ -41,14 +41,14 @@ async function openScrollableQaResults(page: Page, qaLab: QaLab): Promise<void> 
   await qaLab.expandRunDetails();
 }
 
-test("[PF-A11Y-001] has no WCAG 2.2 AA axe violations in English with expanded cases @smoke", async ({ portfolio, page, qaLab }) => {
+test("[PF-A11Y-001] should report no WCAG 2.2 AA axe violations on the English page with QA cases expanded @smoke", async ({ portfolio, page, qaLab }) => {
   await openScrollableQaResults(page, qaLab);
   await expect(portfolio.title).toBeVisible();
   const results = await new AxeBuilder({ page }).withTags(wcagAaTags).analyze();
   expect(results.violations, "English accessibility violations").toEqual([]);
 });
 
-test("[PF-A11Y-002] has no WCAG 2.2 AA axe violations in Spanish with expanded cases @smoke", async ({ portfolio, page, qaLab }) => {
+test("[PF-A11Y-002] should report no WCAG 2.2 AA axe violations on the Spanish page with QA cases expanded @smoke", async ({ portfolio, page, qaLab }) => {
   await openScrollableQaResults(page, qaLab);
   await portfolio.language.select("es");
   const results = await new AxeBuilder({ page }).withTags(wcagAaTags).analyze();

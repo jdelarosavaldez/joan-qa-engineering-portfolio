@@ -1,7 +1,7 @@
 import { test, expect } from "../fixtures/portfolio.fixture";
 import { portfolioTestData } from "../data/test-data";
 
-test("[PF-FLOW-001] exposes all four quality stations with exact accessible names in both languages @smoke", async ({ portfolio }) => {
+test("[PF-FLOW-001] should expose all four stations with exact accessible names in English and Spanish @smoke", async ({ portfolio }) => {
   for (const stationName of portfolioTestData.en.stations) {
     const station = portfolio.flow.station(stationName);
     await expect(station).toBeVisible();
@@ -16,7 +16,7 @@ test("[PF-FLOW-001] exposes all four quality stations with exact accessible name
   }
 });
 
-test("[PF-FLOW-002] opens a station note on hover and closes it when the pointer leaves @regression", async ({ portfolio, page }) => {
+test("[PF-FLOW-002] should show a station note on hover and hide it after pointer exit @regression", async ({ portfolio, page }) => {
   const automation = portfolio.flow.station(portfolioTestData.en.stations[2]);
   await automation.hover();
   await expect(automation).toHaveAttribute("aria-expanded", "true");
@@ -24,7 +24,7 @@ test("[PF-FLOW-002] opens a station note on hover and closes it when the pointer
   await expect(automation).toHaveAttribute("aria-expanded", "false");
 });
 
-test("[PF-FLOW-003] toggles a station note with click @regression", async ({ portfolio }) => {
+test("[PF-FLOW-003] should toggle a station note with a click @regression", async ({ portfolio }) => {
   const strategy = portfolio.flow.station(portfolioTestData.en.stations[0]);
   const strategyNote = await portfolio.flow.noteFor(portfolioTestData.en.stations[0]);
 
@@ -35,7 +35,7 @@ test("[PF-FLOW-003] toggles a station note with click @regression", async ({ por
   await expect(strategy).toHaveAttribute("aria-expanded", "false");
 });
 
-test("[PF-FLOW-004] opens and closes a station note with keyboard controls @regression", async ({ portfolio, page }) => {
+test("[PF-FLOW-004] should open and close station notes with keyboard controls @regression", async ({ portfolio, page }) => {
   const manualTesting = portfolio.flow.station(portfolioTestData.en.stations[1]);
   await manualTesting.focus();
   await expect(manualTesting).toHaveAttribute("aria-expanded", "true");
@@ -50,7 +50,7 @@ test("[PF-FLOW-004] opens and closes a station note with keyboard controls @regr
 test.describe("Touch station notes", () => {
   test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 
-  test("[PF-FLOW-005] opens a station note on touch and closes it on a second tap @regression", async ({ portfolio }) => {
+  test("[PF-FLOW-005] should open a station note on first touch and close it on a second tap @regression", async ({ portfolio }) => {
     const strategy = portfolio.flow.station(portfolioTestData.en.stations[0]);
     await strategy.tap();
     await expect(strategy).toHaveAttribute("aria-expanded", "true");

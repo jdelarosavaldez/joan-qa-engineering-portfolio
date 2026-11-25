@@ -36,7 +36,7 @@ async function publishFeed(page: Page, feed: unknown) {
   }));
 }
 
-test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smoke", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-001] should show Pending and em-dash metrics before CI evidence exists @smoke", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { schemaVersion: 2, latestRun: null, history: [] });
   await qaLab.reload();
   await expect(qaLab.heading).toBeVisible();
@@ -62,7 +62,7 @@ test("[PF-QA-001] shows a truthful pending state before CI evidence exists @smok
   await expect(portfolio.title).toBeVisible();
 });
 
-test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-002] should keep latest-run metrics visible and reveal execution details with the keyboard @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, successfulFeed);
   await qaLab.reload();
   await expect(page.getByRole("heading", { name: "Latest run", level: 3 })).toBeVisible();
@@ -107,7 +107,7 @@ test("[PF-QA-002] keeps the latest run compact and reveals details by keyboard @
   await expect(qaLab.passed).toBeVisible();
 });
 
-test("[PF-QA-003] stays pending when there is no completed run @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-003] should remain Pending until a completed CI run is published @regression", async ({ portfolio, page, qaLab }) => {
   const githubRequests: string[] = [];
   page.on("request", (request) => { if (request.url().startsWith("https://api.github.com/")) githubRequests.push(request.url()); });
   await publishFeed(page, { schemaVersion: 2, latestRun: null, history: [] });
@@ -120,7 +120,7 @@ test("[PF-QA-003] stays pending when there is no completed run @regression", asy
   expect(githubRequests).toEqual([]);
 });
 
-test("[PF-QA-004] keeps malformed public data in the pending state @regression", async ({ portfolio, qaLab, page }) => {
+test("[PF-QA-004] should keep malformed public data out of displayed results @regression", async ({ portfolio, qaLab, page }) => {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 200, contentType: "application/json", body: "{malformed" }));
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
@@ -129,7 +129,7 @@ test("[PF-QA-004] keeps malformed public data in the pending state @regression",
   await expect(qaLab.chart).toBeHidden();
 });
 
-test("[PF-QA-005] localizes an empty published feed @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-005] should localize the empty published-feed state @regression", async ({ portfolio, page, qaLab }) => {
   await page.route("**/data/qa-lab-results.json", (route) => route.fulfill({ status: 404, body: "" }));
   await qaLab.reload();
   await expect(qaLab.status).toHaveText("Pending");
@@ -140,7 +140,7 @@ test("[PF-QA-005] localizes an empty published feed @regression", async ({ portf
   await expect(qaLab.runEvidence).toBeHidden();
 });
 
-test("[PF-QA-006] filters unsafe links from recent CI history @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-006] should exclude unsafe links from recent CI history @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, history: [successfulFeed.history[0],
     { runNumber: 99, status: "cancelled", actionsUrl: "https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/actions/runs/99" },
     { runNumber: 98, status: "failure", actionsUrl: "https://example.com/not-github" },
@@ -153,7 +153,7 @@ test("[PF-QA-006] filters unsafe links from recent CI history @regression", asyn
   await expect(qaLab.history.getByRole("link")).toHaveAttribute("href", /9001$/);
 });
 
-test("[PF-QA-007] colors statuses and metric values by semantic outcome @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-007] should pair semantic status colors with readable labels and metric values @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, mixedStatusFeed);
   await qaLab.reload();
   await qaLab.expandRunDetails();
@@ -168,7 +168,7 @@ test("[PF-QA-007] colors statuses and metric values by semantic outcome @regress
   await expect(qaLab.caseRow("PF-QA-014").locator(".qa-case-status")).toHaveCSS("color", "rgb(255, 224, 138)");
 });
 
-test("[PF-QA-008] renders long markup-like titles as text and fits mobile @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-008] should render markup-like titles as text without mobile overflow @regression", async ({ portfolio, page, qaLab }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   const longTitle = "<img src=x onerror=alert(1)> " + "long case title ".repeat(15);
   const cases = Array.from({ length: 32 }, (_, index) => ({
@@ -186,7 +186,7 @@ test("[PF-QA-008] renders long markup-like titles as text and fits mobile @regre
   expect(documentWidth).toBeLessThanOrEqual(viewportWidth + 1);
 });
 
-test("[PF-QA-009] shows no sample rows when published cases are unavailable @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-009] should show no sample rows when published case details are unavailable @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, cases: [] } });
   await qaLab.reload();
   await qaLab.expandRunDetails();
@@ -195,7 +195,7 @@ test("[PF-QA-009] shows no sample rows when published cases are unavailable @reg
   await expect(qaLab.caseEmpty).toHaveText("No case details are included in this published run.");
 });
 
-test("[PF-QA-010] rejects malformed and control-only titles while rendering accepted titles as text @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-010] should reject malformed titles and render accepted titles as text @regression", async ({ portfolio, page, qaLab }) => {
   await publishFeed(page, { ...successfulFeed, latestRun: { ...successfulFeed.latestRun, cases: [
     { caseId: "<img>", title: "<script>alert(1)</script>", status: "running", durationMs: -4 },
     { caseId: "PF-QA-010-BLANK", title: "\u0001\u0002", status: "passed", durationMs: 1 },
@@ -208,7 +208,7 @@ test("[PF-QA-010] rejects malformed and control-only titles while rendering acce
   await expect(qaLab.caseRow("PF-QA-010")).toContainText("<b>safe text</b>");
   await expect(qaLab.caseList.locator("script, b, img")).toHaveCount(0);
 });
-test("[PF-QA-011] reports the rendered count when published cases were truncated @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-011] should report the displayed case count when published results are truncated @regression", async ({ portfolio, page, qaLab }) => {
   const cases = Array.from({ length: 100 }, (_, index) => ({
     caseId: `PF-LIMIT-${String(index + 1).padStart(3, "0")}`,
     title: `published test case ${index + 1}`,
@@ -224,7 +224,7 @@ test("[PF-QA-011] reports the rendered count when published cases were truncated
   await expect(qaLab.caseCount).toHaveText("Se muestran 98 casos · se omitieron más.");
 });
 
-test("[PF-QA-012] limits oversized case feeds and supports keyboard scrolling @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-012] should limit oversized case feeds and allow keyboard scrolling @regression", async ({ portfolio, page, qaLab }) => {
   const cases = Array.from({ length: 101 }, (_, index) => ({
     caseId: `PF-LIMIT-${String(index + 1).padStart(3, "0")}`,
     title: `published test case ${index + 1}`,
@@ -241,7 +241,7 @@ test("[PF-QA-012] limits oversized case feeds and supports keyboard scrolling @r
   await expect(qaLab.caseList).toHaveCSS("outline-width", "3px");
   expect(await qaLab.scrollCasesToEndWithKeyboard()).toBeGreaterThan(0);
 });
-test("[PF-QA-013] restores keyboard access after viewport reflow makes the case list scrollable @regression", async ({ portfolio, page, qaLab }) => {
+test("[PF-QA-013] should restore keyboard access when viewport reflow makes the case list scrollable @regression", async ({ portfolio, page, qaLab }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   const cases = Array.from({ length: 4 }, (_, index) => ({
     caseId: "PF-REFLOW-" + String(index + 1).padStart(3, "0"),
