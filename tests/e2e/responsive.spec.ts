@@ -42,7 +42,8 @@ for (const layout of layouts) {
           .toBeLessThanOrEqual(label.clientWidth);
       }
 
-      const [strategyName, qualityName] = portfolioTestData[language].stations;
+      const strategyName = portfolioTestData[language].stations[0];
+      const qualityName = portfolioTestData[language].stations[3];
       const spacing = await portfolio.flow.endpointSpacing(strategyName, qualityName);
       expect(spacing.startGap, "the start circle must not touch Strategy").toBeGreaterThanOrEqual(0);
       expect(spacing.endGap, "the finish circle must not touch Quality").toBeGreaterThanOrEqual(0);
