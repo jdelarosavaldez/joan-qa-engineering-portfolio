@@ -7,7 +7,7 @@
     <meta name="description" content="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation." data-en="Joan De la Rosa — QA Engineer focused on thoughtful manual testing and test automation." data-es="Joan De la Rosa — ingeniero de QA enfocado en pruebas manuales y automatización de pruebas." />
     <title>Joan De la Rosa — QA Engineer</title>
     <link rel="stylesheet" href="./styles.css?v=qa-lab-design-20261124i" />
-    <script src="./script.js" defer></script>
+    <script src="./script.js?v=qa-lab-design-20261124f" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main" data-en="Skip to content" data-es="Ir al contenido">Skip to content</a>
@@ -23,7 +23,8 @@
     <div class="welcome-slot">
       <aside class="welcome-banner" id="welcome-banner" hidden>
         <p id="welcome-message" role="status" aria-live="polite"></p>
-        <a class="welcome-start" href="#flow" data-en="Explore the QA flow" data-es="Explorar el flujo de QA">Explore the QA flow</a>
+        <a class="welcome-start" href="#flow" data-en="Start the test" data-es="Iniciar la prueba">Start the test</a>
+        <a class="welcome-validate" href="#qa-lab" data-en="Validate the tests" data-es="Validar las pruebas">Validate the tests</a>
         <button class="welcome-close" type="button" data-en="Close" data-es="Cerrar">Close</button>
       </aside>
     </div>
@@ -41,17 +42,17 @@
           <span class="flow-end flow-start" aria-hidden="true"></span>
           <span class="flow-end flow-finish" aria-hidden="true"></span>
           <div class="stations">
-            <button class="station" type="button" aria-describedby="strategy-copy" aria-controls="strategy-copy" aria-expanded="false">
+            <button class="station" type="button" aria-label="Strategy" data-en-label="Strategy" data-es-label="Estrategia" aria-describedby="strategy-copy" aria-controls="strategy-copy" aria-expanded="false">
               <span class="station-shape shape-step" aria-hidden="true"></span><span class="station-label" data-en="Strategy" data-es="Estrategia">Strategy</span>
             </button>
-            <button class="station" type="button" aria-describedby="manual-copy" aria-controls="manual-copy" aria-expanded="false">
+            <button class="station" type="button" aria-label="Manual testing" data-en-label="Manual testing" data-es-label="Pruebas manuales" aria-describedby="manual-copy" aria-controls="manual-copy" aria-expanded="false">
               <span class="station-shape shape-decision" aria-hidden="true"></span><span class="station-label" data-en="Manual testing" data-es="Pruebas ma&#173;nuales">Manual testing</span>
             </button>
-            <button class="station" type="button" aria-describedby="automation-copy" aria-controls="automation-copy" aria-expanded="false">
+            <button class="station" type="button" aria-label="Automation" data-en-label="Automation" data-es-label="Automatización" aria-describedby="automation-copy" aria-controls="automation-copy" aria-expanded="false">
               <span class="station-shape shape-step" aria-hidden="true"></span><span class="station-label" data-en="Auto&#173;mation" data-es="Automa&#173;tización">Auto&#173;mation</span>
             </button>
-            <button class="station station-goal" type="button" aria-describedby="quality-copy" aria-controls="quality-copy" aria-expanded="false">
-              <span class="station-shape shape-goal" aria-hidden="true"></span><span class="station-label" data-en="Quality through&#173;out" data-es="Calidad continua">Quality through&#173;out</span>
+            <button class="station station-goal" type="button" aria-label="Quality throughout" data-en-label="Quality throughout" data-es-label="Calidad continua" aria-describedby="quality-copy" aria-controls="quality-copy" aria-expanded="false">
+              <span class="station-shape shape-goal" aria-hidden="true"></span><span class="station-label" data-en="Quality throughout" data-es="Calidad continua">Quality throughout</span>
             </button>
           </div>
           <div class="station-notes">
@@ -87,7 +88,7 @@
       </section>
       <section class="qa-lab" id="qa-lab" aria-labelledby="qa-lab-title">
         <div class="qa-lab-intro">
-          <h2 id="qa-lab-title" data-en="QA Lab" data-es="Laboratorio de QA">QA Lab</h2>
+          <h2 id="qa-lab-title" tabindex="-1" data-en="QA Lab" data-es="Laboratorio de QA">QA Lab</h2>
           <p data-en="The portfolio checks itself. Every result below comes from a real GitHub Actions run."
              data-es="El portafolio se prueba a sí mismo. Cada resultado viene de una ejecución real de GitHub Actions.">
             The portfolio checks itself. Every result below comes from a real GitHub Actions run.
@@ -113,7 +114,7 @@
               </div>
               <span class="qa-status" id="qa-status" role="status" data-qa-status="pending">Pending</span>
             </div>
-            <dl class="qa-metrics">
+            <dl class="qa-metrics" id="qa-metrics">
               <div><dt data-en="Passed" data-es="Aprobadas">Passed</dt><dd id="qa-passed">—</dd></div>
               <div><dt data-en="Failed" data-es="Fallidas">Failed</dt><dd id="qa-failed">—</dd></div>
               <div><dt data-en="Skipped" data-es="Omitidas">Skipped</dt><dd id="qa-skipped">—</dd></div>
@@ -138,10 +139,10 @@
           <details class="qa-history" id="qa-history">
             <summary class="qa-history-head">
               <span class="qa-history-title" data-en="Recent CI history" data-es="Historial reciente de CI">Recent CI history</span>
-              <span class="qa-history-context" data-en="Latest runs on main" data-es="Últimas ejecuciones en main">Latest runs on main</span>
               <span class="qa-history-indicator" aria-hidden="true"></span>
             </summary>
             <ol class="qa-history-list" id="qa-history-list"></ol>
+            <p class="qa-history-empty" id="qa-history-empty" data-en="No runs have been published yet." data-es="Aún no se han publicado ejecuciones.">No runs have been published yet.</p>
           </details>
         </div>
       </section>
@@ -155,19 +156,21 @@
         </div>
         <div class="pipeline-list">
           <article class="pipeline-item">
-            <h3 data-en="QA Lab · Playwright portfolio checks" data-es="Laboratorio QA · Pruebas Playwright del portafolio">
-              QA Lab · Playwright portfolio checks
-            </h3>
+            <div class="pipeline-copy">
+              <h3 data-en="QA Lab · Playwright portfolio checks" data-es="Laboratorio QA · Pruebas Playwright del portafolio">
+                QA Lab · Playwright portfolio checks
+              </h3>
+              <p data-en="Playwright and TypeScript checks cover bilingual content, flow interactions, accessibility, and responsive layouts."
+                 data-es="Las pruebas con Playwright y TypeScript cubren el contenido bilingüe, las interacciones del flujo, la accesibilidad y el diseño adaptable.">
+                Playwright and TypeScript checks cover bilingual content, flow interactions, accessibility, and responsive layouts.
+              </p>
+            </div>
             <span class="project-status is-active" data-en="In progress" data-es="En progreso">In progress</span>
             <div class="pipeline-links">
               <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/docs/test-plan.md" target="_blank" rel="noreferrer"
                  data-en="Test plan" data-es="Plan de pruebas">Test plan</a>
               <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/.github/workflows/portfolio-quality.yml" target="_blank" rel="noreferrer"
                  data-en="CI workflow" data-es="Workflow de CI">CI workflow</a>
-              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/scripts/create-qa-summary.mjs" target="_blank" rel="noreferrer"
-                 data-en="Result publisher" data-es="Publicador de resultados">Result publisher</a>
-              <a href="https://github.com/jdelarosavaldez/joan-qa-engineering-portfolio/blob/main/scripts/prepare-qa-lab-feed.mjs" target="_blank" rel="noreferrer"
-                 data-en="Feed builder" data-es="Generador del feed">Feed builder</a>
             </div>
           </article>
           <article class="pipeline-item">
