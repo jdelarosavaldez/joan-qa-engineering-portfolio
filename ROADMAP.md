@@ -37,11 +37,13 @@ This portfolio grows through independently runnable milestones. A project moves 
 
 ## Milestone 3 — UI and API practice case study
 
-- [ ] Choose a practice app and confirm its usage constraints; prefer a local/self-hostable target where stability matters.
-- [ ] Define risk-based scenarios, test data, state cleanup, and API/UI boundaries.
-- [ ] Implement positive, negative, edge, and regression checks.
-- [ ] Include architecture notes, diagrams, reports, screenshots where useful, and known limitations.
-- [ ] Keep tests safe for shared demos; no load testing against public practice sites.
+- [x] Create a separate public repository for the TestYard practice project: https://github.com/jdelarosavaldez/qa-practice-testyard
+- [x] Draft Gherkin `.feature` scenario documentation; it is not executable and does not use Cucumber.
+- [ ] Validate the local TestYard runtime, health check, restart behavior, sandbox isolation, and accessible UI locators.
+- [ ] Include a reviewed local copy of TestYard with its MIT license and attribution so project checks do not depend on its public demo.
+- [ ] Implement a small set of verified UI and API checks with Playwright + TypeScript and POM.
+- [ ] Run the app and checks in Docker Compose and GitHub Actions; retain real reports and limitations.
+- [ ] Publish a sanitized, real-run summary from CI to the portfolio QA Lab and link the project plan/evidence.
 
 ## Milestone 4 — Python and Pytest API testing
 
